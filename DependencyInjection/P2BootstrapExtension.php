@@ -41,12 +41,28 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
         $bundles = $container->getParameter('kernel.bundles');
 
+        if (isset($bundles['TwigBundle'])) {
+            $container->prependExtensionConfig(
+                'twig',
+                array(
+                    'form' => array(
+                        'resources' => array(
+                            'P2BootstrapBundle::forms.html.twig'
+                        )
+                    )
+                )
+            );
+        }
+
         if (isset($bundles['AsseticBundle'])) {
             $container->prependExtensionConfig(
                 'assetic',
                 array(
                     'filters' => array(
-                        'less' => null
+                        'less' => null,
+                        'yui_js' => array(
+                            'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
+                        )
                     ),
                     'assets' => array(
                         'jquery' => $this->buildAsseticJqueryConfig($config),
@@ -129,6 +145,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                 $config['path_bootstrap'] . '/js/tab.js',
                 $config['path_bootstrap'] . '/js/affix.js'
             ),
+            'filters' => array('yui_js'),
             'output' => $config['bootstrap_js']
         );
     }
