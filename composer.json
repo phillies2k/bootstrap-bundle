@@ -16,5 +16,11 @@
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
     },
+    "autoload": {
+        "psr-0": {
+            "P2\\Bundle\\BootstrapBundle\\": ""
+        }
+    },
+    "target-dir": "P2/Bundle/BootstrapBundle",
     "minimum-stability": "dev"
 }
