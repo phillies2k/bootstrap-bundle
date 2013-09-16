@@ -143,7 +143,7 @@ LESS_VARIABLES;
         $themeConfig['theme_' . $theme->getName()] = array(
             array($lessPath . '/layout.less'),
             array('less'),
-            array('output' => 'themes/' . $theme->getName() . '/style.css'),
+            array('output' => 'themes/' . $theme->getName() . '/css/style.css'),
         );
 
         return $themeConfig;
