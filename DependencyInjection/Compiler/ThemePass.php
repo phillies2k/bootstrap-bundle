@@ -118,7 +118,7 @@ LESS_VARIABLES;
         $fontPath = $rootPath . 'vendor/twitter/bootstrap/fonts';
 
         foreach (glob($fontPath . '/*') as $filepath) {
-            symlink($filepath, $publicPath . '/' . basename($filepath));
+            @symlink($filepath, $publicPath . '/' . basename($filepath));
         }
     }
 
