@@ -19,7 +19,7 @@ abstract class Theme implements ThemeInterface
     /**
      * {@inheritDoc}
      */
-    public function getPrimaryColor()
+    public function getBrandPrimary()
     {
         return '';
     }
@@ -27,7 +27,7 @@ abstract class Theme implements ThemeInterface
     /**
      * {@inheritDoc}
      */
-    public function getSuccessColor()
+    public function getBrandSuccess()
     {
         return '';
     }
@@ -35,7 +35,7 @@ abstract class Theme implements ThemeInterface
     /**
      * {@inheritDoc}
      */
-    public function getWarningColor()
+    public function getBrandWarning()
     {
         return '';
     }
@@ -43,7 +43,7 @@ abstract class Theme implements ThemeInterface
     /**
      * {@inheritDoc}
      */
-    public function getDangerColor()
+    public function getBrandDanger()
     {
         return '';
     }
@@ -51,7 +51,7 @@ abstract class Theme implements ThemeInterface
     /**
      * {@inheritDoc}
      */
-    public function getInfoColor()
+    public function getBrandInfo()
     {
         return '';
     }

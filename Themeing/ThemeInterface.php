@@ -28,35 +28,35 @@ interface ThemeInterface
      *
      * @return string
      */
-    public function getPrimaryColor();
+    public function getBrandPrimary();
 
     /**
      * Returns the success color value for this theme.
      *
      * @return string
      */
-    public function getSuccessColor();
+    public function getBrandSuccess();
 
     /**
      * Returns the warning color value for this theme.
      *
      * @return string
      */
-    public function getWarningColor();
+    public function getBrandWarning();
 
     /**
      * Returns the danger color value for this theme.
      *
      * @return string
      */
-    public function getDangerColor();
+    public function getBrandDanger();
 
     /**
      * Returns the info color value for this theme.
      *
      * @return string
      */
-    public function getInfoColor();
+    public function getBrandInfo();
 
     /**
      * Returns the body background value for this theme.

@@ -226,28 +226,28 @@ LESS_VARIABLES;
     {
         $variables = array();
 
-        if ($theme->getPrimaryColor() !== '') {
-            $variables['brand-primary'] = $theme->getPrimaryColor();
+        if ($theme->getBrandPrimary() !== '') {
+            $variables['brand-primary'] = $theme->getBrandPrimary();
         }
 
-        if ($theme->getPrimaryColor() !== '') {
-            $variables['brand-primary'] = $theme->getPrimaryColor();
+        if ($theme->getBrandPrimary() !== '') {
+            $variables['brand-primary'] = $theme->getBrandPrimary();
         }
 
-        if ($theme->getSuccessColor() !== '') {
-            $variables['brand-success'] = $theme->getSuccessColor();
+        if ($theme->getBrandSuccess() !== '') {
+            $variables['brand-success'] = $theme->getBrandSuccess();
         }
 
-        if ($theme->getWarningColor() !== '') {
-            $variables['brand-warning'] = $theme->getWarningColor();
+        if ($theme->getBrandWarning() !== '') {
+            $variables['brand-warning'] = $theme->getBrandWarning();
         }
 
-        if ($theme->getDangerColor() !== '') {
-            $variables['brand-danger'] = $theme->getDangerColor();
+        if ($theme->getBrandDanger() !== '') {
+            $variables['brand-danger'] = $theme->getBrandDanger();
         }
 
-        if ($theme->getInfoColor() !== '') {
-            $variables['brand-info'] = $theme->getInfoColor();
+        if ($theme->getBrandInfo() !== '') {
+            $variables['brand-info'] = $theme->getBrandInfo();
         }
 
         if ($theme->getBodyBackground() !== '') {
