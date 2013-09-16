@@ -84,7 +84,7 @@ LESS_VARIABLES;
                 }
 
                 if (! is_dir($fontPath)) {
-                    mkdir($stylePath, 0777, true);
+                    mkdir($fontPath, 0777, true);
                 }
 
                 $this->symlinkFonts($container, $fontPath);
