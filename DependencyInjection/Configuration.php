@@ -27,13 +27,15 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('p2_bootstrap');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
         $rootNode
             ->children()
                 ->scalarNode('theme_path')->defaultValue('%kernel.root_dir%/Resources/themes')->end()
+                ->scalarNode('bootstrap_css')->defaultValue('css/bootstrap.css')->end()
+                ->scalarNode('bootstrap_js')->defaultValue('js/bootstrap.js')->end()
+                ->scalarNode('jquery')->defaultValue('js/jquery.js')->end()
+                ->scalarNode('holder')->defaultValue('js/holder.js')->end()
+                ->scalarNode('path_jquery')->defaultValue('%kernel.root_dir%/../components/jquery')->end()
+                ->scalarNode('path_bootstrap')->defaultValue('%kernel.root_dir%/../vendor/twitter/bootstrap')->end()
             ->end();
 
         return $treeBuilder;
