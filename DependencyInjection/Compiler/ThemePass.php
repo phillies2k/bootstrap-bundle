@@ -77,10 +77,17 @@ LESS_VARIABLES;
 
                 $themePath = $path . '/' . $theme->getName();
                 $stylePath = $themePath . '/less';
+                $fontPath = $themePath . '/fonts';
 
                 if (! is_dir($stylePath)) {
                     mkdir($stylePath, 0777, true);
                 }
+
+                if (! is_dir($fontPath)) {
+                    mkdir($stylePath, 0777, true);
+                }
+
+                $this->symlinkFonts($container, $fontPath);
 
                 if (! file_exists($stylePath . '/bootstrap.less')) {
                     file_put_contents($stylePath . '/bootstrap.less', $this->generateBootstrapLess($container));
@@ -96,6 +103,16 @@ LESS_VARIABLES;
             }
 
             $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
+        }
+    }
+
+    protected function symlinkFonts(ContainerBuilder $container, $publicPath)
+    {
+        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
+        $fontPath = $rootPath . 'vendor/twitter/bootstrap/fonts';
+
+        foreach (glob($fontPath . '/*') as $filepath) {
+            symlink($filepath, $publicPath . '/' . basename($filepath));
         }
     }
 

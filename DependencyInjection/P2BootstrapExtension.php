@@ -62,7 +62,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticJqueryConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_jquery']),
+            'inputs' => array($config['path_jquery'] . '/jquery.min.js'),
             'output' => $config['jquery']
         );
     }
