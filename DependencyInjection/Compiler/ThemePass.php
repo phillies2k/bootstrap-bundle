@@ -57,53 +57,56 @@ LESS_VARIABLES;
      */
     public function process(ContainerBuilder $container)
     {
-        $themes = $container->findTaggedServiceIds('bootstrap.theme');
-
-        if (count($themes) > 0) {
-            $processor = new Processor();
-
-            $config = $processor->processConfiguration(
-                new Configuration(),
-                $container->getExtensionConfig('p2_bootstrap')
-            );
-
-            $path = $container->getParameterBag()->resolveValue($config['theme_path']);
-
-            $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
-
-            foreach ($themes as $id => $attributes) {
-                /** @var ThemeInterface $theme */
-                $theme = $container->get($id);
-
-                $themePath = $path . '/' . $theme->getName();
-                $stylePath = $themePath . '/less';
-                $fontPath = $themePath . '/fonts';
-
-                if (! is_dir($stylePath)) {
-                    mkdir($stylePath, 0777, true);
-                }
-
-                if (! is_dir($fontPath)) {
-                    mkdir($fontPath, 0777, true);
-                }
-
-                $this->symlinkFonts($container, $fontPath);
-
-                if (! file_exists($stylePath . '/bootstrap.less')) {
-                    file_put_contents($stylePath . '/bootstrap.less', $this->generateBootstrapLess($container));
-                }
-
-                if (! file_exists($stylePath . '/layout.less')) {
-                    file_put_contents($stylePath . '/layout.less', $this->generateLayoutLess($theme));
-                }
-
-                file_put_contents($stylePath . '/variables.less', $this->generateVariablesLess($theme));
-
-                $asseticConfig = array_merge($asseticConfig, $this->getAsseticThemeConfig($stylePath, $theme));
-            }
-
-            $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
+        if (! $container->hasDefinition('assetic.config_resource')) {
+            throw new \RuntimeException('Missing assetic bundle.');
         }
+
+        $processor = new Processor();
+        $config = $processor->processConfiguration(new Configuration(), $container->getExtensionConfig('p2_bootstrap'));
+        $path = $container->getParameterBag()->resolveValue($config['theme_path']);
+        $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
+
+        foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
+            /** @var ThemeInterface $theme */
+            $theme = $container->get($id);
+
+            $this->buildTheme($config, $container, $theme);
+            $asseticConfig = array_merge($asseticConfig, $this->getAsseticThemeConfig($path . '/less', $theme));
+        }
+
+        $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
+    }
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     */
+    protected function buildTheme(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        $themePath = $container->getParameterBag()->resolveValue($config['theme_path']) . '/' . $theme->getName();
+        $stylePath = $themePath . '/less';
+        $fontPath = $themePath . '/fonts';
+
+        if (! is_dir($stylePath)) {
+            mkdir($stylePath, 0777, true);
+        }
+
+        if (! is_dir($fontPath)) {
+            mkdir($fontPath, 0777, true);
+        }
+
+        $this->symlinkFonts($container, $fontPath);
+
+        if (! file_exists($stylePath . '/bootstrap.less')) {
+            file_put_contents($stylePath . '/bootstrap.less', $this->generateBootstrapLess($config, $container));
+        }
+
+        if (! file_exists($stylePath . '/layout.less')) {
+            file_put_contents($stylePath . '/layout.less', $this->generateLayoutLess($theme));
+        }
+
+        file_put_contents($stylePath . '/variables.less', $this->generateVariablesLess($theme));
     }
 
     /**
@@ -144,6 +147,72 @@ LESS_VARIABLES;
         );
 
         return $themeConfig;
+    }
+
+    /**
+     * Generates the bootstrap less file.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     * @throws \RuntimeException
+     */
+    protected function generateBootstrapLess(array $config, ContainerBuilder $container)
+    {
+        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
+        $bootstrapFilepath = $bootstrapDirectory . '/bootstrap.less';
+
+        $pattern = '/@import\s"([^"]+)";/';
+        $imports = array();
+
+        if (false === $count = preg_match_all($pattern, file_get_contents($bootstrapFilepath), $matches)) {
+            throw new \RuntimeException('preg_match_all encountered an error');
+        }
+
+        $relativePath = '../../../../' . substr($config['path_bootstrap'], strpos($config['path_bootstrap'], '/'));
+        $template = "@import \"%s\";";
+        for ($i = 0; $i < $count; $i++) {
+            $filepath = $relativePath . '/' . $matches[1][$i];
+            $imports[] = sprintf($template, $filepath);
+        }
+
+        $offset = array_search($relativePath . '/variables.less', $imports) + 1;
+        array_splice($imports, $offset, 0, "@import \"variables.less\";");
+
+        $contents = "// This file is auto generated.\n\n";
+        $contents.= implode("\n", $imports);
+
+        return $contents;
+    }
+
+    /**
+     * Generates the layout less file for the given theme.
+     *
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
+    protected function generateLayoutLess(ThemeInterface $theme)
+    {
+        return strtr(static::LESS_LAYOUT, array('%theme%' => $theme->getName()));
+    }
+
+    /**
+     * Generates the variables less file for the given theme.
+     *
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
+    protected function generateVariablesLess(ThemeInterface $theme)
+    {
+        $contents = "";
+        foreach ($this->getThemeVariables($theme) as $name => $value) {
+            $contents .= "@" . $name . ": " . $value . ";\n";
+        }
+
+        return strtr(static::LESS_VARIABLES, array('%theme%' => $theme->getName(), '%contents%' => $contents));
     }
 
     /**
@@ -230,71 +299,5 @@ LESS_VARIABLES;
         }
 
         return $variables;
-    }
-
-    /**
-     * Generates the bootstrap less file.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @return string
-     * @throws \RuntimeException
-     */
-    protected function generateBootstrapLess(ContainerBuilder $container)
-    {
-        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
-        $bootstrapDirectory = 'vendor/twitter/bootstrap/less';
-        $bootstrapFilepath = $rootPath . $bootstrapDirectory . '/bootstrap.less';
-
-        $pattern = '/@import\s"([^"]+)";/';
-        $imports = array();
-
-        if (false === $count = preg_match_all($pattern, file_get_contents($bootstrapFilepath), $matches)) {
-            throw new \RuntimeException('preg_match_all encountered an error');
-        }
-
-        $relativePath = '../../../../../' . $bootstrapDirectory;
-        $template = "@import \"%s\";";
-        for ($i = 0; $i < $count; $i++) {
-            $filepath = $relativePath . '/' . $matches[1][$i];
-            $imports[] = sprintf($template, $filepath);
-        }
-
-        $offset = array_search($relativePath . '/variables.less', $imports) + 1;
-        array_splice($imports, $offset, 0, "@import \"variables.less\";");
-
-        $contents = "// This file is auto generated.\n\n";
-        $contents.= implode("\n", $imports);
-
-        return $contents;
-    }
-
-    /**
-     * Generates the layout less file for the given theme.
-     *
-     * @param ThemeInterface $theme
-     *
-     * @return string
-     */
-    protected function generateLayoutLess(ThemeInterface $theme)
-    {
-        return strtr(static::LESS_LAYOUT, array('%theme%' => $theme->getName()));
-    }
-
-    /**
-     * Generates the variables less file for the given theme.
-     *
-     * @param ThemeInterface $theme
-     *
-     * @return string
-     */
-    protected function generateVariablesLess(ThemeInterface $theme)
-    {
-        $contents = "";
-        foreach ($this->getThemeVariables($theme) as $name => $value) {
-            $contents .= "@" . $name . ": " . $value . ";\n";
-        }
-
-        return strtr(static::LESS_VARIABLES, array('%theme%' => $theme->getName(), '%contents%' => $contents));
     }
 }
