@@ -163,7 +163,7 @@ LESS_VARIABLES;
     protected function generateBootstrapLess(array $config, ContainerBuilder $container)
     {
         $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
-        $bootstrapFilepath = $bootstrapDirectory . '/bootstrap.less';
+        $bootstrapFilepath = $bootstrapDirectory . '/less/bootstrap.less';
 
         $pattern = '/@import\s"([^"]+)";/';
         $imports = array();
