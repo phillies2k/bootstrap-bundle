@@ -91,7 +91,7 @@ LESS_VARIABLES;
             mkdir($stylePath, 0777, true);
         }
 
-        $kernelRoot = $container->getParameterBag()->resolveValue('kernel.root_dir');
+        $kernelRoot = $container->getParameter('kernel.root_dir');
         $publicPath = $kernelRoot . '/../web/themes/' . $theme->getName();
 
         $this->symlinkFonts($config, $container, $publicPath . '/fonts');
