@@ -65,15 +65,15 @@ LESS_VARIABLES;
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $container->getExtensionConfig('p2_bootstrap'));
-        $path = $container->getParameterBag()->resolveValue($config['theme_path']);
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
             $theme = $container->get($id);
 
             if ($theme instanceof ThemeInterface) {
-                $this->buildTheme($config, $container, $theme);
+                $this->buildThemeFiles($config, $container, $theme);
+                $this->symlinkFonts($config, $container, $theme);
 
-                $themeConfig = $this->getAsseticThemeConfig($path . '/' . $theme->getName() . '/less', $theme);
+                $themeConfig = $this->buildAsseticThemeConfig($config, $container, $theme);
                 $asseticConfig = array_merge($asseticConfig, $themeConfig);
             }
         }
@@ -82,77 +82,29 @@ LESS_VARIABLES;
     }
 
     /**
+     * Creates the less files for the given theme.
+     *
      * @param array $config
      * @param ContainerBuilder $container
      * @param ThemeInterface $theme
      */
-    protected function buildTheme(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function buildThemeFiles(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
-        $themePath = $container->getParameterBag()->resolveValue($config['theme_path']) . '/' . $theme->getName();
-        $stylePath = $themePath . '/less';
+        $path = $this->getThemePath($config, $container, $theme) . '/less';
 
-        if (! is_dir($stylePath)) {
-            mkdir($stylePath, 0777, true);
+        if (! is_dir($path)) {
+            mkdir($path, 0777, true);
         }
 
-        $kernelRoot = $container->getParameter('kernel.root_dir');
-        $publicPath = $kernelRoot . '/../web/themes/' . $theme->getName();
-
-        $this->symlinkFonts($config, $container, $publicPath . '/fonts');
-
-        if (! file_exists($stylePath . '/bootstrap.less')) {
-            file_put_contents($stylePath . '/bootstrap.less', $this->generateBootstrapLess($config, $container));
+        if (! file_exists($path . '/bootstrap.less')) {
+            file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container));
         }
 
-        if (! file_exists($stylePath . '/layout.less')) {
-            file_put_contents($stylePath . '/layout.less', $this->generateLayoutLess($theme));
+        if (! file_exists($path . '/layout.less')) {
+            file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
         }
 
-        file_put_contents($stylePath . '/variables.less', $this->generateVariablesLess($theme));
-    }
-
-    /**
-     * Adds theme symlinks for bootstraps glyphicon font.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     * @param string $fontPath
-     */
-    protected function symlinkFonts(array $config, ContainerBuilder $container, $fontPath)
-    {
-        $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/fonts/*';
-
-        if (! is_dir($fontPath)) {
-            mkdir($fontPath, 0777, true);
-        }
-
-        foreach (glob($pattern) as $filepath) {
-            $distPath = $fontPath . '/' . basename($filepath);
-            if (! file_exists($distPath)) {
-                symlink($filepath, $distPath);
-            }
-        }
-    }
-
-    /**
-     * Returns the assetic configuration entry for the given theme.
-     *
-     * @param string $lessPath
-     * @param ThemeInterface $theme
-     *
-     * @return array
-     */
-    protected function getAsseticThemeConfig($lessPath, ThemeInterface $theme)
-    {
-        $themeConfig = array();
-
-        $themeConfig['theme_' . $theme->getName()] = array(
-            array($lessPath . '/layout.less'),
-            array('less'),
-            array('output' => 'themes/' . $theme->getName() . '/css/style.css'),
-        );
-
-        return $themeConfig;
+        file_put_contents($path . '/variables.less', $this->generateVariablesLess($theme));
     }
 
     /**
@@ -222,7 +174,80 @@ LESS_VARIABLES;
     }
 
     /**
-     * Returns set theme variables as an associative array.
+     * Adds theme symlinks for bootstraps glyphicon font.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     */
+    protected function symlinkFonts(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/fonts/*';
+        $fontPath = $this->getPublicThemePath($config, $container, $theme) . '/fonts';
+
+        if (! is_dir($fontPath)) {
+            mkdir($fontPath, 0777, true);
+        }
+
+        foreach (glob($pattern) as $filepath) {
+            $distPath = $fontPath . '/' . basename($filepath);
+            if (! file_exists($distPath)) {
+                symlink($filepath, $distPath);
+            }
+        }
+    }
+
+    /**
+     * Returns the assetic configuration entry for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     *
+     * @return array
+     */
+    protected function buildAsseticThemeConfig(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        $themeConfig = array();
+
+        $themeConfig['theme_' . $theme->getName()] = array(
+            array($this->getThemePath($config, $container, $theme) . '/less/layout.less'),
+            array('less'),
+            array('output' => 'themes/' . $theme->getName() . '/css/style.css'),
+        );
+
+        return $themeConfig;
+    }
+
+    /**
+     * Returns the public theme path for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
+    protected function getPublicThemePath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        return $container->getParameterBag()->resolveValue($config['public_path']) . '/' . $theme->getName();
+    }
+
+    /**
+     * Returns the theme path for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     * @return string
+     */
+    protected function getThemePath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        return $container->getParameterBag()->resolveValue($config['theme_path']) . '/' . $theme->getName();
+    }
+
+    /**
+     * Returns present theme variables as an associative array.
      *
      * @param ThemeInterface $theme
      *
