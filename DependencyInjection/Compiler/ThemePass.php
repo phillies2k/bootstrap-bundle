@@ -172,7 +172,7 @@ LESS_VARIABLES;
             throw new \RuntimeException('preg_match_all encountered an error');
         }
 
-        $relativePath = '../../../../' . substr($config['path_bootstrap'], strpos($config['path_bootstrap'], '/'));
+        $relativePath = '../../../../vendor/twitter/bootstrap/less';
         $template = "@import \"%s\";";
         for ($i = 0; $i < $count; $i++) {
             $filepath = $relativePath . '/' . $matches[1][$i];
