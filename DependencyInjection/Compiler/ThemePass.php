@@ -71,7 +71,9 @@ LESS_VARIABLES;
             $theme = $container->get($id);
 
             $this->buildTheme($config, $container, $theme);
-            $asseticConfig = array_merge($asseticConfig, $this->getAsseticThemeConfig($path . '/less', $theme));
+
+            $themeConfig = $this->getAsseticThemeConfig($path . '/' . $theme->getName() . '/less', $theme);
+            $asseticConfig = array_merge($asseticConfig, $themeConfig);
         }
 
         $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
