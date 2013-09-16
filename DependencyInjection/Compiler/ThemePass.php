@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the MTN project.
+ * This file is part of the BootstrapBundle project.
  *
  * (c) 2013 Philipp Boes <mostgreedy@gmail.com>
  *
@@ -106,6 +106,12 @@ LESS_VARIABLES;
         }
     }
 
+    /**
+     * Adds theme symlinks for bootstraps glyphicon font.
+     *
+     * @param ContainerBuilder $container
+     * @param string $publicPath
+     */
     protected function symlinkFonts(ContainerBuilder $container, $publicPath)
     {
         $rootPath = $container->getParameter('kernel.root_dir') . '/../';

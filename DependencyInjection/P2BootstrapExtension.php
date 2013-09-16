@@ -59,6 +59,13 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         }
     }
 
+    /**
+     * Returns the assetic jquery configuration.
+     *
+     * @param array $config
+     *
+     * @return array
+     */
     protected function buildAsseticJqueryConfig(array $config)
     {
         return array(
@@ -67,6 +74,13 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         );
     }
 
+    /**
+     * Returns the assetic holder js configuration.
+     *
+     * @param array $config
+     *
+     * @return array
+     */
     protected function buildAsseticHolderConfig(array $config)
     {
         return array(
@@ -75,6 +89,13 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         );
     }
 
+    /**
+     * Returns the assetic bootstrap css configuration.
+     *
+     * @param array $config
+     *
+     * @return array
+     */
     protected function buildAsseticBootstrapCssConfig(array $config)
     {
         return array(
@@ -84,6 +105,13 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         );
     }
 
+    /**
+     * Returns the assetic bootstrap js configuration.
+     *
+     * @param array $config
+     *
+     * @return array
+     */
     protected function buildAsseticBootstrapJsConfig(array $config)
     {
         return array(
