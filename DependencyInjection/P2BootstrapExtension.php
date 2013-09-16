@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the BootstrapBundle project.
+ *
+ * (c) 2013 Philipp Boes <mostgreedy@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace P2\Bundle\BootstrapBundle\DependencyInjection;
 
@@ -11,9 +19,8 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ * Class P2BootstrapExtension
+ * @package P2\Bundle\BootstrapBundle\DependencyInjection
  */
 class P2BootstrapExtension extends Extension implements PrependExtensionInterface
 {
