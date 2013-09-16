@@ -8,8 +8,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class P2BootstrapBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new ThemePass());
-    }
 }
