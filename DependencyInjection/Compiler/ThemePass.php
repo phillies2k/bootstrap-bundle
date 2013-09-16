@@ -124,7 +124,7 @@ LESS_VARIABLES;
             mkdir($fontPath, 0777, true);
         }
 
-        foreach (glob($pattern . '/*') as $filepath) {
+        foreach (glob($pattern) as $filepath) {
             $distPath = $fontPath . '/' . basename($filepath);
             if (! file_exists($distPath)) {
                 symlink($filepath, $distPath);
