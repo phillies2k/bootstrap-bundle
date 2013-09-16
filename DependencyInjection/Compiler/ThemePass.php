@@ -86,17 +86,15 @@ LESS_VARIABLES;
     {
         $themePath = $container->getParameterBag()->resolveValue($config['theme_path']) . '/' . $theme->getName();
         $stylePath = $themePath . '/less';
-        $fontPath = $themePath . '/fonts';
 
         if (! is_dir($stylePath)) {
             mkdir($stylePath, 0777, true);
         }
 
-        if (! is_dir($fontPath)) {
-            mkdir($fontPath, 0777, true);
-        }
+        $kernelRoot = $container->getParameterBag()->resolveValue('kernel.root_dir');
+        $publicPath = $kernelRoot . '/../web/themes/' . $theme->getName();
 
-        $this->symlinkFonts($container, $fontPath);
+        $this->symlinkFonts($config, $container, $publicPath . '/fonts');
 
         if (! file_exists($stylePath . '/bootstrap.less')) {
             file_put_contents($stylePath . '/bootstrap.less', $this->generateBootstrapLess($config, $container));
@@ -112,16 +110,20 @@ LESS_VARIABLES;
     /**
      * Adds theme symlinks for bootstraps glyphicon font.
      *
+     * @param array $config
      * @param ContainerBuilder $container
-     * @param string $publicPath
+     * @param string $fontPath
      */
-    protected function symlinkFonts(ContainerBuilder $container, $publicPath)
+    protected function symlinkFonts(array $config, ContainerBuilder $container, $fontPath)
     {
-        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
-        $fontPath = $rootPath . 'vendor/twitter/bootstrap/fonts';
+        $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/fonts/*';
 
-        foreach (glob($fontPath . '/*') as $filepath) {
-            $distPath = $publicPath . '/' . basename($filepath);
+        if (! is_dir($fontPath)) {
+            mkdir($fontPath, 0777, true);
+        }
+
+        foreach (glob($pattern . '/*') as $filepath) {
+            $distPath = $fontPath . '/' . basename($filepath);
             if (! file_exists($distPath)) {
                 symlink($filepath, $distPath);
             }
