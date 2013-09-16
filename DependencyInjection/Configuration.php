@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('theme_path')->defaultValue('%kernel.root_dir%/Resources/themes')->end()
-                ->scalarNode('public_path')->defaultValue('%kernel.root_dir%/../web/themes')->end()
+                ->scalarNode('public_path')->defaultValue('themes')->end()
                 ->scalarNode('bootstrap_css')->defaultValue('css/bootstrap.css')->end()
                 ->scalarNode('bootstrap_js')->defaultValue('js/bootstrap.js')->end()
                 ->scalarNode('jquery')->defaultValue('js/jquery.js')->end()

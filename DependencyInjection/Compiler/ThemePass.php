@@ -90,7 +90,7 @@ LESS_VARIABLES;
      */
     protected function buildThemeFiles(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
-        $path = $this->getThemePath($config, $container, $theme) . '/less';
+        $path = $this->resolveThemePath($config['theme_path'], $container, $theme) . '/less';
 
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
@@ -183,7 +183,8 @@ LESS_VARIABLES;
     protected function symlinkFonts(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
         $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/fonts/*';
-        $fontPath = $this->getPublicThemePath($config, $container, $theme) . '/fonts';
+        $rootPath = $container->getParameter('kernel.root_dir') . '/../web';
+        $fontPath = $rootPath . '/' . $this->resolveThemePath($config['public_path'], $container, $theme) . '/fonts';
 
         if (! is_dir($fontPath)) {
             mkdir($fontPath, 0777, true);
@@ -211,39 +212,26 @@ LESS_VARIABLES;
         $themeConfig = array();
 
         $themeConfig['theme_' . $theme->getName()] = array(
-            array($this->getThemePath($config, $container, $theme) . '/less/layout.less'),
+            array($this->resolveThemePath($config['theme_path'], $container, $theme) . '/less/layout.less'),
             array('less'),
-            array('output' => 'themes/' . $theme->getName() . '/css/style.css'),
+            array('output' => $this->resolveThemePath($config['public_path'], $container, $theme) . '/css/style.css'),
         );
 
         return $themeConfig;
     }
 
     /**
-     * Returns the public theme path for the given theme.
+     * Returns the resolved path for the given theme.
      *
-     * @param array $config
+     * @param string $path
      * @param ContainerBuilder $container
      * @param ThemeInterface $theme
      *
      * @return string
      */
-    protected function getPublicThemePath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function resolveThemePath($path, ContainerBuilder $container, ThemeInterface $theme)
     {
-        return $container->getParameterBag()->resolveValue($config['public_path']) . '/' . $theme->getName();
-    }
-
-    /**
-     * Returns the theme path for the given theme.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
-     * @return string
-     */
-    protected function getThemePath(array $config, ContainerBuilder $container, ThemeInterface $theme)
-    {
-        return $container->getParameterBag()->resolveValue($config['theme_path']) . '/' . $theme->getName();
+        return $container->getParameterBag()->resolveValue($path) . '/' . $theme->getName();
     }
 
     /**
