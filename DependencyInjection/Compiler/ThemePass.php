@@ -22,11 +22,38 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class ThemePass implements CompilerPassInterface
 {
     /**
-     * You can modify the container here before it is dumped to PHP code.
+     * Template for layout.less file
      *
-     * @param ContainerBuilder $container
+     * @var string
+     */
+    const LESS_LAYOUT = <<<LESS_LAYOUT
+// Theme: %theme%
+//
+// Imports
+// -------------------------------------------------
+@import "bootstrap.less";
+
+// Put your custom styles here
+
+LESS_LAYOUT;
+
+    /**
+     * Template for variables.less file
      *
-     * @api
+     * @var string
+     */
+    const LESS_VARIABLES = <<<LESS_VARIABLES
+// Theme: %theme%
+//
+// Variables
+// -------------------------------------------------
+
+%contents%
+
+LESS_VARIABLES;
+
+    /**
+     * {@inheritDoc}
      */
     public function process(ContainerBuilder $container)
     {
@@ -64,6 +91,14 @@ class ThemePass implements CompilerPassInterface
         $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
     }
 
+    /**
+     * Returns the assetic configuration entry for the given theme.
+     *
+     * @param string $lessPath
+     * @param ThemeInterface $theme
+     *
+     * @return array
+     */
     protected function getAsseticThemeConfig($lessPath, ThemeInterface $theme)
     {
         $themeConfig = array();
@@ -77,6 +112,13 @@ class ThemePass implements CompilerPassInterface
         return $themeConfig;
     }
 
+    /**
+     * Returns set theme variables as an associative array.
+     *
+     * @param ThemeInterface $theme
+     *
+     * @return array
+     */
     protected function getThemeVariables(ThemeInterface $theme)
     {
         $variables = array();
@@ -144,6 +186,14 @@ class ThemePass implements CompilerPassInterface
         return $variables;
     }
 
+    /**
+     * Generates the bootstrap less file.
+     *
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     * @throws \RuntimeException
+     */
     protected function generateBootstrapLess(ContainerBuilder $container)
     {
         $rootPath = $container->getParameter('kernel.root_dir') . '/../';
@@ -173,21 +223,25 @@ class ThemePass implements CompilerPassInterface
         return $contents;
     }
 
+    /**
+     * Generates the layout less file for the given theme.
+     *
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
     protected function generateLayoutLess(ThemeInterface $theme)
     {
-        return <<<LESS_LAYOUT
-// Theme: {$theme->getName()}
-//
-// Imports
-// -------------------------------------------------
-@import "bootstrap.less";
-
-// Put your custom styles here
-
-LESS_LAYOUT;
-
+        return strtr(static::LESS_LAYOUT, array('%theme%' => $theme->getName()));
     }
 
+    /**
+     * Generates the variables less file for the given theme.
+     *
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
     protected function generateVariablesLess(ThemeInterface $theme)
     {
         $contents = "";
@@ -195,14 +249,6 @@ LESS_LAYOUT;
             $contents .= "@" . $name . ": " . $value . ";\n";
         }
 
-        return <<< VARIABLES_LESS
-// Theme: {$theme->getName()}
-//
-// Variables
-// -------------------------------------------------
-
-{$contents}
-
-VARIABLES_LESS;
+        return strtr(static::LESS_VARIABLES, array('%theme%' => $theme->getName(), '%contents%' => $contents));
     }
 }
