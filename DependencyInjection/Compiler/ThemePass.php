@@ -61,19 +61,21 @@ LESS_VARIABLES;
             throw new \RuntimeException('Missing assetic bundle.');
         }
 
+        $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
+
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $container->getExtensionConfig('p2_bootstrap'));
         $path = $container->getParameterBag()->resolveValue($config['theme_path']);
-        $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
-            /** @var ThemeInterface $theme */
             $theme = $container->get($id);
 
-            $this->buildTheme($config, $container, $theme);
+            if ($theme instanceof ThemeInterface) {
+                $this->buildTheme($config, $container, $theme);
 
-            $themeConfig = $this->getAsseticThemeConfig($path . '/' . $theme->getName() . '/less', $theme);
-            $asseticConfig = array_merge($asseticConfig, $themeConfig);
+                $themeConfig = $this->getAsseticThemeConfig($path . '/' . $theme->getName() . '/less', $theme);
+                $asseticConfig = array_merge($asseticConfig, $themeConfig);
+            }
         }
 
         $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
