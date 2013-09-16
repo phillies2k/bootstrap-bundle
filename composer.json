@@ -11,7 +11,9 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.3.*"
+        "symfony/symfony": "2.3.*",
+        "twitter/bootstrap": "dev-master",
+        "components/jquery": "~1.9"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
