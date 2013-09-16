@@ -73,6 +73,26 @@ abstract class Theme implements ThemeInterface
     }
 
     /**
+     * Returns the link color value for this theme.
+     *
+     * @return string
+     */
+    public function getLinkColor()
+    {
+        return '';
+    }
+
+    /**
+     * Returns the link hover color value for this theme.
+     *
+     * @return string
+     */
+    public function getLinkHoverColor()
+    {
+        return '';
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getButtonDefaultColor()

@@ -73,6 +73,20 @@ interface ThemeInterface
     public function getTextColor();
 
     /**
+     * Returns the link color value for this theme.
+     *
+     * @return string
+     */
+    public function getLinkColor();
+
+    /**
+     * Returns the link hover color value for this theme.
+     *
+     * @return string
+     */
+    public function getLinkHoverColor();
+
+    /**
      * Returns the default button color value for this theme.
      *
      * @return string

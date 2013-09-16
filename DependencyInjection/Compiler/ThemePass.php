@@ -57,38 +57,46 @@ LESS_VARIABLES;
      */
     public function process(ContainerBuilder $container)
     {
-        $configs = $container->getExtensionConfig('p2_bootstrap');
-        $processor = new Processor();
-        $config = $processor->processConfiguration(new Configuration(), $configs);
-        $path = $container->getParameterBag()->resolveValue($config['theme_path']);
-        $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
+        $themes = $container->findTaggedServiceIds('bootstrap.theme');
 
-        foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
-            /** @var ThemeInterface $theme */
-            $theme = $container->get($id);
+        if (count($themes) > 0) {
+            $processor = new Processor();
 
-            $themePath = $path . '/' . $theme->getName();
-            $lessPath = $themePath . '/less';
+            $config = $processor->processConfiguration(
+                new Configuration(),
+                $container->getExtensionConfig('p2_bootstrap')
+            );
 
-            if (! is_dir($lessPath)) {
-                mkdir($lessPath, 0777, true);
+            $path = $container->getParameterBag()->resolveValue($config['theme_path']);
+
+            $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
+
+            foreach ($themes as $id => $attributes) {
+                /** @var ThemeInterface $theme */
+                $theme = $container->get($id);
+
+                $themePath = $path . '/' . $theme->getName();
+                $stylePath = $themePath . '/less';
+
+                if (! is_dir($stylePath)) {
+                    mkdir($stylePath, 0777, true);
+                }
+
+                if (! file_exists($stylePath . '/bootstrap.less')) {
+                    file_put_contents($stylePath . '/bootstrap.less', $this->generateBootstrapLess($container));
+                }
+
+                if (! file_exists($stylePath . '/layout.less')) {
+                    file_put_contents($stylePath . '/layout.less', $this->generateLayoutLess($theme));
+                }
+
+                file_put_contents($stylePath . '/variables.less', $this->generateVariablesLess($theme));
+
+                $asseticConfig = array_merge($asseticConfig, $this->getAsseticThemeConfig($stylePath, $theme));
             }
 
-            if (! file_exists($lessPath . '/bootstrap.less')) {
-                file_put_contents($lessPath . '/bootstrap.less', $this->generateBootstrapLess($container));
-            }
-
-            if (! file_exists($lessPath . '/layout.less')) {
-                file_put_contents($lessPath . '/layout.less', $this->generateLayoutLess($theme));
-            }
-
-            file_put_contents($lessPath . '/variables.less', $this->generateVariablesLess($theme));
-
-            $themeConfig = $this->getAsseticThemeConfig($lessPath, $theme);
-            $asseticConfig = array_merge($asseticConfig, $themeConfig);
+            $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
         }
-
-        $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
     }
 
     /**
@@ -123,10 +131,6 @@ LESS_VARIABLES;
     {
         $variables = array();
 
-        if ($theme->getBodyBackground() !== '') {
-            $variables['body-bg'] = $theme->getBodyBackground();
-        }
-
         if ($theme->getPrimaryColor() !== '') {
             $variables['brand-primary'] = $theme->getPrimaryColor();
         }
@@ -149,6 +153,22 @@ LESS_VARIABLES;
 
         if ($theme->getInfoColor() !== '') {
             $variables['brand-info'] = $theme->getInfoColor();
+        }
+
+        if ($theme->getBodyBackground() !== '') {
+            $variables['body-bg'] = $theme->getBodyBackground();
+        }
+
+        if ($theme->getTextColor() !== '') {
+            $variables['text-color'] = $theme->getTextColor();
+        }
+
+        if ($theme->getLinkColor() !== '') {
+            $variables['link-color'] = $theme->getLinkColor();
+        }
+
+        if ($theme->getLinkHoverColor() !== '') {
+            $variables['link-hover-color'] = $theme->getLinkHoverColor();
         }
 
         if ($theme->getButtonDefaultColor() !== '') {
