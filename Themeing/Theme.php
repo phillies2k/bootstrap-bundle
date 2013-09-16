@@ -73,9 +73,7 @@ abstract class Theme implements ThemeInterface
     }
 
     /**
-     * Returns the link color value for this theme.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getLinkColor()
     {
@@ -83,9 +81,7 @@ abstract class Theme implements ThemeInterface
     }
 
     /**
-     * Returns the link hover color value for this theme.
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function getLinkHoverColor()
     {
