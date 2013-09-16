@@ -33,13 +33,15 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getPrimaryColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getSuccessColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getWarningColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getDangerColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getInfoColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandPrimary
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandSuccess
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandWarning
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandDanger
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandInfo
      * @covers P2\Bundle\BootstrapBundle\Themeing::getBodyBackground
      * @covers P2\Bundle\BootstrapBundle\Themeing::getTextColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getLinkColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getLinkHoverColor
      * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDefaultColor
      * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDefaultBackground
      * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDefaultBorder
@@ -56,13 +58,15 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $mock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme');
         $mock->expects($this->any())->method('getName')->will($this->returnValue('theme'));
 
-        $this->assertEquals('', $mock->getPrimaryColor());
-        $this->assertEquals('', $mock->getSuccessColor());
-        $this->assertEquals('', $mock->getWarningColor());
-        $this->assertEquals('', $mock->getDangerColor());
-        $this->assertEquals('', $mock->getInfoColor());
+        $this->assertEquals('', $mock->getBrandPrimary());
+        $this->assertEquals('', $mock->getBrandSuccess());
+        $this->assertEquals('', $mock->getBrandWarning());
+        $this->assertEquals('', $mock->getBrandDanger());
+        $this->assertEquals('', $mock->getBrandInfo());
         $this->assertEquals('', $mock->getBodyBackground());
         $this->assertEquals('', $mock->getTextColor());
+        $this->assertEquals('', $mock->getLinkColor());
+        $this->assertEquals('', $mock->getLinkHoverColor());
         $this->assertEquals('', $mock->getButtonDefaultColor());
         $this->assertEquals('', $mock->getButtonDefaultBackground());
         $this->assertEquals('', $mock->getButtonDefaultBorder());
