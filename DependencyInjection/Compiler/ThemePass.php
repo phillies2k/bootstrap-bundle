@@ -140,7 +140,7 @@ LESS_VARIABLES;
     }
 
     /**
-     * Returns the array of bootstrap variables for this theme.
+     * Returns an array of variables for this theme.
      *
      * @param array $config
      * @param ContainerBuilder $container
