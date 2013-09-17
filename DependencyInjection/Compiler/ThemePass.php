@@ -110,14 +110,6 @@ LESS_VARIABLES;
             mkdir($path, 0777, true);
         }
 
-        if (! file_exists($path . '/bootstrap.less')) {
-            file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container, $theme));
-        }
-
-        if (! file_exists($path . '/layout.less')) {
-            file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
-        }
-
         if (file_exists($path . '/variables.less')) {
             $existingVariables = $this->parseVariablesFromFile($path . '/variables.less');
             $updatingVariables = $this->buildBootstrapVariables($config, $container, $theme);
@@ -127,6 +119,12 @@ LESS_VARIABLES;
         }
 
         file_put_contents($path . '/variables.less', $this->generateThemeVariablesLess($variables, $theme));
+        file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container, $theme));
+
+        // only create layout.less if this file does not exists already (we do not want to overwrite custom styling)
+        if (! file_exists($path . '/layout.less')) {
+            file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
+        }
     }
 
     /**
