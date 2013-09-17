@@ -220,21 +220,14 @@ LESS_THEME;
     protected function generateBootstrapLess(array $config, ContainerBuilder $container)
     {
         $relativePath = $this->getRelativeBootstrapPath($config, $container);
-        $imports = $this->parseImports($config, $container);
+        $template = "@import \"%s\";\n";
+        $contents = "// This file is auto generated.\n\n";
 
-        $template = "@import \"%s\";";
-        for ($i = 0; $i < count($imports); $i++) {
-            $filepath = $imports[$i];
-            if ($imports[$i] === 'variables.less') {
-                unset($imports[$i]);
-            } else {
-                $filepath = $relativePath . '/' . $filepath;
-                $imports[$i] = sprintf($template, $filepath);
+        foreach ($this->parseImports($config, $container) as $filepath) {
+            if ($filepath !== 'variables.less') {
+                $contents .= sprintf($template, $relativePath . '/' . $filepath);
             }
         }
-
-        $contents = "// This file is auto generated.\n\n";
-        $contents.= implode("\n", $imports);
 
         return $contents;
     }
