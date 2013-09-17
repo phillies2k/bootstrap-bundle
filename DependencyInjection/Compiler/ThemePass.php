@@ -118,7 +118,93 @@ LESS_VARIABLES;
             file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
         }
 
-        file_put_contents($path . '/variables.less', $this->generateVariablesLess($theme));
+        if (file_exists($path . '/variables.less')) {
+            $existingVariables = $this->parseVariablesFromFile($path . '/variables.less');
+            $updatingVariables = $this->buildBootstrapVariables($config, $container, $theme);
+            $variables = array_diff_key($updatingVariables, $existingVariables);
+        } else {
+            $variables = $this->buildBootstrapVariables($config, $container, $theme);
+        }
+
+        file_put_contents($path . '/variables.less', $this->generateThemeVariablesLess($variables, $theme));
+    }
+
+    /**
+     * Returns the variables.less stylesheet contents.
+     *
+     * @param array $variables
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
+    protected function generateThemeVariablesLess(array $variables, ThemeInterface $theme)
+    {
+        $contents = "";
+        foreach ($variables as $name => $value) {
+            $contents .= "@" . $name . ": " . $value . ";\n";
+        }
+
+        return strtr(static::LESS_VARIABLES, array('%theme%' => $theme->getName(), '%contents%' => $contents));
+    }
+
+    /**
+     * Returns the array of bootstrap variables for this theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     *
+     * @return array
+     */
+    protected function buildBootstrapVariables(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        $variables = $this->parseBootstrapVariables($config, $container);
+
+        foreach ($this->getThemeVariables($theme) as $name => $value) {
+            if (isset($variables[$name])) {
+                $variables[$name] = $value;
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
+     * Parses variables values from the bootstrap variables.less file.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    protected function parseBootstrapVariables(array $config, ContainerBuilder $container)
+    {
+        $source = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/less/variables.less';
+
+        return $this->parseVariablesFromFile($source);
+    }
+
+    /**
+     * Parses variables from the given file path.
+     *
+     * @param string $filepath
+     *
+     * @return array
+     */
+    protected function parseVariablesFromFile($filepath)
+    {
+        $contents = file_get_contents($filepath);
+        $contents = str_replace(array("\r", "\r\n"), "\n", $contents);
+        $variables = array();
+        $code = explode("\n", $contents);
+
+        foreach ($code as $row) {
+            if (false !== preg_match('/^@([^:]+)\:([^;])+;/', $row, $matches)) {
+                $variables[$matches[1]] = trim($matches[2]);
+            }
+        }
+
+        return $variables;
     }
 
     /**
@@ -138,12 +224,13 @@ LESS_VARIABLES;
 
         $template = "@import \"%s\";";
         for ($i = 0; $i < count($imports); $i++) {
-            $filepath = $relativePath . '/' . $imports[$i];
+            $filepath = $imports[$i];
+            if ($imports[$i] !== 'variables.less') {
+                $filepath = $relativePath . '/' . $filepath;
+            }
+
             $imports[$i] = sprintf($template, $filepath);
         }
-
-        $offset = array_search($relativePath . '/variables.less', $imports) + 1;
-        array_splice($imports, $offset, 0, "@import \"variables.less\";");
 
         $contents = "// This file is auto generated.\n\n";
         $contents.= implode("\n", $imports);
@@ -224,24 +311,6 @@ LESS_VARIABLES;
     {
         return strtr(static::LESS_LAYOUT, array('%theme%' => $theme->getName()));
     }
-
-    /**
-     * Generates the variables less file for the given theme.
-     *
-     * @param ThemeInterface $theme
-     *
-     * @return string
-     */
-    protected function generateVariablesLess(ThemeInterface $theme)
-    {
-        $contents = "";
-        foreach ($this->getThemeVariables($theme) as $name => $value) {
-            $contents .= "@" . $name . ": " . $value . ";\n";
-        }
-
-        return strtr(static::LESS_VARIABLES, array('%theme%' => $theme->getName(), '%contents%' => $contents));
-    }
-
     /**
      * Adds theme symlinks for bootstraps glyphicon font.
      *
