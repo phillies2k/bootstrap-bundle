@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace P2\Bundle\BootstrapBundle\DependencyInjection\Compiler;
 
 use P2\Bundle\BootstrapBundle\DependencyInjection\Configuration;
@@ -61,24 +62,37 @@ LESS_VARIABLES;
             throw new \RuntimeException('Missing assetic bundle.');
         }
 
-        $asseticConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
-
-        $processor = new Processor();
-        $config = $processor->processConfiguration(new Configuration(), $container->getExtensionConfig('p2_bootstrap'));
+        $resourcesConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
+        $extensionConfig = $this->getExtensionConfiguration($container);
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
             $theme = $container->get($id);
 
             if ($theme instanceof ThemeInterface) {
-                $this->buildThemeFiles($config, $container, $theme);
-                $this->symlinkFonts($config, $container, $theme);
+                $this->buildThemeFiles($extensionConfig, $container, $theme);
+                $this->symlinkFonts($extensionConfig, $container, $theme);
 
-                $themeConfig = $this->buildAsseticThemeConfig($config, $container, $theme);
-                $asseticConfig = array_merge($asseticConfig, $themeConfig);
+                $themeConfig = $this->buildAsseticThemeConfig($extensionConfig, $container, $theme);
+                $resourcesConfig = array_merge($resourcesConfig, $themeConfig);
             }
         }
 
-        $container->getDefinition('assetic.config_resource')->replaceArgument(0, $asseticConfig);
+        $container->getDefinition('assetic.config_resource')->replaceArgument(0, $resourcesConfig);
+    }
+
+    /**
+     * Returns the bundles processed extension configuration.
+     *
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    protected function getExtensionConfiguration(ContainerBuilder $container)
+    {
+        $config = $container->getExtensionConfig('p2_bootstrap');
+        $processor = new Processor();
+
+        return $processor->processConfiguration(new Configuration(), $config);
     }
 
     /**
