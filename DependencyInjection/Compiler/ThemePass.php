@@ -111,7 +111,7 @@ LESS_VARIABLES;
         }
 
         if (! file_exists($path . '/bootstrap.less')) {
-            file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container));
+            file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container, $theme));
         }
 
         if (! file_exists($path . '/layout.less')) {
@@ -122,31 +122,24 @@ LESS_VARIABLES;
     }
 
     /**
-     * Generates the bootstrap less file.
+     * Generates the bootstrap.less file for the given theme.
      *
      * @param array $config
      * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
      *
      * @return string
      * @throws \RuntimeException
      */
-    protected function generateBootstrapLess(array $config, ContainerBuilder $container)
+    protected function generateBootstrapLess(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
-        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
-        $bootstrapFilepath = $bootstrapDirectory . '/less/bootstrap.less';
+        $relativePath = $this->getRelativeBootstrapPath($config, $container, $theme);
+        $imports = $this->parseImports($config, $container);
 
-        $pattern = '/@import\s"([^"]+)";/';
-        $imports = array();
-
-        if (false === $count = preg_match_all($pattern, file_get_contents($bootstrapFilepath), $matches)) {
-            throw new \RuntimeException('preg_match_all encountered an error');
-        }
-
-        $relativePath = '../../../../../vendor/twitter/bootstrap/less';
         $template = "@import \"%s\";";
-        for ($i = 0; $i < $count; $i++) {
-            $filepath = $relativePath . '/' . $matches[1][$i];
-            $imports[] = sprintf($template, $filepath);
+        for ($i = 0; $i < count($imports); $i++) {
+            $filepath = $relativePath . '/' . $imports[$i];
+            $imports[$i] = sprintf($template, $filepath);
         }
 
         $offset = array_search($relativePath . '/variables.less', $imports) + 1;
@@ -156,6 +149,68 @@ LESS_VARIABLES;
         $contents.= implode("\n", $imports);
 
         return $contents;
+    }
+
+    /**
+     * Parses import statements from bootstrap.less and returns an array of its values.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function parseImports(array $config, ContainerBuilder $container)
+    {
+        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
+        $bootstrapFilepath = $bootstrapDirectory . '/less/bootstrap.less';
+
+        if (false === $count = preg_match_all('/@import\s"([^"]+)";/', file_get_contents($bootstrapFilepath), $matches)) {
+            throw new \RuntimeException('preg_match_all encountered an error');
+        }
+
+        if ($count === 0 || ! isset($matches[1]) || ! is_array($matches[1])) {
+
+            return array();
+        }
+
+        return $matches[1];
+    }
+
+    /**
+     * Returns the relative path to the twitter bootstrap directory for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
+    protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        $bootstrapPath = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
+        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
+
+        return $this->getRelativeRootPath($config, $container, $theme) . substr($bootstrapPath, strlen($rootPath));
+    }
+
+    /**
+     * Returns the relative path to the project root for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param ThemeInterface $theme
+     *
+     * @return string
+     */
+    protected function getRelativeRootPath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    {
+        $themeDirectory = realpath($this->resolveThemePath($config['theme_path'], $container, $theme) . '/less');
+        $rootDirectory = realpath($container->getParameter('kernel.root_dir') . '/..');
+        $path = substr($themeDirectory, strlen($rootDirectory) + 1);
+        $step = count(explode('/', $path));
+
+        return str_repeat('../', $step);
     }
 
     /**
