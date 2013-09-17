@@ -68,13 +68,13 @@ LESS_THEME;
         $extensionConfig = $this->getExtensionConfiguration($container);
 
         $this->buildBootstrapLess($extensionConfig, $container);
+        $this->symlinkFonts($extensionConfig, $container);
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
             $theme = $container->get($id);
 
             if ($theme instanceof ThemeInterface) {
                 $this->buildThemeFiles($extensionConfig, $container, $theme);
-                $this->symlinkFonts($extensionConfig, $container, $theme);
 
                 $themeConfig = $this->buildAsseticThemeConfig($extensionConfig, $container, $theme);
                 $resourcesConfig = array_merge($resourcesConfig, $themeConfig);
@@ -308,13 +308,12 @@ LESS_THEME;
      *
      * @param array $config
      * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
      */
-    protected function symlinkFonts(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function symlinkFonts(array $config, ContainerBuilder $container)
     {
         $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap_fonts']) . '/*';
         $rootPath = $container->getParameter('kernel.root_dir') . '/../web';
-        $fontPath = $rootPath . '/' . $this->resolveThemePath($config['public_path'], $container, $theme) . '/fonts';
+        $fontPath = $rootPath . '/' . $container->getParameterBag()->resolveValue($config['public_path']) . '/fonts';
 
         if (! is_dir($fontPath)) {
             mkdir($fontPath, 0777, true);
