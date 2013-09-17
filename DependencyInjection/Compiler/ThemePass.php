@@ -189,7 +189,7 @@ LESS_VARIABLES;
         $code = explode("\n", $contents);
 
         foreach ($code as $row) {
-            if (false !== preg_match('/^@([^:]+)\:([^;])+;/', $row, $matches)) {
+            if (false !== preg_match('/^@([^:]+)\:([^;]+);/', $row, $matches)) {
                 if (isset($matches[1])) {
                     $variables[$matches[1]] = trim($matches[2]);
                 }

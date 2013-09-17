@@ -1,7 +1,7 @@
 BootstrapBundle
 ===============
 
-Version: **0.9.5**
+Version: **0.9.6**
 
 
 ### Installation
