@@ -33,28 +33,27 @@ class ThemePass implements CompilerPassInterface
 //
 // Layout
 // -------------------------------------------------
-@import "bootstrap.less";
+@import "theme.less";
 
 // Put your custom styles here
 
 LESS_LAYOUT;
 
-    /**
-     * Template for variables.less file
-     *
-     * @var string
-     */
-    const LESS_VARIABLES = <<<LESS_VARIABLES
+    const LESS_THEME = <<<LESS_THEME
 //
 // Theme: %theme%
 // Last-Modified: %datetime%
 //
-// This file is auto-generated. Do not edit, as it is generated during the cache creation process.
+// This file is auto-generated. Do not edit, as it
+// is generated during the cache creation process.
 // -------------------------------------------------
+//
 
 %contents%
 
-LESS_VARIABLES;
+@import "../../bootstrap.less";
+
+LESS_THEME;
 
     /**
      * {@inheritDoc}
@@ -67,6 +66,8 @@ LESS_VARIABLES;
 
         $resourcesConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
         $extensionConfig = $this->getExtensionConfiguration($container);
+
+        $this->buildBootstrapLess($extensionConfig, $container);
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
             $theme = $container->get($id);
@@ -84,18 +85,17 @@ LESS_VARIABLES;
     }
 
     /**
-     * Returns the bundles processed extension configuration.
+     * Creates the bootstrap.less file for your themes.
      *
+     * @param array $config
      * @param ContainerBuilder $container
-     *
-     * @return array
      */
-    protected function getExtensionConfiguration(ContainerBuilder $container)
+    protected function buildBootstrapLess(array $config, ContainerBuilder $container)
     {
-        $config = $container->getExtensionConfig('p2_bootstrap');
-        $processor = new Processor();
+        $filepath = $container->getParameterBag()->resolveValue($config['theme_path']) . '/bootstrap.less';
+        $contents = $this->generateBootstrapLess($config, $container);
 
-        return $processor->processConfiguration(new Configuration(), $config);
+        file_put_contents($filepath, $contents);
     }
 
     /**
@@ -113,8 +113,7 @@ LESS_VARIABLES;
             mkdir($path, 0777, true);
         }
 
-        file_put_contents($path . '/variables.less', $this->generateThemeVariablesLess($config, $container, $theme));
-        file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container, $theme));
+        file_put_contents($path . '/theme.less', $this->generateThemeLess($config, $container, $theme));
 
         // only create layout.less if this file does not exists already (we do not want to overwrite custom styling)
         if (! file_exists($path . '/layout.less')) {
@@ -123,7 +122,7 @@ LESS_VARIABLES;
     }
 
     /**
-     * Returns the variables.less stylesheet contents.
+     * Returns the theme.less stylesheet contents.
      *
      * @param array $config
      * @param ContainerBuilder $container
@@ -131,7 +130,7 @@ LESS_VARIABLES;
      *
      * @return string
      */
-    protected function generateThemeVariablesLess(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function generateThemeLess(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
         $contents = "";
 
@@ -140,7 +139,7 @@ LESS_VARIABLES;
         }
 
         return strtr(
-            static::LESS_VARIABLES,
+            static::LESS_THEME,
             array(
                 '%theme%' => $theme->getName(),
                 '%datetime%' => date('d/m/Y H:i:s', time()),
@@ -214,14 +213,13 @@ LESS_VARIABLES;
      *
      * @param array $config
      * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
      *
      * @return string
      * @throws \RuntimeException
      */
-    protected function generateBootstrapLess(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function generateBootstrapLess(array $config, ContainerBuilder $container)
     {
-        $relativePath = $this->getRelativeBootstrapPath($config, $container, $theme);
+        $relativePath = $this->getRelativeBootstrapPath($config, $container);
         $imports = $this->parseImports($config, $container);
 
         $template = "@import \"%s\";";
@@ -229,9 +227,8 @@ LESS_VARIABLES;
             $filepath = $imports[$i];
             if ($imports[$i] !== 'variables.less') {
                 $filepath = $relativePath . '/' . $filepath;
+                $imports[$i] = sprintf($template, $filepath);
             }
-
-            $imports[$i] = sprintf($template, $filepath);
         }
 
         $contents = "// This file is auto generated.\n\n";
@@ -271,16 +268,15 @@ LESS_VARIABLES;
      *
      * @param array $config
      * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
      *
      * @return string
      */
-    protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container)
     {
         $bootstrapPath = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
         $rootPath = $container->getParameter('kernel.root_dir') . '/../';
 
-        return $this->getRelativeRootPath($config, $container, $theme) . substr($bootstrapPath, strlen($rootPath));
+        return $this->getRelativeRootPath($config, $container) . substr($bootstrapPath, strlen($rootPath));
     }
 
     /**
@@ -288,13 +284,12 @@ LESS_VARIABLES;
      *
      * @param array $config
      * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
      *
      * @return string
      */
-    protected function getRelativeRootPath(array $config, ContainerBuilder $container, ThemeInterface $theme)
+    protected function getRelativeRootPath(array $config, ContainerBuilder $container)
     {
-        $themeDirectory = realpath($this->resolveThemePath($config['theme_path'], $container, $theme) . '/less');
+        $themeDirectory = realpath($container->getParameterBag()->resolveValue($config['theme_path']));
         $rootDirectory = realpath($container->getParameter('kernel.root_dir') . '/..');
         $path = substr($themeDirectory, strlen($rootDirectory) + 1);
         $step = count(explode('/', $path));
@@ -372,6 +367,21 @@ LESS_VARIABLES;
     protected function resolveThemePath($path, ContainerBuilder $container, ThemeInterface $theme)
     {
         return $container->getParameterBag()->resolveValue($path) . '/' . $theme->getName();
+    }
+
+    /**
+     * Returns the bundles processed extension configuration.
+     *
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    protected function getExtensionConfiguration(ContainerBuilder $container)
+    {
+        $config = $container->getExtensionConfig('p2_bootstrap');
+        $processor = new Processor();
+
+        return $processor->processConfiguration(new Configuration(), $config);
     }
 
     /**
