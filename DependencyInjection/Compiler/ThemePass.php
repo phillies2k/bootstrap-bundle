@@ -28,9 +28,10 @@ class ThemePass implements CompilerPassInterface
      * @var string
      */
     const LESS_LAYOUT = <<<LESS_LAYOUT
+//
 // Theme: %theme%
 //
-// Imports
+// Layout
 // -------------------------------------------------
 @import "bootstrap.less";
 
@@ -44,9 +45,11 @@ LESS_LAYOUT;
      * @var string
      */
     const LESS_VARIABLES = <<<LESS_VARIABLES
-// Theme: %theme%
 //
-// Variables
+// Theme: %theme%
+// Last-Modified: %datetime%
+//
+// This file is auto-generated. Do not edit, as it is generated during the cache creation process.
 // -------------------------------------------------
 
 %contents%
@@ -136,7 +139,14 @@ LESS_VARIABLES;
             $contents .= "@" . $name . ": " . $value . ";\n";
         }
 
-        return strtr(static::LESS_VARIABLES, array('%theme%' => $theme->getName(), '%contents%' => $contents));
+        return strtr(
+            static::LESS_VARIABLES,
+            array(
+                '%theme%' => $theme->getName(),
+                '%datetime%' => date('d/m/Y H:i:s', time()),
+                '%contents%' => $contents
+            )
+        );
     }
 
     /**
