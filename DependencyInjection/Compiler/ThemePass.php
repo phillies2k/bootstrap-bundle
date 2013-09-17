@@ -110,15 +110,7 @@ LESS_VARIABLES;
             mkdir($path, 0777, true);
         }
 
-        if (file_exists($path . '/variables.less')) {
-            $existingVariables = $this->parseVariablesFromFile($path . '/variables.less');
-            $updatingVariables = $this->buildBootstrapVariables($config, $container, $theme);
-            $variables = array_diff_key($updatingVariables, $existingVariables);
-        } else {
-            $variables = $this->buildBootstrapVariables($config, $container, $theme);
-        }
-
-        file_put_contents($path . '/variables.less', $this->generateThemeVariablesLess($variables, $theme));
+        file_put_contents($path . '/variables.less', $this->generateThemeVariablesLess($config, $container, $theme));
         file_put_contents($path . '/bootstrap.less', $this->generateBootstrapLess($config, $container, $theme));
 
         // only create layout.less if this file does not exists already (we do not want to overwrite custom styling)
@@ -130,15 +122,17 @@ LESS_VARIABLES;
     /**
      * Returns the variables.less stylesheet contents.
      *
-     * @param array $variables
+     * @param array $config
+     * @param ContainerBuilder $container
      * @param ThemeInterface $theme
      *
      * @return string
      */
-    protected function generateThemeVariablesLess(array $variables, ThemeInterface $theme)
+    protected function generateThemeVariablesLess(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
         $contents = "";
-        foreach ($variables as $name => $value) {
+
+        foreach ($this->buildBootstrapVariables($config, $container, $theme) as $name => $value) {
             $contents .= "@" . $name . ": " . $value . ";\n";
         }
 
