@@ -99,6 +99,90 @@ LESS_THEME;
     }
 
     /**
+     * Generates the bootstrap.less file for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     * @throws \RuntimeException
+     */
+    protected function generateBootstrapLess(array $config, ContainerBuilder $container)
+    {
+        $relativePath = $this->getRelativeBootstrapPath($config, $container);
+        $template = "@import \"%s\";\n";
+        $contents = "// This file is auto generated.\n\n";
+
+        foreach ($this->parseImports($config, $container) as $filepath) {
+            if ($filepath !== 'variables.less') {
+                $contents .= sprintf($template, $relativePath . '/' . $filepath);
+            }
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Parses import statements from bootstrap.less and returns an array of its values.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function parseImports(array $config, ContainerBuilder $container)
+    {
+        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
+        $bootstrapFilepath = $bootstrapDirectory . '/bootstrap.less';
+
+        if (false === $count = preg_match_all('/@import\s"([^"]+)";/', file_get_contents($bootstrapFilepath), $matches)) {
+            throw new \RuntimeException('preg_match_all encountered an error');
+        }
+
+        if ($count === 0 || ! isset($matches[1]) || ! is_array($matches[1])) {
+
+            return array();
+        }
+
+        return $matches[1];
+    }
+
+    /**
+     * Returns the relative path to the twitter bootstrap directory for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     */
+    protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container)
+    {
+        $bootstrapPath = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
+        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
+
+        return $this->getRelativeRootPath($config, $container) . substr($bootstrapPath, strlen($rootPath));
+    }
+
+    /**
+     * Returns the relative path to the project root for the given theme.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return string
+     */
+    protected function getRelativeRootPath(array $config, ContainerBuilder $container)
+    {
+        $themeDirectory = realpath($container->getParameterBag()->resolveValue($config['theme_path']));
+        $rootDirectory = realpath($container->getParameter('kernel.root_dir') . '/..');
+        $path = substr($themeDirectory, strlen($rootDirectory) + 1);
+        $step = count(explode('/', $path));
+
+        return str_repeat('../', $step);
+    }
+
+    /**
      * Creates the less files for the given theme.
      *
      * @param array $config
@@ -206,90 +290,6 @@ LESS_THEME;
         }
 
         return $variables;
-    }
-
-    /**
-     * Generates the bootstrap.less file for the given theme.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     *
-     * @return string
-     * @throws \RuntimeException
-     */
-    protected function generateBootstrapLess(array $config, ContainerBuilder $container)
-    {
-        $relativePath = $this->getRelativeBootstrapPath($config, $container);
-        $template = "@import \"%s\";\n";
-        $contents = "// This file is auto generated.\n\n";
-
-        foreach ($this->parseImports($config, $container) as $filepath) {
-            if ($filepath !== 'variables.less') {
-                $contents .= sprintf($template, $relativePath . '/' . $filepath);
-            }
-        }
-
-        return $contents;
-    }
-
-    /**
-     * Parses import statements from bootstrap.less and returns an array of its values.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     *
-     * @return array
-     * @throws \RuntimeException
-     */
-    protected function parseImports(array $config, ContainerBuilder $container)
-    {
-        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
-        $bootstrapFilepath = $bootstrapDirectory . '/bootstrap.less';
-
-        if (false === $count = preg_match_all('/@import\s"([^"]+)";/', file_get_contents($bootstrapFilepath), $matches)) {
-            throw new \RuntimeException('preg_match_all encountered an error');
-        }
-
-        if ($count === 0 || ! isset($matches[1]) || ! is_array($matches[1])) {
-
-            return array();
-        }
-
-        return $matches[1];
-    }
-
-    /**
-     * Returns the relative path to the twitter bootstrap directory for the given theme.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     *
-     * @return string
-     */
-    protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container)
-    {
-        $bootstrapPath = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
-        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
-
-        return $this->getRelativeRootPath($config, $container) . substr($bootstrapPath, strlen($rootPath));
-    }
-
-    /**
-     * Returns the relative path to the project root for the given theme.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     *
-     * @return string
-     */
-    protected function getRelativeRootPath(array $config, ContainerBuilder $container)
-    {
-        $themeDirectory = realpath($container->getParameterBag()->resolveValue($config['theme_path']));
-        $rootDirectory = realpath($container->getParameter('kernel.root_dir') . '/..');
-        $path = substr($themeDirectory, strlen($rootDirectory) + 1);
-        $step = count(explode('/', $path));
-
-        return str_repeat('../', $step);
     }
 
     /**
