@@ -225,7 +225,9 @@ LESS_THEME;
         $template = "@import \"%s\";";
         for ($i = 0; $i < count($imports); $i++) {
             $filepath = $imports[$i];
-            if ($imports[$i] !== 'variables.less') {
+            if ($imports[$i] === 'variables.less') {
+                unset($imports[$i]);
+            } else {
                 $filepath = $relativePath . '/' . $filepath;
                 $imports[$i] = sprintf($template, $filepath);
             }
