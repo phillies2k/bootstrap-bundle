@@ -200,7 +200,9 @@ LESS_VARIABLES;
 
         foreach ($code as $row) {
             if (false !== preg_match('/^@([^:]+)\:([^;])+;/', $row, $matches)) {
-                $variables[$matches[1]] = trim($matches[2]);
+                if (isset($matches[1])) {
+                    $variables[$matches[1]] = trim($matches[2]);
+                }
             }
         }
 
