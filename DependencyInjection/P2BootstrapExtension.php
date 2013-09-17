@@ -83,7 +83,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     {
         return array(
             'inputs' => array($config['path_jquery_js']),
-            'output' => $config['jquery']
+            'output' => $config['jquery_js']
         );
     }
 
@@ -98,7 +98,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     {
         return array(
             'inputs' => array($config['path_bootstrap_assets'] . '/js/holder.js'),
-            'output' => $config['holder']
+            'output' => $config['holder_js']
         );
     }
 
