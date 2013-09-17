@@ -179,7 +179,7 @@ LESS_VARIABLES;
      */
     protected function parseBootstrapVariables(array $config, ContainerBuilder $container)
     {
-        $source = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/less/variables.less';
+        $source = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']) . '/variables.less';
 
         return $this->parseVariablesFromFile($source);
     }
@@ -249,8 +249,8 @@ LESS_VARIABLES;
      */
     protected function parseImports(array $config, ContainerBuilder $container)
     {
-        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
-        $bootstrapFilepath = $bootstrapDirectory . '/less/bootstrap.less';
+        $bootstrapDirectory = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
+        $bootstrapFilepath = $bootstrapDirectory . '/bootstrap.less';
 
         if (false === $count = preg_match_all('/@import\s"([^"]+)";/', file_get_contents($bootstrapFilepath), $matches)) {
             throw new \RuntimeException('preg_match_all encountered an error');
@@ -275,7 +275,7 @@ LESS_VARIABLES;
      */
     protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
-        $bootstrapPath = $container->getParameterBag()->resolveValue($config['path_bootstrap']);
+        $bootstrapPath = $container->getParameterBag()->resolveValue($config['path_bootstrap_less']);
         $rootPath = $container->getParameter('kernel.root_dir') . '/../';
 
         return $this->getRelativeRootPath($config, $container, $theme) . substr($bootstrapPath, strlen($rootPath));
@@ -320,7 +320,7 @@ LESS_VARIABLES;
      */
     protected function symlinkFonts(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
-        $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap']) . '/fonts/*';
+        $pattern = $container->getParameterBag()->resolveValue($config['path_bootstrap_fonts']) . '/*';
         $rootPath = $container->getParameter('kernel.root_dir') . '/../web';
         $fontPath = $rootPath . '/' . $this->resolveThemePath($config['public_path'], $container, $theme) . '/fonts';
 

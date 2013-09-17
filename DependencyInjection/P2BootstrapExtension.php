@@ -11,7 +11,6 @@
 namespace P2\Bundle\BootstrapBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
@@ -63,10 +62,10 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                         )
                     ),
                     'assets' => array(
-                        'jquery' => $this->buildAsseticJqueryConfig($config),
+                        'jquery_js' => $this->buildAsseticJqueryConfig($config),
                         'bootstrap_css' => $this->buildAsseticBootstrapCssConfig($config),
                         'bootstrap_js' => $this->buildAsseticBootstrapJsConfig($config),
-                        'holder' => $this->buildAsseticHolderConfig($config),
+                        'holder_js' => $this->buildAsseticHolderConfig($config),
                     )
                 )
             );
@@ -83,7 +82,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticJqueryConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_jquery'] . '/jquery.min.js'),
+            'inputs' => array($config['path_jquery_js']),
             'output' => $config['jquery']
         );
     }
@@ -98,7 +97,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticHolderConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_bootstrap'] . '/assets/js/holder.js'),
+            'inputs' => array($config['path_bootstrap_assets'] . '/js/holder.js'),
             'output' => $config['holder']
         );
     }
@@ -113,7 +112,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticBootstrapCssConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_bootstrap'] . '/less/bootstrap.less'),
+            'inputs' => array($config['path_bootstrap_less'] . '/bootstrap.less'),
             'filters' => array('less'),
             'output' => $config['bootstrap_css']
         );
@@ -130,18 +129,18 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     {
         return array(
             'inputs' => array(
-                $config['path_bootstrap'] . '/js/transition.js',
-                $config['path_bootstrap'] . '/js/alert.js',
-                $config['path_bootstrap'] . '/js/button.js',
-                $config['path_bootstrap'] . '/js/carousel.js',
-                $config['path_bootstrap'] . '/js/collapse.js',
-                $config['path_bootstrap'] . '/js/dropdown.js',
-                $config['path_bootstrap'] . '/js/modal.js',
-                $config['path_bootstrap'] . '/js/tooltip.js',
-                $config['path_bootstrap'] . '/js/popover.js',
-                $config['path_bootstrap'] . '/js/scrollspy.js',
-                $config['path_bootstrap'] . '/js/tab.js',
-                $config['path_bootstrap'] . '/js/affix.js'
+                $config['path_bootstrap_js'] . '/transition.js',
+                $config['path_bootstrap_js'] . '/alert.js',
+                $config['path_bootstrap_js'] . '/button.js',
+                $config['path_bootstrap_js'] . '/carousel.js',
+                $config['path_bootstrap_js'] . '/collapse.js',
+                $config['path_bootstrap_js'] . '/dropdown.js',
+                $config['path_bootstrap_js'] . '/modal.js',
+                $config['path_bootstrap_js'] . '/tooltip.js',
+                $config['path_bootstrap_js'] . '/popover.js',
+                $config['path_bootstrap_js'] . '/scrollspy.js',
+                $config['path_bootstrap_js'] . '/tab.js',
+                $config['path_bootstrap_js'] . '/affix.js'
             ),
             'filters' => array('yui_js'),
             'output' => $config['bootstrap_js']
