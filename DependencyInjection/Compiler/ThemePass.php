@@ -244,6 +244,7 @@ LESS_THEME;
     protected function buildBootstrapVariables(array $config, ContainerBuilder $container, ThemeInterface $theme)
     {
         $variables = $this->parseBootstrapVariables($config, $container);
+        $variables['font-path'] = '../../fonts';
 
         foreach ($this->getThemeVariables($theme) as $name => $value) {
             $variables[$name] = $value;
