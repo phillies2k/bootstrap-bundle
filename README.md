@@ -1,7 +1,7 @@
 BootstrapBundle
 ===============
 
-Version: **0.9.2**
+Version: **0.9.3**
 
 
 ### Installation
@@ -32,14 +32,17 @@ The Bundle will automatically create and provide the following assets for you:
 Default configuration:
 ```yaml
 p2_bootstrap:
-    theme_path: '%kernel.root_dir%/Resources/themes'                    # path to store the themes
-    public_path: 'themes'                                               # public path to the themes
-    bootstrap_css: 'css/bootstrap.css'                                  # public bootstrap css path
-    bootstrap_js: 'js/bootstrap.js'                                     # public bootstrap js library path
-    jquery: 'js/jquery.js'                                              # public jquery path
-    holder: 'js/holder.js'                                              # public holder.js path
-    path_jquery: '%kernel.root_dir%/../components/jquery'               # path to the jquery source directory
-    path_bootstrap: '%kernel.root_dir%/../vendor/twitter/bootstrap'     # path to the bootstrap source directory
+    theme_path: '%kernel.root_dir%/Resources/themes'                                # path to store the themes
+    public_path: 'themes'                                                           # public path to the themes
+    bootstrap_css: 'css/bootstrap.css'                                              # public bootstrap css path
+    bootstrap_js: 'js/bootstrap.js'                                                 # public bootstrap js library path
+    jquery_js: 'js/jquery.js'                                                       # public jquery path
+    holder_js: 'js/holder.js'                                                       # public holder.js path
+    path_jquery_js: '%kernel.root_dir%/../components/jquery/jquery.min.js'          # path to the jquery source directory
+    path_bootstrap_less: '%kernel.root_dir%/../vendor/twitter/bootstrap/less'       # path to the bootstrap less directory
+    path_bootstrap_js: '%kernel.root_dir%/../vendor/twitter/bootstrap/js'           # path to the bootstrap js directory
+    path_bootstrap_assets: '%kernel.root_dir%/../vendor/twitter/bootstrap/assets'   # path to the bootstrap assets directory
+    path_bootstrap_fonts: '%kernel.root_dir%/../vendor/twitter/bootstrap/fonts'     # path to the bootstrap font directory
 
 ```
 
