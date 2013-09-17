@@ -29,8 +29,8 @@ The Bundle will automatically create and provide the following assets for you:
 
 ### Configuration
 
+Default configuration:
 ```yaml
-
 p2_bootstrap:
     theme_path: '%kernel.root_dir%/Resources/themes'                    # path to store the themes
     public_path: 'themes'                                               # public path to the themes
