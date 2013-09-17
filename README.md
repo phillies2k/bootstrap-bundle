@@ -27,6 +27,22 @@ The Bundle will automatically create and provide the following assets for you:
   The jQuery library
 
 
+### Configuration
+
+```yaml
+
+p2_bootstrap:
+    theme_path: '%kernel.root_dir%/Resources/themes'                    # path to store the themes
+    public_path: 'themes'                                               # public path to the themes
+    bootstrap_css: 'css/bootstrap.css'                                  # public bootstrap css path
+    bootstrap_js: 'js/bootstrap.js'                                     # public bootstrap js library path
+    jquery: 'js/jquery.js'                                              # public jquery path
+    holder: 'js/holder.js'                                              # public holder.js path
+    path_jquery: '%kernel.root_dir%/../components/jquery'               # path to the jquery source directory
+    path_bootstrap: '%kernel.root_dir%/../vendor/twitter/bootstrap'     # path to the bootstrap source directory
+
+```
+
 ### Themeing
 
 Start creating your custom theme class by extending [Theme](Themeing/Theme.php). It represents a default implementation of the [ThemeInterface](Themeing/ThemeInterface.php), meaning bringing you the default bootstrap style on top.
