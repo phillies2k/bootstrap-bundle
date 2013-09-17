@@ -19,6 +19,14 @@ abstract class Theme implements ThemeInterface
     /**
      * {@inheritDoc}
      */
+    public function getCustomVariables()
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getBrandPrimary()
     {
         return '';

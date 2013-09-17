@@ -24,6 +24,13 @@ interface ThemeInterface
     public function getName();
 
     /**
+     * Returns an array of custom variables for this theme.
+     *
+     * @return array
+     */
+    public function getCustomVariables();
+
+    /**
      * Returns the primary color value for this theme.
      *
      * @return string

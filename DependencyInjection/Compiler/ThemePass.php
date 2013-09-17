@@ -153,9 +153,7 @@ LESS_VARIABLES;
         $variables = $this->parseBootstrapVariables($config, $container);
 
         foreach ($this->getThemeVariables($theme) as $name => $value) {
-            if (isset($variables[$name])) {
-                $variables[$name] = $value;
-            }
+            $variables[$name] = $value;
         }
 
         return $variables;
@@ -447,6 +445,10 @@ LESS_VARIABLES;
 
         if ($theme->getButtonInfoColor() !== '') {
             $variables['btn-info-color'] = $theme->getButtonInfoColor();
+        }
+
+        foreach ($theme->getCustomVariables() as $name => $value) {
+            $variables[$name] = $value;
         }
 
         return $variables;
