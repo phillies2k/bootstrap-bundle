@@ -50,7 +50,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $bundles = $container->getParameter('kernel.bundles');
 
         if (isset($bundles['AsseticBundle'])) {
-            $container->prependExtensionConfig('assetic', $this->buildAsseticAssetsConfig($config));
+            $container->prependExtensionConfig('assetic', $this->buildAsseticConfig($config, $container));
         }
 
         if (isset($bundles['TwigBundle'])) {
@@ -68,20 +68,50 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     }
 
     /**
-     * Returns the assetic assets configuration section.
+     * Returns the assetic asset configuration for your themes.
      *
      * @param array $config
+     * @param ContainerBuilder $container
      *
      * @return array
      */
-    protected function buildAsseticAssetsConfig(array $config)
+    protected function buildAssetsConfig(array $config, ContainerBuilder $container)
     {
-        $assets = array(
-            'jquery_js' => $this->buildAsseticJqueryConfig($config),
-            'bootstrap_css' => $this->buildAsseticBootstrapCssConfig($config),
-            'bootstrap_js' => $this->buildAsseticBootstrapJsConfig($config),
-            'holder_js' => $this->buildAsseticHolderConfig($config),
-        );
+        $publicPath = $container->getParameterBag()->resolveValue($config['public_path']);
+        $publicPath = substr($publicPath, strpos($publicPath, 'web/') + 4);
+        $themesPath = $container->getParameterBag()->resolveValue($config['themes_path']);
+
+        $assets = array();
+
+        foreach (glob($themesPath . '/*/less/layout.less') as $filepath) {
+            $theme = trim(substr($filepath, strlen($themesPath)), '/');
+            $theme = substr($theme, 0, strpos($theme, '/'));
+
+            $assets['theme_' . $theme] = array(
+                'inputs' => array($filepath),
+                'filters' => array('less'),
+                'output' => $publicPath . '/' . $theme . '/css/style.css'
+            );
+        }
+
+        return $assets;
+    }
+
+    /**
+     * Returns the assetic assets configuration section.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    protected function buildAsseticConfig(array $config, ContainerBuilder $container)
+    {
+        $assets = $this->buildAssetsConfig($config, $container);
+        $assets['bootstrap_css'] = $this->buildAsseticBootstrapCssConfig($config);
+        $assets['bootstrap_js'] = $this->buildAsseticBootstrapJsConfig($config);
+        $assets['holder_js'] = $this->buildAsseticJqueryConfig($config);
+        $assets['jquery_js'] = $this->buildAsseticHolderConfig($config);
 
         $filters = array(
             'less' => null,

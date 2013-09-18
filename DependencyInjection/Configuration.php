@@ -29,14 +29,15 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->booleanNode('use_themes')->defaultTrue()->end()
-                ->scalarNode('jquery_path')->defaultValue('%kernel.root_dir%/../components/jquery/jquery.js')->end()
-                ->scalarNode('source_path')->defaultValue('%kernel.root_dir%/../vendor/twitter/bootstrap')->end()
-                ->scalarNode('themes_path')->defaultValue('%kernel.root_dir%/Resources/themes')->end()
-                ->scalarNode('bootstrap_css')->defaultValue('css/bootstrap.css')->end()
-                ->scalarNode('bootstrap_js')->defaultValue('js/bootstrap.js')->end()
-                ->scalarNode('jquery_js')->defaultValue('js/jquery.js')->end()
-                ->scalarNode('holder_js')->defaultValue('js/holder.js')->end()
+            ->booleanNode('use_themes')->defaultTrue()->end()
+            ->scalarNode('public_path')->defaultValue('%kernel.root_dir%/../web/themes')->end()
+            ->scalarNode('jquery_path')->defaultValue('%kernel.root_dir%/../components/jquery/jquery.js')->end()
+            ->scalarNode('source_path')->defaultValue('%kernel.root_dir%/../vendor/twitter/bootstrap')->end()
+            ->scalarNode('themes_path')->defaultValue('%kernel.root_dir%/Resources/themes')->end()
+            ->scalarNode('bootstrap_css')->defaultValue('css/bootstrap.css')->end()
+            ->scalarNode('bootstrap_js')->defaultValue('js/bootstrap.js')->end()
+            ->scalarNode('jquery_js')->defaultValue('js/jquery.js')->end()
+            ->scalarNode('holder_js')->defaultValue('js/holder.js')->end()
             ->end();
 
         return $treeBuilder;
