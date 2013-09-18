@@ -75,6 +75,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $mock->getButtonWarningColor());
         $this->assertEquals('', $mock->getButtonDangerColor());
         $this->assertEquals('', $mock->getButtonInfoColor());
+        $this->assertEquals(array(), $mock->getCustomVariables());
         $this->assertEquals('theme', $mock->getName());
     }
 }
