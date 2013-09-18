@@ -44,8 +44,7 @@ LESS_LAYOUT;
 // Theme: %theme%
 // Last-Modified: %datetime%
 //
-// This file is auto-generated. Do not edit, as it
-// is generated during the cache creation process.
+// This file is auto-generated.
 // -------------------------------------------------
 //
 
