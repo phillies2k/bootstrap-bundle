@@ -41,7 +41,7 @@ class ThemePass implements CompilerPassInterface
         $themeBuilder = $container->getDefinition('p2_bootstrap.theme_builder');
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
-            $themeBuilder->addMethodCall('buildTheme', array(new Reference($id)));
+            $themeBuilder->addMethodCall('addTheme', array(new Reference($id)));
         }
     }
 

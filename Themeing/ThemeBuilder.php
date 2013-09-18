@@ -66,6 +66,11 @@ LESS_THEME;
     protected $themesDirectory;
 
     /**
+     * @var ThemeInterface[]
+     */
+    protected $themes;
+
+    /**
      * @param string $sourceDirectory
      * @param string $themesDirectory
      */
@@ -79,19 +84,31 @@ LESS_THEME;
     /**
      * {@inheritDoc}
      */
-    public function buildTheme(ThemeInterface $theme)
+    public function addTheme(ThemeInterface $theme)
     {
-        $path = $this->themesDirectory . '/' . $theme->getName() . '/less';
+        $this->themes[$theme->getName()] = $theme;
 
-        if (! is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
+        return $this;
+    }
 
-        file_put_contents($path . '/theme.less', $this->generateThemeLess($theme));
+    /**
+     * {@inheritDoc}
+     */
+    public function buildThemes()
+    {
+        foreach ($this->themes as $theme) {
+            $path = $this->themesDirectory . '/' . $theme->getName() . '/less';
 
-        // only create layout.less if this file does not exists already (we do not want to overwrite custom styling)
-        if (! file_exists($path . '/layout.less')) {
-            file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
+            if (! is_dir($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            // only create layout.less if this file does not exists already (we do not want to overwrite custom styling)
+            if (! file_exists($path . '/layout.less')) {
+                file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
+            }
+
+            file_put_contents($path . '/theme.less', $this->generateThemeLess($theme));
         }
     }
 

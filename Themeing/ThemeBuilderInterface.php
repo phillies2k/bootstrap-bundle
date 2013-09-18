@@ -13,14 +13,21 @@ namespace P2\Bundle\BootstrapBundle\Themeing;
  * Interface ThemeBuilderInterface
  * @package P2\Bundle\BootstrapBundle\Themeing
  */
-interface ThemeBuilderInterface 
+interface ThemeBuilderInterface
 {
     /**
-     * Creates the given theme.
+     * Adds a theme to the theme builder.
      *
      * @param ThemeInterface $theme
      *
+     * @return ThemeBuilderInterface
+     */
+    public function addTheme(ThemeInterface $theme);
+
+    /**
+     * Builds the themes.
+     *
      * @return void
      */
-    public function buildTheme(ThemeInterface $theme);
+    public function buildThemes();
 }
