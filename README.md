@@ -42,6 +42,14 @@ p2_bootstrap:
     holder_js: 'js/holder.js'                                           # public holder.js path
 ```
 
+### Console Command
+
+```bash
+    app/console bootstrap:generate:theme
+```
+
+This will generate the themes for your application.
+
 ### Themeing
 
 Start creating your custom theme class by extending [Theme](Themeing/Theme.php). It represents a default implementation of the [ThemeInterface](Themeing/ThemeInterface.php), meaning bringing you the default bootstrap style on top.
