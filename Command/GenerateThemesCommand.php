@@ -15,10 +15,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class GenerateThemeCommand
+ * Class GenerateThemesCommand
  * @package P2\Bundle\BootstrapBundle\Command
  */
-class GenerateThemeCommand extends ContainerAwareCommand
+class GenerateThemesCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritDoc}
@@ -26,7 +26,7 @@ class GenerateThemeCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('bootstrap:generate:theme')
+            ->setName('bootstrap:generate:themes')
             ->setDescription('Generates bootstrap themes')
             ->setHelp('no help available.');
     }
@@ -36,8 +36,14 @@ class GenerateThemeCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (! $this->getContainer()->has('p2_bootstrap.theme_builder')) {
+            throw new \RuntimeException('Missing theme builder service definition.');
+        }
+
+        $themeBuilder = $this->getContainer()->get('p2_bootstrap.theme_builder');
+
         try {
-            $this->getThemeBuilder()->buildThemes();
+            $themeBuilder->buildThemes();
 
             $output->writeln("<notice>Themes build successfully!</notice>");
 
@@ -47,20 +53,5 @@ class GenerateThemeCommand extends ContainerAwareCommand
 
             return -1;
         }
-    }
-
-    /**
-     * Returns the theme builder service.
-     *
-     * @return \P2\Bundle\BootstrapBundle\Themeing\ThemeBuilderInterface
-     * @throws \RuntimeException When the theme builder service was not found.
-     */
-    protected function getThemeBuilder()
-    {
-        if (! $this->getContainer()->has('p2_bootstrap.theme_builder')) {
-            throw new \RuntimeException('Missing theme builder service definition.');
-        }
-
-        return $this->getContainer()->get('p2_bootstrap.theme_builder');
     }
 }
