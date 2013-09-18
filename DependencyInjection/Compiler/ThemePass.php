@@ -28,30 +28,22 @@ class ThemePass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (! $container->hasDefinition('assetic.config_resource')) {
-            throw new \RuntimeException('Missing assetic bundle.');
-        }
-
         if (! $container->hasDefinition('p2_bootstrap.theme_builder')) {
             throw new \RuntimeException('Missing theme builder service "p2_bootstrap.theme_builder".');
         }
 
-        $resourcesConfig = $container->getDefinition('assetic.config_resource')->getArgument(0);
-        $extensionConfig = $this->getExtensionConfiguration($container);
+        $processor = new Processor();
+        $configs = $container->getExtensionConfig('p2_bootstrap');
+        $config = $processor->processConfiguration(new Configuration(), $configs);
 
-        $this->buildBootstrapLess($extensionConfig, $container);
-        $this->symlinkFonts($extensionConfig, $container);
+        $this->buildBootstrapLess($config, $container);
+        $this->symlinkFonts($config, $container);
 
         $themeBuilder = $container->getDefinition('p2_bootstrap.theme_builder');
 
         foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
             $themeBuilder->addMethodCall('buildTheme', array(new Reference($id)));
-            $theme = $container->get($id);
-            $themeConfig = $this->buildAsseticThemeConfig($extensionConfig, $container, $theme);
-            $resourcesConfig = array_merge($resourcesConfig, $themeConfig);
         }
-
-        $container->getDefinition('assetic.config_resource')->replaceArgument(0, $resourcesConfig);
     }
 
     /**
@@ -178,56 +170,5 @@ class ThemePass implements CompilerPassInterface
                 symlink($filepath, $distPath);
             }
         }
-    }
-
-    /**
-     * Returns the assetic configuration entry for the given theme.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
-     *
-     * @return array
-     */
-    protected function buildAsseticThemeConfig(array $config, ContainerBuilder $container, ThemeInterface $theme)
-    {
-        $themeConfig = array();
-
-        $themeConfig['theme_' . $theme->getName()] = array(
-            array($this->resolveThemePath($config['themes_path'], $container, $theme) . '/less/layout.less'),
-            array('less'),
-            array('output' => $this->resolveThemePath($config['public_path'], $container, $theme) . '/css/style.css'),
-        );
-
-        return $themeConfig;
-    }
-
-    /**
-     * Returns the resolved path for the given theme.
-     *
-     * @param string $path
-     * @param ContainerBuilder $container
-     * @param ThemeInterface $theme
-     *
-     * @return string
-     */
-    protected function resolveThemePath($path, ContainerBuilder $container, ThemeInterface $theme)
-    {
-        return $container->getParameterBag()->resolveValue($path) . '/' . $theme->getName();
-    }
-
-    /**
-     * Returns the bundles processed extension configuration.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @return array
-     */
-    protected function getExtensionConfiguration(ContainerBuilder $container)
-    {
-        $config = $container->getExtensionConfig('p2_bootstrap');
-        $processor = new Processor();
-
-        return $processor->processConfiguration(new Configuration(), $config);
     }
 }

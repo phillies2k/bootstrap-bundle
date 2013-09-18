@@ -10,6 +10,7 @@
 
 namespace P2\Bundle\BootstrapBundle\DependencyInjection;
 
+use P2\Bundle\BootstrapBundle\Themeing\ThemeBuilderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -70,15 +71,41 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                             'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
                         )
                     ),
-                    'assets' => array(
-                        'jquery_js' => $this->buildAsseticJqueryConfig($config),
-                        'bootstrap_css' => $this->buildAsseticBootstrapCssConfig($config),
-                        'bootstrap_js' => $this->buildAsseticBootstrapJsConfig($config),
-                        'holder_js' => $this->buildAsseticHolderConfig($config),
-                    )
+                    'assets' => $this->buildAsseticAssetsConfig($config, $container)
                 )
             );
         }
+    }
+
+    /**
+     * Returns the assetic assets configuration section.
+     *
+     * @param array $config
+     * @param ContainerBuilder $container
+     *
+     * @return array
+     */
+    protected function buildAsseticAssetsConfig(array $config, ContainerBuilder $container)
+    {
+        $assets = array(
+            'jquery_js' => $this->buildAsseticJqueryConfig($config),
+            'bootstrap_css' => $this->buildAsseticBootstrapCssConfig($config),
+            'bootstrap_js' => $this->buildAsseticBootstrapJsConfig($config),
+            'holder_js' => $this->buildAsseticHolderConfig($config),
+        );
+
+        /** @var ThemeBuilderInterface $themeBuilder */
+        $themeBuilder = $container->get('p2_bootstrap.theme_builder');
+
+        foreach ($themeBuilder->getThemes() as $theme) {
+            $assets['theme_' . $theme->getName()] = array(
+                'inputs' => array($config['themes_path'] . '/' . $theme->getName() . '/less/layout.less'),
+                'filters' => array('less'),
+                'output' => $config['public_path'] . '/' . $theme->getName() . '/css/style.less'
+            );
+        }
+
+        return $assets;
     }
 
     /**

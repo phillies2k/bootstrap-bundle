@@ -66,6 +66,11 @@ LESS_THEME;
     protected $themesDirectory;
 
     /**
+     * @var ThemeInterface[]
+     */
+    protected $themes;
+
+    /**
      * @param string $sourceDirectory
      * @param string $themesDirectory
      */
@@ -73,6 +78,7 @@ LESS_THEME;
     {
         $this->sourceDirectory = $sourceDirectory;
         $this->themesDirectory = $themesDirectory;
+        $this->themes = array();
     }
 
     /**
@@ -81,6 +87,7 @@ LESS_THEME;
     public function buildTheme(ThemeInterface $theme)
     {
         $path = $this->themesDirectory . '/' . $theme->getName() . '/less';
+        $this->themes[$theme->getName()] = $theme;
 
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
@@ -92,6 +99,14 @@ LESS_THEME;
         if (! file_exists($path . '/layout.less')) {
             file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getThemes()
+    {
+        return $this->themes;
     }
 
     /**
