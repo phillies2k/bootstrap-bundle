@@ -17,22 +17,6 @@ namespace P2\Bundle\BootstrapBundle\Tests\Themeing;
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * set up
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-    
-    /**
-     * tear down
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
-    /**
      * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandPrimary
      * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandSuccess
      * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandWarning
@@ -50,6 +34,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonWarningColor
      * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDangerColor
      * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonInfoColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing::getCustomVariables
      * @covers P2\Bundle\BootstrapBundle\Themeing::getName
      * @group s
      */
