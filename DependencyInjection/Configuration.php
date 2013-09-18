@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->booleanNode('use_themes')->defaultTrue()->end()
                 ->scalarNode('jquery_path')->defaultValue('%kernel.root_dir%/../components/jquery/jquery.js')->end()
                 ->scalarNode('source_path')->defaultValue('%kernel.root_dir%/../vendor/twitter/bootstrap')->end()
                 ->scalarNode('themes_path')->defaultValue('%kernel.root_dir%/Resources/themes')->end()
