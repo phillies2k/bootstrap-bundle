@@ -79,19 +79,19 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     {
         $publicPath = $container->getParameterBag()->resolveValue($config['public_path']);
         $publicPath = substr($publicPath, strpos($publicPath, 'web/') + 4);
+
         $themesPath = $container->getParameterBag()->resolveValue($config['themes_path']);
 
         $assets = array();
 
         foreach (glob($themesPath . '/*/less/layout.less') as $filepath) {
-            $theme = trim(substr($filepath, strlen($themesPath)), '/');
-            $theme = substr($theme, 0, strpos($theme, '/'));
-
-            $assets['theme_' . $theme] = array(
-                'inputs' => array($filepath),
-                'filters' => array('less'),
-                'output' => $publicPath . '/' . $theme . '/css/style.css'
-            );
+            if (false !== preg_match('#(\w+)/less/(\w+)\.less#', $filepath, $matches)) {
+                $assets['theme_' . $matches[1]] = array(
+                    'inputs' => array(dirname($filepath) . '/theme.less', $filepath),
+                    'filters' => array('less'),
+                    'output' => $publicPath . '/' . $matches[1] . '/css/style.css'
+                );
+            }
         }
 
         return $assets;

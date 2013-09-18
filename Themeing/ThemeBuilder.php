@@ -28,7 +28,6 @@ class ThemeBuilder implements ThemeBuilderInterface
 //
 // Layout
 // -------------------------------------------------
-@import "theme.less";
 
 // Put your custom styles here
 
