@@ -10,6 +10,7 @@
 
 namespace P2\Bundle\BootstrapBundle\DependencyInjection;
 
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -26,6 +27,14 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
+
+        $container->setParameter('p2_bootstrap.source_directory', $config['source_path']);
+        $container->setParameter('p2_bootstrap.themes_directory', $config['themes_path']);
     }
 
     /**
@@ -82,7 +91,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticJqueryConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_jquery_js']),
+            'inputs' => array($config['jquery_path']),
             'output' => $config['jquery_js']
         );
     }
@@ -97,7 +106,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticHolderConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_bootstrap_assets'] . '/js/holder.js'),
+            'inputs' => array($config['source_path'] . '/assets/js/holder.js'),
             'output' => $config['holder_js']
         );
     }
@@ -112,7 +121,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticBootstrapCssConfig(array $config)
     {
         return array(
-            'inputs' => array($config['path_bootstrap_less'] . '/bootstrap.less'),
+            'inputs' => array($config['source_path'] . '/less/bootstrap.less'),
             'filters' => array('less'),
             'output' => $config['bootstrap_css']
         );
@@ -129,18 +138,18 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     {
         return array(
             'inputs' => array(
-                $config['path_bootstrap_js'] . '/transition.js',
-                $config['path_bootstrap_js'] . '/alert.js',
-                $config['path_bootstrap_js'] . '/button.js',
-                $config['path_bootstrap_js'] . '/carousel.js',
-                $config['path_bootstrap_js'] . '/collapse.js',
-                $config['path_bootstrap_js'] . '/dropdown.js',
-                $config['path_bootstrap_js'] . '/modal.js',
-                $config['path_bootstrap_js'] . '/tooltip.js',
-                $config['path_bootstrap_js'] . '/popover.js',
-                $config['path_bootstrap_js'] . '/scrollspy.js',
-                $config['path_bootstrap_js'] . '/tab.js',
-                $config['path_bootstrap_js'] . '/affix.js'
+                $config['source_path'] . '/js/transition.js',
+                $config['source_path'] . '/js/alert.js',
+                $config['source_path'] . '/js/button.js',
+                $config['source_path'] . '/js/carousel.js',
+                $config['source_path'] . '/js/collapse.js',
+                $config['source_path'] . '/js/dropdown.js',
+                $config['source_path'] . '/js/modal.js',
+                $config['source_path'] . '/js/tooltip.js',
+                $config['source_path'] . '/js/popover.js',
+                $config['source_path'] . '/js/scrollspy.js',
+                $config['source_path'] . '/js/tab.js',
+                $config['source_path'] . '/js/affix.js'
             ),
             'filters' => array('yui_js'),
             'output' => $config['bootstrap_js']

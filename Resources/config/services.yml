@@ -1,0 +1,12 @@
+parameters:
+
+    p2_bootstrap.theme_builder.class: P2\Bundle\BootstrapBundle\Themeing\ThemeBuilder
+
+services:
+
+    # theme builder
+    p2_bootstrap.theme_builder:
+        class: %p2_bootstrap.theme_builder.class%
+        arguments:
+            - %p2_bootstrap.source_directory%
+            - %p2_bootstrap.themes_directory%
