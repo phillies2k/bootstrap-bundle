@@ -40,6 +40,7 @@ class GenerateThemesCommand extends ContainerAwareCommand
             throw new \RuntimeException('Missing theme builder service definition.');
         }
 
+        /** @var ThemeBuilderInterface $themeBuilder */
         $themeBuilder = $this->getContainer()->get('p2_bootstrap.theme_builder');
 
         try {
