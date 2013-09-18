@@ -10,7 +10,6 @@
 
 namespace P2\Bundle\BootstrapBundle\DependencyInjection;
 
-use P2\Bundle\BootstrapBundle\Themeing\ThemeBuilderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -31,11 +30,12 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-
         $container->setParameter('p2_bootstrap.source_directory', $config['source_path']);
         $container->setParameter('p2_bootstrap.themes_directory', $config['themes_path']);
+        $container->setParameter('p2_bootstrap.themes', $config['themes']);
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
     }
 
     /**
@@ -47,6 +47,10 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['AsseticBundle'])) {
+            $container->prependExtensionConfig('assetic', $this->buildAsseticAssetsConfig($config));
+        }
 
         if (isset($bundles['TwigBundle'])) {
             $container->prependExtensionConfig(
@@ -60,32 +64,16 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                 )
             );
         }
-
-        if (isset($bundles['AsseticBundle'])) {
-            $container->prependExtensionConfig(
-                'assetic',
-                array(
-                    'filters' => array(
-                        'less' => null,
-                        'yui_js' => array(
-                            'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
-                        )
-                    ),
-                    'assets' => $this->buildAsseticAssetsConfig($config, $container)
-                )
-            );
-        }
     }
 
     /**
      * Returns the assetic assets configuration section.
      *
      * @param array $config
-     * @param ContainerBuilder $container
      *
      * @return array
      */
-    protected function buildAsseticAssetsConfig(array $config, ContainerBuilder $container)
+    protected function buildAsseticAssetsConfig(array $config)
     {
         $assets = array(
             'jquery_js' => $this->buildAsseticJqueryConfig($config),
@@ -94,18 +82,25 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
             'holder_js' => $this->buildAsseticHolderConfig($config),
         );
 
-        /** @var ThemeBuilderInterface $themeBuilder */
-        $themeBuilder = $container->get('p2_bootstrap.theme_builder');
+        $filters = array(
+            'less' => null,
+            'yui_js' => array(
+                'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
+            )
+        );
 
-        foreach ($themeBuilder->getThemes() as $theme) {
-            $assets['theme_' . $theme->getName()] = array(
-                'inputs' => array($config['themes_path'] . '/' . $theme->getName() . '/less/layout.less'),
+        foreach ($config['themes'] as $theme) {
+            $assets['theme_' . $theme] = array(
+                'inputs' => array($config['themes_path'] . '/' . $theme . '/less/layout.less'),
                 'filters' => array('less'),
-                'output' => $config['public_path'] . '/' . $theme->getName() . '/css/style.less'
+                'output' => $config['public_path'] . '/' . $theme . '/css/style.less'
             );
         }
 
-        return $assets;
+        return array(
+            'filters' => $filters,
+            'assets' => $assets
+        );
     }
 
     /**

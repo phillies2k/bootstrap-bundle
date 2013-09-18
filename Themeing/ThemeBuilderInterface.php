@@ -23,11 +23,4 @@ interface ThemeBuilderInterface
      * @return void
      */
     public function buildTheme(ThemeInterface $theme);
-
-    /**
-     * Returns an array of built themes.
-     *
-     * @return ThemeInterface[]
-     */
-    public function getThemes();
 }

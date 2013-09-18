@@ -11,7 +11,6 @@
 namespace P2\Bundle\BootstrapBundle\DependencyInjection\Compiler;
 
 use P2\Bundle\BootstrapBundle\DependencyInjection\Configuration;
-use P2\Bundle\BootstrapBundle\Themeing\ThemeInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
