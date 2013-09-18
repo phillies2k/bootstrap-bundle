@@ -140,7 +140,7 @@ LESS_THEME;
      */
     protected function buildBootstrapVariables(ThemeInterface $theme)
     {
-        $variables = $this->parseVariablesFromFile($this->sourceDirectory . '/less');
+        $variables = $this->parseVariablesFromFile($this->sourceDirectory . '/less/variables.less');
 
         // we alter bootstraps font path, cause we're storing fonts general in themes/fonts instead of providing
         // the same files within every theme directory (e.g. themes/default/fonts)
