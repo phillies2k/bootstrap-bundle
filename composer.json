@@ -2,6 +2,7 @@
     "name": "p2/bootstrap-bundle",
     "keywords": [ "symfony", "bootstrap", "bundle" ],
     "description": "Twitter Bootstrap 3.0 themeing for symfony2",
+    "homepage": "https://github.com/phillies2k/bootstrap-bundle",
     "license": "MIT",
     "author": [
         {
