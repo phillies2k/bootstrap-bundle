@@ -1,7 +1,7 @@
 BootstrapBundle
 ===============
 
-Version: **1.2.1**
+Version: **1.2.2**
 
 
 ### Installation
@@ -32,6 +32,7 @@ The Bundle will automatically create and provide the following assets for you:
 Default configuration:
 ```yaml
 p2_bootstrap:
+    use_themes: true                                                    # enables bootstrap themeing
     jquery_path: '%kernel.root_dir%/../components/jquery/jquery.js'     # path to the jquery source directory
     source_path: '%kernel.root_dir%/../vendor/twitter/bootstrap'        # path to the bootstrap source directory
     themes_path: '%kernel.root_dir%/Resources/themes'                   # path to store the themes to

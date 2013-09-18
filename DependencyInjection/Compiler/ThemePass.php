@@ -35,13 +35,15 @@ class ThemePass implements CompilerPassInterface
         $configs = $container->getExtensionConfig('p2_bootstrap');
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
-        $this->buildBootstrapLess($config, $container);
-        $this->symlinkFonts($config, $container);
+        if ($config['use_themes'] === true) {
+            $this->buildBootstrapLess($config, $container);
+            $this->symlinkFonts($config, $container);
 
-        $themeBuilder = $container->getDefinition('p2_bootstrap.theme_builder');
+            $themeBuilder = $container->getDefinition('p2_bootstrap.theme_builder');
 
-        foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
-            $themeBuilder->addMethodCall('addTheme', array(new Reference($id)));
+            foreach ($container->findTaggedServiceIds('bootstrap.theme') as $id => $attributes) {
+                $themeBuilder->addMethodCall('addTheme', array(new Reference($id)));
+            }
         }
     }
 
