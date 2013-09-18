@@ -62,10 +62,13 @@ class ThemePass implements CompilerPassInterface
      */
     protected function buildBootstrapLess(array $config, ContainerBuilder $container)
     {
-        $filepath = $container->getParameterBag()->resolveValue($config['themes_path']) . '/bootstrap.less';
-        $contents = $this->generateBootstrapLess($config, $container);
+        $filepath = $container->getParameterBag()->resolveValue($config['themes_path']);
 
-        file_put_contents($filepath, $contents);
+        if (! is_dir($filepath)) {
+            mkdir($filepath, 0777, true);
+        }
+
+        file_put_contents($filepath . '/bootstrap.less', $this->generateBootstrapLess($config, $container));
     }
 
     /**
