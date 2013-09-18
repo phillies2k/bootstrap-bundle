@@ -159,7 +159,7 @@ LESS_THEME;
     protected function buildBootstrapVariables(ThemeInterface $theme)
     {
         $variables = $this->parseVariablesFromFile($this->sourceDirectory . '/less/variables.less');
-        $variables['icon-font-path'] = '"../../../fonts"';
+        $variables['icon-font-path'] = '"../../../fonts/"';
 
         foreach ($this->getThemeVariables($theme) as $name => $value) {
             $variables[$name] = $value;
