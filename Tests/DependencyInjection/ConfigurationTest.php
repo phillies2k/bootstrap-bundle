@@ -16,23 +16,8 @@ use Symfony\Component\Config\Definition\Processor;
  * UnitTest ConfigurationTest
  * @package P2\Bundle\BootstrapBundle\Tests\DependencyInjection
  */
-class ConfigurationTest extends \PHPUnit_Framework_TestCase {
-    /**
-     * set up
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-    
-    /**
-     * tear down
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-    }
-
+class ConfigurationTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @covers P2\Bundle\BootstrapBundle\DependencyInjection\Configuration::getConfigTreeBuilder
      * @group s
