@@ -89,7 +89,7 @@ class DarkTheme extends Theme
 
 ```
 Setup a service definition for your theme and tag it with 'bootstrap.theme'. The bundle will automatically generate all
-necessary files and will add the theme to your applications assets configuration.
+necessary files and registers the themes for the theme builder.
 
 ```yaml
 
@@ -104,5 +104,15 @@ services:
         tags:
             - { name: 'bootstrap.theme' }
 
+```
+
+Use your theme:
+
+```twig
+{% stylesheets filter="less"
+  "../app/Resources/themes/dark/less/layout.less"
+%}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}">
+{% endstylesheets %}
 ```
 
