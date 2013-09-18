@@ -10,7 +10,7 @@
 namespace P2\Bundle\BootstrapBundle\Command;
 
 use P2\Bundle\BootstrapBundle\Themeing\ThemeBuilderInterface;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,13 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class GenerateThemeCommand
  * @package P2\Bundle\BootstrapBundle\Command
  */
-class GenerateThemeCommand extends Command
+class GenerateThemeCommand extends ContainerAwareCommand
 {
-    /**
-     * @var ThemeBuilderInterface
-     */
-    protected $themeBuilder;
-
     /**
      * {@inheritDoc}
      */
@@ -44,6 +39,8 @@ class GenerateThemeCommand extends Command
         try {
             $this->getThemeBuilder()->buildThemes();
 
+            $output->writeln("<notice>Themes build successfully!</notice>");
+
             return 0;
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
@@ -53,22 +50,17 @@ class GenerateThemeCommand extends Command
     }
 
     /**
-     * @param \P2\Bundle\BootstrapBundle\Themeing\ThemeBuilderInterface $themeBuilder
+     * Returns the theme builder service.
      *
-     * @return GenerateThemeCommand
-     */
-    public function setThemeBuilder(ThemeBuilderInterface $themeBuilder)
-    {
-        $this->themeBuilder = $themeBuilder;
-
-        return $this;
-    }
-
-    /**
      * @return \P2\Bundle\BootstrapBundle\Themeing\ThemeBuilderInterface
+     * @throws \RuntimeException When the theme builder service was not found.
      */
     protected function getThemeBuilder()
     {
-        return $this->themeBuilder;
+        if (! $this->getContainer()->has('p2_bootstrap.theme_builder')) {
+            throw new \RuntimeException('Missing theme builder service definition.');
+        }
+
+        return $this->getContainer()->get('p2_bootstrap.theme_builder');
     }
 }

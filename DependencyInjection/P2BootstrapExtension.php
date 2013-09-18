@@ -89,14 +89,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
             )
         );
 
-        foreach ($config['themes'] as $theme) {
-            $assets['theme_' . $theme] = array(
-                'inputs' => array($config['themes_path'] . '/' . $theme . '/less/layout.less'),
-                'filters' => array('less'),
-                'output' => $config['public_path'] . '/' . $theme . '/css/style.less'
-            );
-        }
-
         return array(
             'filters' => $filters,
             'assets' => $assets
