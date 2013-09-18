@@ -80,7 +80,7 @@ LESS_THEME;
      */
     public function buildTheme(ThemeInterface $theme)
     {
-        $path = $this->themesDirectory . '/less';
+        $path = $this->themesDirectory . '/' . $theme->getName() . '/less';
 
         if (! is_dir($path)) {
             mkdir($path, 0777, true);
