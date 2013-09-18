@@ -31,7 +31,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('jquery_path', $config);
         $this->assertArrayHasKey('source_path', $config);
         $this->assertArrayHasKey('themes_path', $config);
-        $this->assertArrayHasKey('public_path', $config);
         $this->assertArrayHasKey('bootstrap_css', $config);
         $this->assertArrayHasKey('bootstrap_js', $config);
         $this->assertArrayHasKey('jquery_js', $config);

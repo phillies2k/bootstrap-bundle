@@ -156,8 +156,7 @@ class ThemePass implements CompilerPassInterface
     protected function symlinkFonts(array $config, ContainerBuilder $container)
     {
         $pattern = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts/*';
-        $rootPath = $container->getParameter('kernel.root_dir') . '/../web';
-        $fontPath = $rootPath . '/' . $container->getParameterBag()->resolveValue($config['public_path']) . '/fonts';
+        $fontPath = $container->getParameter('kernel.root_dir') . '/../web/fonts';
 
         if (! is_dir($fontPath)) {
             mkdir($fontPath, 0777, true);

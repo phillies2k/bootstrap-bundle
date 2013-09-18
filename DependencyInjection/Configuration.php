@@ -32,7 +32,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('jquery_path')->defaultValue('%kernel.root_dir%/../components/jquery/jquery.js')->end()
                 ->scalarNode('source_path')->defaultValue('%kernel.root_dir%/../vendor/twitter/bootstrap')->end()
                 ->scalarNode('themes_path')->defaultValue('%kernel.root_dir%/Resources/themes')->end()
-                ->scalarNode('public_path')->defaultValue('themes')->end()
                 ->scalarNode('bootstrap_css')->defaultValue('css/bootstrap.css')->end()
                 ->scalarNode('bootstrap_js')->defaultValue('js/bootstrap.js')->end()
                 ->scalarNode('jquery_js')->defaultValue('js/jquery.js')->end()
