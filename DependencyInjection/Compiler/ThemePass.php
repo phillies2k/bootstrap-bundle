@@ -83,7 +83,7 @@ class ThemePass implements CompilerPassInterface
 
         foreach ($this->parseImports($config, $container) as $filepath) {
             if ($filepath !== 'variables.less') {
-                $contents .= sprintf($template, $relativePath . '/' . $filepath);
+                $contents .= sprintf($template, $relativePath . '/less/' . $filepath);
             }
         }
 
