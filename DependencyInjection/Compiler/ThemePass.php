@@ -15,6 +15,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class ThemePass
@@ -35,9 +36,10 @@ class ThemePass implements CompilerPassInterface
         $configs = $container->getExtensionConfig('p2_bootstrap');
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
+        $this->symlinkFonts($config, $container);
+
         if ($config['use_themes'] === true) {
             $this->buildBootstrapLess($config, $container);
-            $this->symlinkFonts($config, $container);
 
             $themeBuilder = $container->getDefinition('p2_bootstrap.theme_builder');
 
@@ -116,7 +118,7 @@ class ThemePass implements CompilerPassInterface
     }
 
     /**
-     * Returns the relative path to the twitter bootstrap directory for the given theme.
+     * Returns the relative path to the twitter bootstrap directory.
      *
      * @param array $config
      * @param ContainerBuilder $container
@@ -125,14 +127,14 @@ class ThemePass implements CompilerPassInterface
      */
     protected function getRelativeBootstrapPath(array $config, ContainerBuilder $container)
     {
-        $bootstrapPath = $container->getParameterBag()->resolveValue($config['source_path']) . '/less';
-        $rootPath = $container->getParameter('kernel.root_dir') . '/../';
+        $bootstrapPath = realpath($container->getParameterBag()->resolveValue($config['source_path']));
+        $rootPath = realpath($container->getParameter('kernel.root_dir') . '/../');
 
-        return $this->getRelativeRootPath($config, $container) . substr($bootstrapPath, strlen($rootPath));
+        return $this->getRelativeRootPath($config, $container) . ltrim(substr($bootstrapPath, strlen($rootPath)), '/');
     }
 
     /**
-     * Returns the relative path to the project root for the given theme.
+     * Returns the relative path to the project root.
      *
      * @param array $config
      * @param ContainerBuilder $container
@@ -157,18 +159,10 @@ class ThemePass implements CompilerPassInterface
      */
     protected function symlinkFonts(array $config, ContainerBuilder $container)
     {
-        $pattern = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts/*';
-        $fontPath = $container->getParameter('kernel.root_dir') . '/../web/fonts';
+        $origin = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts';
+        $target = $container->getParameter('kernel.root_dir') . '/../web/fonts';
 
-        if (! is_dir($fontPath)) {
-            mkdir($fontPath, 0777, true);
-        }
-
-        foreach (glob($pattern) as $filepath) {
-            $distPath = $fontPath . '/' . basename($filepath);
-            if (! file_exists($distPath)) {
-                symlink($filepath, $distPath);
-            }
-        }
+        $filesystem = new Filesystem();
+        $filesystem->symlink($origin, $target);
     }
 }
