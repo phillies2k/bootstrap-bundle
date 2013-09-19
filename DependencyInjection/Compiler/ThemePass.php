@@ -163,6 +163,8 @@ class ThemePass implements CompilerPassInterface
         $target = $container->getParameter('kernel.root_dir') . '/../web/fonts';
 
         $filesystem = new Filesystem();
-        $filesystem->symlink($origin, $target);
+        if (! $filesystem->exists($target)) {
+            $filesystem->symlink($origin, $target);
+        }
     }
 }
