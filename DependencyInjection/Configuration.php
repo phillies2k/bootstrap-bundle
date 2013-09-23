@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('bootstrap_js')->defaultValue('js/bootstrap.js')->end()
             ->scalarNode('jquery_js')->defaultValue('js/jquery.js')->end()
             ->scalarNode('holder_js')->defaultValue('js/holder.js')->end()
+            ->scalarNode('less_path')->defaultNull()->end()
             ->end();
 
         return $treeBuilder;

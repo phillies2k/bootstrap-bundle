@@ -114,7 +114,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $assets['jquery_js'] = $this->buildAsseticHolderConfig($config);
 
         $filters = array(
-            'less' => null,
+            'less' => $config['less_path'] ?: null,
             'yui_js' => array(
                 'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
             )
