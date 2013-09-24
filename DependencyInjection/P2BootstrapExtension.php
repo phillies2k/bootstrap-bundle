@@ -151,7 +151,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     protected function buildAsseticHolderConfig(array $config)
     {
         return array(
-            'inputs' => array($config['source_path'] . '/assets/js/holder.js'),
+            'inputs' => array($config['source_path'] . '/docs-assets/js/holder.js'),
             'output' => $config['holder_js']
         );
     }
