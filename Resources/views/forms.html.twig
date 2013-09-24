@@ -35,7 +35,7 @@
 {% block form_label %}
 {% spaceless %}
     {% if label is not sameas(false) %}
-        {% set label_attr = label_attr|merge({'class': 'hidden-xs col-sm-4 col-md-4 col-lg-5 control-label'}) %}
+        {% set label_attr = label_attr|merge({'class': 'col-sm-4 col-md-4 col-lg-5 control-label'}) %}
         {% if not compound %}
             {% set label_attr = label_attr|merge({'for': id}) %}
         {% endif %}
