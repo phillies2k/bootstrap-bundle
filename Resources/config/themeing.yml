@@ -1,5 +1,6 @@
 parameters:
 
+    p2_bootstrap.theme.default_theme.class: P2\Bundle\BootstrapBundle\Themeing\Theme\DefaultTheme
     p2_bootstrap.theme_builder.class: P2\Bundle\BootstrapBundle\Themeing\ThemeBuilder
     p2_bootstrap.command.generate_theme.class: P2\Bundle\BootstrapBundle\Command\GenerateThemeCommand
 
@@ -17,3 +18,9 @@ services:
         class: %p2_bootstrap.command.generate_theme.class%
         calls:
             - [ setThemeBuilder, [ @p2_bootstrap.theme_builder ]]
+
+    # default theme (bootstrap default style)
+    p2_bootstrap.theme.default_theme:
+        class: %p2_bootstrap.theme.default_theme.class%
+        tags:
+            - { name: bootstrap.theme }

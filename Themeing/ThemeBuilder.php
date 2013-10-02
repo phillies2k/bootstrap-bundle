@@ -7,8 +7,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace P2\Bundle\BootstrapBundle\Themeing;
 
+use P2\Bundle\BootstrapBundle\Themeing\Theme\ThemeInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -28,6 +30,8 @@ class ThemeBuilder implements ThemeBuilderInterface
 //
 // Layout
 // -------------------------------------------------
+
+@import "../theme";
 
 // Put your custom styles here
 
@@ -49,7 +53,7 @@ LESS_LAYOUT;
 
 %contents%
 
-@import "../../bootstrap.less";
+@import "../../../bootstrap.less";
 
 LESS_THEME;
 

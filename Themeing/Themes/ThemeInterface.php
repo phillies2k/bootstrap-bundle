@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace P2\Bundle\BootstrapBundle\Themeing;
+namespace P2\Bundle\BootstrapBundle\Themeing\Theme;
 
 /**
  * Interface ThemeInterface
- * @package P2\Bundle\BootstrapBundle\Themeing
+ * @package P2\Bundle\BootstrapBundle\Themeing\Theme
  */
 interface ThemeInterface 
 {

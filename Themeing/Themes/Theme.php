@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace P2\Bundle\BootstrapBundle\Themeing;
+namespace P2\Bundle\BootstrapBundle\Themeing\Theme;
 
 /**
  * Class Theme
- * @package P2\Bundle\BootstrapBundle\Themeing
+ * @package P2\Bundle\BootstrapBundle\Themeing\Theme
  */
 abstract class Theme implements ThemeInterface
 {
