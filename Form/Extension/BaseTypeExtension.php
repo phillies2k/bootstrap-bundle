@@ -10,24 +10,23 @@
 
 namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class FormTypeExtension
+ * Class BaseTypeExtension
  * @package P2\Bundle\BootstrapBundle\Form\Extension
  */
-class FormTypeExtension extends BaseTypeExtension
+abstract class BaseTypeExtension extends AbstractTypeExtension
 {
     /**
      * {@inheritDoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['horizontal'] = $options['horizontal'];
-        $view->vars['inline'] = $options['inline'];
-        $view->vars['help'] = $options['help'];
+        $view->vars['grid'] = $options['grid'];
     }
 
     /**
@@ -37,25 +36,20 @@ class FormTypeExtension extends BaseTypeExtension
     {
         $resolver->setDefaults(
             array(
-                'horizontal' => true,
-                'inline' => false,
-                'help' => null,
-            )
-        );
-
-        $resolver->setAllowedValues(
-            array(
-                'horizontal' => array(true, false),
-                'inline' => array(true, false)
+                'grid' => array('sm' => array(4,8)),
             )
         );
     }
-
     /**
-     * {@inheritDoc}
+     * Returns the name of the type being extended.
+     *
+     * @return string The name of the type being extended
      */
     public function getExtendedType()
     {
-        return 'form';
+        $classname = get_class($this);
+        $classname = substr($classname, strrpos($classname, '\\'), -13);
+
+        return strtolower($classname);
     }
 }
