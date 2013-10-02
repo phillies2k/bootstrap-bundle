@@ -58,7 +58,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
             $container->prependExtensionConfig('assetic', $this->buildAsseticConfig($config, $container));
         }
 
-        if (isset($bundles['TwigBundle'])) {
+        if (isset($bundles['TwigBundle']) && $config['use_forms'] === true) {
             $container->prependExtensionConfig(
                 'twig',
                 array(
