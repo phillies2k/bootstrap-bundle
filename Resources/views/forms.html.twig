@@ -1,8 +1,5 @@
 {% extends 'form_div_layout.html.twig' %}
 
-
-{# Layout #}
-
 {% block form_start %}
     {% set attr = attr|merge({ role: 'form' }) %}
     {% if horizontal %}
@@ -29,12 +26,16 @@
     {% spaceless %}
         <div class="form-group">
             {{ form_label(form) }}
-            <div{{ block('form_row_attributes') }}>
+            {% if horizontal and not inline %}
+                <div{{ block('form_row_attributes') }}>
+            {% endif %}
                 {{ form_widget(form) }}
                 {% if form.parent == null %}
                     {{ form_errors(form) }}
                 {% endif %}
-            </div>
+            {% if horizontal and not inline %}
+                </div>
+            {% endif %}
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -48,28 +49,26 @@
 {% endblock form_help %}
 
 {% block form_label %}
-    {% set grid_attr = grid_attr|default('') %}
-    {% for key,val in grid %}
-        {% set grid_attr = (grid_attr ~ ' col-' ~ key ~ '-' ~ val[0])|trim %}
-    {% endfor %}
-    {% set label_attr = label_attr|default({})|merge({ class: (label_attr.class|default('') ~ ' control-label ' ~ grid_attr)|trim}) %}
+    {% if horizontal and not inline %}
+        {% set grid_attr = grid_attr|default('') %}
+        {% for key,val in grid %}
+            {% set grid_attr = (grid_attr ~ ' col-' ~ key ~ '-' ~ val[0])|trim %}
+        {% endfor %}
+        {% set label_attr = label_attr|default({})|merge({ class: (label_attr.class|default('') ~ ' control-label ' ~ grid_attr)|trim}) %}
+    {% endif %}
     {{ parent() }}
 {% endblock form_label %}
 
 {% block form_widget_simple %}
     {% spaceless %}
-        {% set type = type|default('text') %}
-        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+        {{ parent() }}
         {{ block('form_help') }}
     {% endspaceless %}
 {% endblock form_widget_simple %}
 
 {% block widget_attributes %}
-    {% spaceless %}
-        {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control')|trim}) %}
-        id="{{ id }}" name="{{ full_name }}"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
-        {% for attrname, attrvalue in attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
-    {% endspaceless %}
+    {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control')|trim}) %}
+    {{ parent() }}
 {% endblock widget_attributes %}
 
 {% block date_widget %}
@@ -86,12 +85,16 @@
     {{ parent() }}
 {% endblock time_widget %}
 
-{# Buttons #}
-
 {% block button_row %}
     {% spaceless %}
-        <div{{ block('button_row_attributes') }}>
+        <div class="form-group">
+            {% if horizontal and not inline %}
+                <div{{ block('button_row_attributes') }}>
+            {% endif %}
             {{ form_widget(form) }}
+            {% if horizontal and not inline %}
+                </div>
+            {% endif %}
         </div>
     {% endspaceless %}
 {% endblock button_row %}
@@ -111,13 +114,13 @@
     {% spaceless %}
         {% if label is empty %}
             {% set label = name|humanize %}
-            <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
-                {% if icon is not empty %}
-                    <i class="glyphicon glyphicon-{{ icon }}"></i>
-                {% endif %}
-                {{ label|trans({}, translation_domain) }}
-            </button>
         {% endif %}
+        <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
+            {% if icon is not empty %}
+                <i class="glyphicon glyphicon-{{ icon }}"></i>
+            {% endif %}
+            {{ label|trans({}, translation_domain) }}
+        </button>
     {% endspaceless %}
 {% endblock button_widget %}
 

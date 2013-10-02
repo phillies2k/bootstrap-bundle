@@ -26,6 +26,8 @@ abstract class BaseTypeExtension extends AbstractTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $view->vars['horizontal'] = $options['horizontal'];
+        $view->vars['inline'] = $options['inline'];
         $view->vars['grid'] = $options['grid'];
     }
 
@@ -36,7 +38,16 @@ abstract class BaseTypeExtension extends AbstractTypeExtension
     {
         $resolver->setDefaults(
             array(
+                'horizontal' => true,
+                'inline' => false,
                 'grid' => array('sm' => array(4,8)),
+            )
+        );
+
+        $resolver->setAllowedValues(
+            array(
+                'horizontal' => array(true, false),
+                'inline' => array(true, false)
             )
         );
     }

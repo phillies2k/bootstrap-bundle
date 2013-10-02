@@ -27,8 +27,6 @@ class FormTypeExtension extends BaseTypeExtension
     {
         parent::buildView($view, $form, $options);
 
-        $view->vars['horizontal'] = $options['horizontal'];
-        $view->vars['inline'] = $options['inline'];
         $view->vars['help'] = $options['help'];
     }
 
@@ -41,16 +39,7 @@ class FormTypeExtension extends BaseTypeExtension
 
         $resolver->setDefaults(
             array(
-                'horizontal' => true,
-                'inline' => false,
                 'help' => null,
-            )
-        );
-
-        $resolver->setAllowedValues(
-            array(
-                'horizontal' => array(true, false),
-                'inline' => array(true, false)
             )
         );
     }
