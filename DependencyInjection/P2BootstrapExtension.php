@@ -115,7 +115,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $assets = $this->buildAssetsConfig($config, $container);
         $assets['bootstrap_css'] = $this->buildAsseticBootstrapCssConfig($config);
         $assets['bootstrap_js'] = $this->buildAsseticBootstrapJsConfig($config);
-        $assets['jquery_js'] = $this->buildAsseticHolderConfig($config);
+        $assets['jquery_js'] = $this->buildAsseticJqueryConfig($config);
 
         $filters = array(
             'less' => $config['less_path'] ?: null,
