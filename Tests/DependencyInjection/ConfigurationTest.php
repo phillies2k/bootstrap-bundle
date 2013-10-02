@@ -36,7 +36,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('themes_path', $config);
         $this->assertArrayHasKey('bootstrap_css', $config);
         $this->assertArrayHasKey('bootstrap_js', $config);
-        $this->assertArrayHasKey('holder_js', $config);
         $this->assertArrayHasKey('jquery_js', $config);
         $this->assertArrayHasKey('less_path', $config);
 
@@ -48,7 +47,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('%kernel.root_dir%/Resources/themes', $config['themes_path']);
         $this->assertEquals('css/bootstrap.css', $config['bootstrap_css']);
         $this->assertEquals('js/bootstrap.js', $config['bootstrap_js']);
-        $this->assertEquals('js/holder.js', $config['holder_js']);
         $this->assertEquals('js/jquery.js', $config['jquery_js']);
         $this->assertNull($config['less_path']);
     }

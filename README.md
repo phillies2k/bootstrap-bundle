@@ -21,8 +21,6 @@ The Bundle will automatically create and provide the following assets for you:
   The default twitter bootstrap css
 * **"js/bootstrap.js"**
   The combined twitter bootstrap javascript library
-* **"js/holder.js"**
-  The holder.js library
 * **"js/jquery.js"**
   The jQuery library
 
@@ -40,7 +38,6 @@ p2_bootstrap:
     bootstrap_css: 'css/bootstrap.css'                                  # public bootstrap css path
     bootstrap_js: 'js/bootstrap.js'                                     # public bootstrap js library path
     jquery_js: 'js/jquery.js'                                           # public jquery path
-    holder_js: 'js/holder.js'                                           # public holder.js path
 ```
 
 ### Console Command

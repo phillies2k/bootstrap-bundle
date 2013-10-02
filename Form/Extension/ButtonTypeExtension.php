@@ -82,14 +82,13 @@ class ButtonTypeExtension extends AbstractTypeExtension
             array(
                 'button' => static::BUTTON_DEFAULT,
                 'icon' => null,
-                'grid' => array(),
+                'grid' => array('sm' => array(4,8)),
             )
         );
 
         $resolver->setAllowedValues(
             array(
-                'button' => static::$buttons,
-                'grid' => array(array())
+                'button' => static::$buttons
             )
         );
     }

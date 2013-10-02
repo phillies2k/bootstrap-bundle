@@ -115,7 +115,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $assets = $this->buildAssetsConfig($config, $container);
         $assets['bootstrap_css'] = $this->buildAsseticBootstrapCssConfig($config);
         $assets['bootstrap_js'] = $this->buildAsseticBootstrapJsConfig($config);
-        $assets['holder_js'] = $this->buildAsseticJqueryConfig($config);
         $assets['jquery_js'] = $this->buildAsseticHolderConfig($config);
 
         $filters = array(
@@ -143,21 +142,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         return array(
             'inputs' => array($config['jquery_path']),
             'output' => $config['jquery_js']
-        );
-    }
-
-    /**
-     * Returns the assetic holder js configuration.
-     *
-     * @param array $config
-     *
-     * @return array
-     */
-    protected function buildAsseticHolderConfig(array $config)
-    {
-        return array(
-            'inputs' => array($config['source_path'] . '/docs-assets/js/holder.js'),
-            'output' => $config['holder_js']
         );
     }
 

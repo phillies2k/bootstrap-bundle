@@ -3,25 +3,38 @@
 
 {# Layout #}
 
+{% block form_start %}
+    {% set attr = attr|merge({ role: 'form' }) %}
+    {% if horizontal %}
+        {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-horizontal')|trim}) %}
+    {% elseif inline %}
+        {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-inline')|trim}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock form_start %}
+
 {% block form_row_attributes %}
     {% spaceless %}
         {% set grid_attr = grid_attr|default('') %}
         {% for key,val in grid %}
             {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
         {% endfor %}
-        {% set row_attr = row_attr|default({})|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% if id is not empty %} id="{{ id ~ '-control' }}"{% endif %}
+        {% set row_attr = row_attr|default({})|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
 {% endblock form_row_attributes %}
 
 {% block form_row %}
     {% spaceless %}
-        <div{{ block('form_row_attributes') }}>
-            {{ form_widget(form) }}
-            {% if form.parent == null %}
-                {{ form_errors(form) }}
-            {% endif %}
+        <div class="form-group">
+            {{ form_label(form) }}
+            <div{{ block('form_row_attributes') }}>
+                {{ form_widget(form) }}
+                {% if form.parent == null %}
+                    {{ form_errors(form) }}
+                {% endif %}
+            </div>
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -29,10 +42,19 @@
 {% block form_help %}
     {% spaceless %}
         {% if help is not empty %}
-            <span class="help">{{ help|trans({}, translation_domain) }}</span>
+            <span class="help-block">{{ help|trans({}, translation_domain) }}</span>
         {% endif %}
     {% endspaceless %}
 {% endblock form_help %}
+
+{% block form_label %}
+    {% set grid_attr = grid_attr|default('') %}
+    {% for key,val in grid %}
+        {% set grid_attr = (grid_attr ~ ' col-' ~ key ~ '-' ~ val[0])|trim %}
+    {% endfor %}
+    {% set label_attr = label_attr|default({})|merge({ class: (label_attr.class|default('') ~ ' control-label ' ~ grid_attr)|trim}) %}
+    {{ parent() }}
+{% endblock form_label %}
 
 {% block form_widget_simple %}
     {% spaceless %}
@@ -50,6 +72,20 @@
     {% endspaceless %}
 {% endblock widget_attributes %}
 
+{% block date_widget %}
+    {% if widget == 'single_text' %}
+        {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control-inline')|trim}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock date_widget %}
+
+{% block time_widget %}
+    {% if widget == 'single_text' %}
+        {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control-inline')|trim}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock time_widget %}
+
 {# Buttons #}
 
 {% block button_row %}
@@ -64,7 +100,7 @@
     {% spaceless %}
         {% set grid_attr = grid_attr|default('') %}
         {% for key,val in grid %}
-            {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0])|trim %}
+            {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0] ~ ' col-' ~ key ~ '-' ~val[1])|trim %}
         {% endfor %}
         {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% for attrname, attrvalue in button_row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}

@@ -41,7 +41,7 @@ class FormTypeExtension extends AbstractTypeExtension
             array(
                 'horizontal' => true,
                 'inline' => false,
-                'grid' => array(),
+                'grid' => array('sm' => array(4,8)),
                 'help' => null,
             )
         );
@@ -49,8 +49,7 @@ class FormTypeExtension extends AbstractTypeExtension
         $resolver->setAllowedValues(
             array(
                 'horizontal' => array(true, false),
-                'inline' => array(true, false),
-                'grid' => array(array())
+                'inline' => array(true, false)
             )
         );
     }
