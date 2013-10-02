@@ -44,11 +44,6 @@ abstract class BaseTypeExtension extends AbstractTypeExtension
             )
         );
 
-        $resolver->setAllowedValues(
-            array(
-                'horizontal' => array(true, false),
-                'inline' => array(true, false)
-            )
-        );
+        $resolver->setAllowedTypes(array('horizontal' => 'bool', 'inline' => 'bool', 'grid' => 'array'));
     }
 }
