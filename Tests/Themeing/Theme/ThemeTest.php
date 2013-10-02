@@ -8,39 +8,39 @@
  * file that was distributed with this source code.
  */
 
-namespace P2\Bundle\BootstrapBundle\Tests\Themeing;
+namespace P2\Bundle\BootstrapBundle\Tests\Themeing\Theme;
 
 /**
  * UnitTest ThemeTest
- * @package P2\Bundle\BootstrapBundle\Tests\Themeing
+ * @package P2\Bundle\BootstrapBundle\Tests\Themeing\Theme
  */
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandPrimary
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandSuccess
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandWarning
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandDanger
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getBrandInfo
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getBodyBackground
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getTextColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getLinkColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getLinkHoverColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDefaultColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDefaultBackground
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDefaultBorder
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonPrimaryColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonSuccessColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonWarningColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonDangerColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getButtonInfoColor
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getCustomVariables
-     * @covers P2\Bundle\BootstrapBundle\Themeing::getName
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getBrandPrimary
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getBrandSuccess
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getBrandWarning
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getBrandDanger
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getBrandInfo
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getBodyBackground
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getTextColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getLinkColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getLinkHoverColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonDefaultColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonDefaultBackground
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonDefaultBorder
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonPrimaryColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonSuccessColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonWarningColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonDangerColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getButtonInfoColor
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getCustomVariables
+     * @covers P2\Bundle\BootstrapBundle\Themeing\Theme::getName
      * @group s
      */
     public function testGetter()
     {
-        $mock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme');
+        $mock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme\Theme');
         $mock->expects($this->any())->method('getName')->will($this->returnValue('theme'));
 
         $this->assertEquals('', $mock->getBrandPrimary());
