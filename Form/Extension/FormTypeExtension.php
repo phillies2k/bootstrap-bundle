@@ -29,6 +29,7 @@ class FormTypeExtension extends AbstractTypeExtension
         $view->vars['horizontal'] = $options['horizontal'];
         $view->vars['inline'] = $options['inline'];
         $view->vars['grid'] = $options['grid'];
+        $view->vars['help'] = $options['help'];
     }
 
     /**
@@ -40,7 +41,8 @@ class FormTypeExtension extends AbstractTypeExtension
             array(
                 'horizontal' => true,
                 'inline' => false,
-                'grid' => array()
+                'grid' => array(),
+                'help' => null,
             )
         );
 

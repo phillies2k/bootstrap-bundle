@@ -25,6 +25,30 @@
     {% endspaceless %}
 {% endblock form_row %}
 
+{% block form_help %}
+    {% spaceless %}
+        {% if help is not empty %}
+            <span class="help">{{ help|trans({}, translation_domain) }}</span>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_help %}
+
+{% block form_widget_simple %}
+    {% spaceless %}
+        {% set type = type|default('text') %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}>
+        {{ block('form_help') }}
+    {% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block widget_attributes %}
+    {% spaceless %}
+        {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control')|trim}) %}
+        id="{{ id }}" name="{{ full_name }}"{% if read_only %} readonly="readonly"{% endif %}{% if disabled %} disabled="disabled"{% endif %}{% if required %} required="required"{% endif %}{% if max_length %} maxlength="{{ max_length }}"{% endif %}{% if pattern %} pattern="{{ pattern }}"{% endif %}
+        {% for attrname, attrvalue in attr %}{% if attrname in ['placeholder', 'title'] %}{{ attrname }}="{{ attrvalue|trans({}, translation_domain) }}" {% else %}{{ attrname }}="{{ attrvalue }}" {% endif %}{% endfor %}
+    {% endspaceless %}
+{% endblock widget_attributes %}
+
 {# Buttons #}
 
 {% block button_row %}
