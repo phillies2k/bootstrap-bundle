@@ -70,6 +70,7 @@ class ButtonTypeExtension extends AbstractTypeExtension
     {
         $view->vars['button'] = $options['button'];
         $view->vars['icon'] = $options['icon'];
+        $view->vars['grid'] = $options['grid'];
     }
 
     /**
@@ -77,8 +78,20 @@ class ButtonTypeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('button' => static::BUTTON_DEFAULT, 'icon' => null));
-        $resolver->setAllowedValues(array('button' => static::$buttons));
+        $resolver->setDefaults(
+            array(
+                'button' => static::BUTTON_DEFAULT,
+                'icon' => null,
+                'grid' => array(),
+            )
+        );
+
+        $resolver->setAllowedValues(
+            array(
+                'button' => static::$buttons,
+                'grid' => array(array())
+            )
+        );
     }
 
     /**

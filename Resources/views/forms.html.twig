@@ -5,10 +5,11 @@
 
 {% block form_row_attributes %}
     {% spaceless %}
+        {% set grid_attr = grid_attr|default('') %}
         {% for key,val in grid %}
             {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
         {% endfor %}
-        {% set row_attr = row_attr|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+        {% set row_attr = row_attr|default({})|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% if id is not empty %} id="{{ id ~ '-control' }}"{% endif %}
         {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
@@ -61,10 +62,11 @@
 
 {% block button_row_attributes %}
     {% spaceless %}
+        {% set grid_attr = grid_attr|default('') %}
         {% for key,val in grid %}
             {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0])|trim %}
         {% endfor %}
-        {% set button_row_attr = button_row_attr|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+        {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% for attrname, attrvalue in button_row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
 {% endblock button_row_attributes %}
