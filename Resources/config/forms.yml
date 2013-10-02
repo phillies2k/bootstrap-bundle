@@ -1,24 +1,8 @@
 parameters:
-
-    p2_bootstrap.theme_builder.class: P2\Bundle\BootstrapBundle\Themeing\ThemeBuilder
-    p2_bootstrap.command.generate_theme.class: P2\Bundle\BootstrapBundle\Command\GenerateThemeCommand
     p2_bootstrap.form.button_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\ButtonTypeExtension
     p2_bootstrap.form.form_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\FormTypeExtension
 
 services:
-
-    # theme builder
-    p2_bootstrap.theme_builder:
-        class: %p2_bootstrap.theme_builder.class%
-        arguments:
-            - %p2_bootstrap.source_directory%
-            - %p2_bootstrap.themes_directory%
-
-    # generate theme command
-    p2_bootstrap.command.generate_theme:
-        class: %p2_bootstrap.command.generate_theme.class%
-        calls:
-            - [ setThemeBuilder, [ @p2_bootstrap.theme_builder ]]
 
     # button type extension
     p2_bootstrap.form.button_type_extension:
