@@ -84,6 +84,6 @@
 {% endblock button_widget %}
 
 {% block button_attributes %}
-    {% set attr = attr|merge({ class: ((attr.class|default('') ~ ' btn btn-' ~ button)|trim }) %}
+    {% set attr = attr|merge({ class: (attr.class|default('') ~ ' btn btn-' ~ button)|trim }) %}
     {{ parent() }}
 {% endblock button_attributes %}
