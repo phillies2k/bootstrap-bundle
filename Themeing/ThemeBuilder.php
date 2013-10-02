@@ -55,6 +55,14 @@ LESS_LAYOUT;
 
 @import "../../../bootstrap.less";
 
+.form-control-inline {
+    display: inline-block;
+    width: auto;
+    + .form-control-inline {
+        margin-left: @base-padding-horizontal;
+    }
+}
+
 LESS_THEME;
 
     /**
