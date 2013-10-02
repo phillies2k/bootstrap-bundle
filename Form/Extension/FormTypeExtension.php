@@ -25,6 +25,8 @@ class FormTypeExtension extends BaseTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        parent::buildView($view, $form, $options);
+
         $view->vars['horizontal'] = $options['horizontal'];
         $view->vars['inline'] = $options['inline'];
         $view->vars['help'] = $options['help'];
@@ -35,6 +37,8 @@ class FormTypeExtension extends BaseTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        parent::setDefaultOptions($resolver);
+
         $resolver->setDefaults(
             array(
                 'horizontal' => true,

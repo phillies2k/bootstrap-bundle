@@ -40,16 +40,4 @@ abstract class BaseTypeExtension extends AbstractTypeExtension
             )
         );
     }
-    /**
-     * Returns the name of the type being extended.
-     *
-     * @return string The name of the type being extended
-     */
-    public function getExtendedType()
-    {
-        $classname = get_class($this);
-        $classname = substr($classname, strrpos($classname, '\\'), -13);
-
-        return strtolower($classname);
-    }
 }
