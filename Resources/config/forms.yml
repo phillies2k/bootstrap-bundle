@@ -20,6 +20,7 @@ services:
     p2_bootstrap.form.button_type_extension:
         class: %p2_bootstrap.form.button_type_extension.class%
         parent: p2_bootstrap.form.abstract_type_extension
+        public: true
         tags:
             - { name: form.type_extension, alias: button }
 
@@ -27,5 +28,6 @@ services:
     p2_bootstrap.form.form_type_extension:
         class: %p2_bootstrap.form.form_type_extension.class%
         parent: p2_bootstrap.form.abstract_type_extension
+        public: true
         tags:
             - { name: form.type_extension, alias: form }
