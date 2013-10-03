@@ -132,6 +132,7 @@
 {% endblock button_widget %}
 
 {% block button_attributes %}
+    {% if type == 'submit' and button == 'default' %}{% set button = 'primary' %}{% endif %}
     {% set attr = attr|merge({ class: (attr.class|default('') ~ ' btn btn-' ~ button)|trim }) %}
     {{ parent() }}
 {% endblock button_attributes %}
