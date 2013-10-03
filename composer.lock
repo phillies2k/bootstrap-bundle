@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3cb5d9abf26100526dbd099d1a6c8359",
+    "hash": "ac5c19c8576338a3bb3c82d29ac8f755",
     "packages": [
         {
             "name": "components/jquery",
@@ -123,16 +123,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "2c9761ff1d13e188d5f7378066c1ce2882d7a336"
+                "reference": "d0e4447707a064a5814b18cb0dcc2f24185f6179"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/2c9761ff1d13e188d5f7378066c1ce2882d7a336",
-                "reference": "2c9761ff1d13e188d5f7378066c1ce2882d7a336",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/d0e4447707a064a5814b18cb0dcc2f24185f6179",
+                "reference": "d0e4447707a064a5814b18cb0dcc2f24185f6179",
                 "shasum": ""
             },
             "require": {
@@ -188,7 +188,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2013-08-07 16:04:25"
+            "time": "2013-09-26 19:23:25"
         },
         {
             "name": "doctrine/collections",
@@ -462,12 +462,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "e0646fa52937c4e5ce61ce089ada28c509b01b40"
+                "reference": "439f9f1b3fe2af31eac3457230caa4ecd5c14962"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/e0646fa52937c4e5ce61ce089ada28c509b01b40",
-                "reference": "e0646fa52937c4e5ce61ce089ada28c509b01b40",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/439f9f1b3fe2af31eac3457230caa4ecd5c14962",
+                "reference": "439f9f1b3fe2af31eac3457230caa4ecd5c14962",
                 "shasum": ""
             },
             "require": {
@@ -525,7 +525,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-09-03 12:45:02"
+            "time": "2013-09-25 17:12:24"
         },
         {
             "name": "psr/log",
@@ -663,12 +663,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "a1cfdb421af21df824cb17864bd9f88225041262"
+                "reference": "8840591b25e38b636b3fbc20df0e419bb1949a6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/a1cfdb421af21df824cb17864bd9f88225041262",
-                "reference": "a1cfdb421af21df824cb17864bd9f88225041262",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/8840591b25e38b636b3fbc20df0e419bb1949a6e",
+                "reference": "8840591b25e38b636b3fbc20df0e419bb1949a6e",
                 "shasum": ""
             },
             "require": {
@@ -763,7 +763,44 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2013-09-19 09:47:13"
+            "time": "2013-10-01 17:10:09"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "e8a1df5f060bf7e6631554648e0abde150aedbe4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/e8a1df5f060bf7e6631554648e0abde150aedbe4",
+                "reference": "e8a1df5f060bf7e6631554648e0abde150aedbe4",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "sugeng tigefa",
+                    "email": "tigefa@gmail.com"
+                },
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                }
+            ],
+            "description": "Sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "bootstrap",
+                "css"
+            ],
+            "time": "2013-08-19 21:18:20"
         },
         {
             "name": "twig/twig",
@@ -771,12 +808,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "0d97eb95288c6f08d5c46e9aa5706f2341a34e29"
+                "reference": "d3b488a8b772e5f127050950c59810a867b3b002"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/0d97eb95288c6f08d5c46e9aa5706f2341a34e29",
-                "reference": "0d97eb95288c6f08d5c46e9aa5706f2341a34e29",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/d3b488a8b772e5f127050950c59810a867b3b002",
+                "reference": "d3b488a8b772e5f127050950c59810a867b3b002",
                 "shasum": ""
             },
             "require": {
@@ -812,44 +849,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-09-17 13:39:25"
-        },
-        {
-            "name": "twitter/bootstrap",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "5deee652f927a0eebfceeea7d0584819bea0f766"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/5deee652f927a0eebfceeea7d0584819bea0f766",
-                "reference": "5deee652f927a0eebfceeea7d0584819bea0f766",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Mark Otto",
-                    "email": "markdotto@gmail.com"
-                },
-                {
-                    "name": "Jacob Thornton",
-                    "email": "jacobthornton@gmail.com"
-                }
-            ],
-            "description": "Sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development.",
-            "homepage": "http://getbootstrap.com",
-            "keywords": [
-                "bootstrap",
-                "css"
-            ],
-            "time": "2013-09-18 20:15:18"
+            "time": "2013-10-03 07:19:21"
         }
     ],
     "packages-dev": [
@@ -1270,7 +1270,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "twitter/bootstrap": 20,
         "mikey179/vfsstream": 20
     },
     "platform": {

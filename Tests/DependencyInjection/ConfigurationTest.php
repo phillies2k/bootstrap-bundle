@@ -75,7 +75,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($config['use_forms']);
         $this->assertEquals('%kernel.root_dir%/../web/themes', $config['public_path']);
         $this->assertEquals('%kernel.root_dir%/../components/jquery/jquery.js', $config['jquery_path']);
-        $this->assertEquals('%kernel.root_dir%/../vendor/twitter/bootstrap', $config['source_path']);
+        $this->assertEquals('%kernel.root_dir%/../vendor/twbs/bootstrap', $config['source_path']);
         $this->assertEquals('%kernel.root_dir%/Resources/themes', $config['themes_path']);
         $this->assertEquals('css/bootstrap.css', $config['bootstrap_css']);
         $this->assertEquals('js/bootstrap.js', $config['bootstrap_js']);
