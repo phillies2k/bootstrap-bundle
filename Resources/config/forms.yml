@@ -1,6 +1,8 @@
 parameters:
     p2_bootstrap.form.button_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\ButtonTypeExtension
-    p2_bootstrap.form.form_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\FormTypeExtension
+    p2_bootstrap.form.grid_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\GridTypeExtension
+    p2_bootstrap.form.help_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\HelpTypeExtension
+    p2_bootstrap.form.horizontal_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\HorizontalTypeExtension
 
 services:
 
@@ -10,8 +12,20 @@ services:
         tags:
             - { name: "form.type_extension", alias: "button" }
 
-    # form type extension
-    p2_bootstrap.form.form_type_extension:
-        class: %p2_bootstrap.form.form_type_extension.class%
+    # grid type extension
+    p2_bootstrap.form.grid_type_extension:
+        class: %p2_bootstrap.form.grid_type_extension.class%
+        tags:
+            - { name: "form.type_extension", alias: "form" }
+
+    # help type extension
+    p2_bootstrap.form.help_type_extension:
+        class: %p2_bootstrap.form.help_type_extension.class%
+        tags:
+            - { name: "form.type_extension", alias: "form" }
+
+    # horizontal type extension
+    p2_bootstrap.form.horizontal_type_extension:
+        class: %p2_bootstrap.form.horizontal_type_extension.class%
         tags:
             - { name: "form.type_extension", alias: "form" }

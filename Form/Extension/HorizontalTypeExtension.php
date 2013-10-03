@@ -10,24 +10,24 @@
 
 namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class FormTypeExtension
+ * Class HorizontalTypeExtension
  * @package P2\Bundle\BootstrapBundle\Form\Extension
  */
-class FormTypeExtension extends BaseTypeExtension
+class HorizontalTypeExtension extends AbstractTypeExtension
 {
     /**
      * {@inheritDoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        parent::buildView($view, $form, $options);
-
-        $view->vars['help'] = $options['help'];
+        $view->vars['horizontal'] = $options['horizontal'];
+        $view->vars['inline'] = $options['inline'];
     }
 
     /**
@@ -35,13 +35,14 @@ class FormTypeExtension extends BaseTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
-
         $resolver->setDefaults(
             array(
-                'help' => null,
+                'horizontal' => false,
+                'inline' => false,
             )
         );
+
+        $resolver->setAllowedTypes(array('horizontal' => 'bool', 'inline' => 'bool'));
     }
 
     /**

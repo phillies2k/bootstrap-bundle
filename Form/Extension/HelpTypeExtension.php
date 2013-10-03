@@ -16,19 +16,17 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class BaseTypeExtension
+ * Class HelpTypeExtension
  * @package P2\Bundle\BootstrapBundle\Form\Extension
  */
-abstract class BaseTypeExtension extends AbstractTypeExtension
+class HelpTypeExtension extends AbstractTypeExtension
 {
     /**
      * {@inheritDoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['horizontal'] = $options['horizontal'];
-        $view->vars['inline'] = $options['inline'];
-        $view->vars['grid'] = $options['grid'];
+        $view->vars['help'] = $options['help'];
     }
 
     /**
@@ -38,12 +36,18 @@ abstract class BaseTypeExtension extends AbstractTypeExtension
     {
         $resolver->setDefaults(
             array(
-                'horizontal' => true,
-                'inline' => false,
-                'grid' => array('sm' => array(4,8)),
+                'help' => null,
             )
         );
 
-        $resolver->setAllowedTypes(array('horizontal' => 'bool', 'inline' => 'bool', 'grid' => 'array'));
+        $resolver->setAllowedTypes(array('help' => 'string'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getExtendedType()
+    {
+        return 'form';
     }
 }

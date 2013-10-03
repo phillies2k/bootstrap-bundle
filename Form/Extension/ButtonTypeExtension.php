@@ -10,6 +10,7 @@
 
 namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * Class ButtonTypeExtension
  * @package P2\Bundle\BootstrapBundle\Form\Extension
  */
-class ButtonTypeExtension extends BaseTypeExtension
+class ButtonTypeExtension extends AbstractTypeExtension
 {
     /**
      * default button
@@ -67,8 +68,6 @@ class ButtonTypeExtension extends BaseTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        parent::buildView($view, $form, $options);
-
         $view->vars['button'] = $options['button'];
         $view->vars['icon'] = $options['icon'];
     }
