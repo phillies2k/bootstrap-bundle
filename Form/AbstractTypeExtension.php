@@ -81,7 +81,7 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         foreach (array_keys($this->defaults) as $key) {
-            if (isset($options[$key])) {
+            if (array_key_exists($key, $options)) {
                 $view->vars[$key] = $options[$key];
             }
         }
