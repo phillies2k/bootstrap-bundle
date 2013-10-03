@@ -38,8 +38,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('bootstrap_js', $config);
         $this->assertArrayHasKey('jquery_js', $config);
         $this->assertArrayHasKey('less_path', $config);
-
         $this->assertArrayHasKey('forms', $config);
+
         $forms = $config['forms'];
 
         $this->assertArrayHasKey('defaults', $forms);
@@ -49,10 +49,14 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $forms['allowed_values']);
 
         $allowedTypes = $forms['allowed_types'];
+        $this->assertArrayHasKey('prepend', $allowedTypes);
+        $this->assertArrayHasKey('append', $allowedTypes);
         $this->assertArrayHasKey('horizontal', $allowedTypes);
         $this->assertArrayHasKey('inline', $allowedTypes);
         $this->assertArrayHasKey('grid', $allowedTypes);
 
+        $this->assertEquals('bool', $allowedTypes['prepend']);
+        $this->assertEquals('bool', $allowedTypes['append']);
         $this->assertEquals('bool', $allowedTypes['horizontal']);
         $this->assertEquals('bool', $allowedTypes['inline']);
         $this->assertEquals('array', $allowedTypes['grid']);
