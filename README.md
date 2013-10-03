@@ -38,6 +38,22 @@ p2_bootstrap:
     bootstrap_css: 'css/bootstrap.css'                                  # public bootstrap css path
     bootstrap_js: 'js/bootstrap.js'                                     # public bootstrap js library path
     jquery_js: 'js/jquery.js'                                           # public jquery path
+    forms:
+        defaults:
+            horizontal: true
+            inline: false
+            prepend: true
+            append: false
+            help: ~
+            grid: [ 4, 8 ]
+        allowed_types:
+            horizontal: 'bool'
+            inline: 'bool'
+            prepend: 'bool'
+            append: 'bool'
+            help: [ 'null', 'string' ]
+            grid: 'array'
+        allowed_values: []
 ```
 
 ### Console Command
@@ -61,7 +77,7 @@ You can overwrite any method to return a custom value for your theme. Have a loo
 
 namespace Acme\Bundle\CustomBundle\Themeing;
 
-use P2\Bundle\BootstrapBundle\Themeing\Theme;
+use P2\Bundle\BootstrapBundle\Themeing\Theme\Theme;
 
 /**
  * Class DarkTheme
@@ -115,9 +131,7 @@ services:
 Use your theme:
 
 ```twig
-{% stylesheets filter="less"
-  "../app/Resources/themes/dark/less/layout.less"
-%}
+{% stylesheets filter="less" "@dark_style" %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}">
 {% endstylesheets %}
 ```
