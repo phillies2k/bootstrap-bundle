@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 namespace P2\Bundle\BootstrapBundle\Tests\DependencyInjection;
+
 use P2\Bundle\BootstrapBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
-
 
 /**
  * UnitTest ConfigurationTest
@@ -28,6 +28,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $configuration = new Configuration(array());
         $config = $processor->processConfiguration($configuration, array(array()));
 
+        var_dump($config);
+
         $this->assertArrayHasKey('use_themes', $config);
         $this->assertArrayHasKey('use_forms', $config);
         $this->assertArrayHasKey('public_path', $config);
@@ -38,6 +40,21 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('bootstrap_js', $config);
         $this->assertArrayHasKey('jquery_js', $config);
         $this->assertArrayHasKey('less_path', $config);
+
+        $this->assertArrayHasKey('forms', $config);
+        $forms = $config['forms'];
+
+        $this->assertArrayHasKey('defaults', $forms);
+        $this->assertArrayHasKey('allowed_types', $forms);
+        $this->assertArrayHasKey('allowed_values', $forms);
+
+        $this->assertArrayHasKey('horizontal', $forms['defaults']);
+        $this->assertArrayHasKey('inline', $forms['defaults']);
+        $this->assertArrayHasKey('grid', $forms['defaults']);
+
+        $this->assertTrue($forms['defaults']['horizontal']);
+        $this->assertFalse($forms['defaults']['inline']);
+        $this->assertInternalType('array', $forms['defaults']['grid']);
 
         $this->assertTrue($config['use_themes']);
         $this->assertTrue($config['use_forms']);

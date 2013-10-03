@@ -93,7 +93,7 @@ class ThemeBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddTheme()
     {
-        $themeMock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme');
+        $themeMock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme\Theme');
         $themeMock->expects($this->any())->method('getName')->will($this->returnValue('default'));
         $propertyReflection = new \ReflectionProperty($this->themeBuilder, 'themes');
         $this->assertTrue($propertyReflection->isProtected());
@@ -103,7 +103,7 @@ class ThemeBuilderTest extends \PHPUnit_Framework_TestCase
         $value = $propertyReflection->getValue($this->themeBuilder);
         $this->assertCount(1, $value);
         $this->assertArrayHasKey('default', $value);
-        $this->assertInstanceOf('P2\Bundle\BootstrapBundle\Themeing\ThemeInterface', array_shift($value));
+        $this->assertInstanceOf('P2\Bundle\BootstrapBundle\Themeing\Theme\ThemeInterface', array_shift($value));
     }
 
     /**
@@ -112,7 +112,7 @@ class ThemeBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildThemes()
     {
-        $themeMock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme');
+        $themeMock = $this->getMockForAbstractClass('P2\Bundle\BootstrapBundle\Themeing\Theme\Theme');
         $themeMock->expects($this->any())->method('getName')->will($this->returnValue('default'));
         $this->themeBuilder->addTheme($themeMock);
 
