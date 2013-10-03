@@ -28,8 +28,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $configuration = new Configuration(array());
         $config = $processor->processConfiguration($configuration, array(array()));
 
-        var_dump($config);
-
         $this->assertArrayHasKey('use_themes', $config);
         $this->assertArrayHasKey('use_forms', $config);
         $this->assertArrayHasKey('public_path', $config);
@@ -48,13 +46,26 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('allowed_types', $forms);
         $this->assertArrayHasKey('allowed_values', $forms);
 
-        $this->assertArrayHasKey('horizontal', $forms['defaults']);
-        $this->assertArrayHasKey('inline', $forms['defaults']);
-        $this->assertArrayHasKey('grid', $forms['defaults']);
+        $this->assertInternalType('array', $forms['allowed_values']);
 
-        $this->assertTrue($forms['defaults']['horizontal']);
-        $this->assertFalse($forms['defaults']['inline']);
-        $this->assertInternalType('array', $forms['defaults']['grid']);
+        $allowedTypes = $forms['allowed_types'];
+        $this->assertArrayHasKey('horizontal', $allowedTypes);
+        $this->assertArrayHasKey('inline', $allowedTypes);
+        $this->assertArrayHasKey('grid', $allowedTypes);
+
+        $this->assertEquals('bool', $allowedTypes['horizontal']);
+        $this->assertEquals('bool', $allowedTypes['inline']);
+        $this->assertEquals('array', $allowedTypes['grid']);
+
+        $defaults = $forms['defaults'];
+
+        $this->assertArrayHasKey('horizontal', $defaults);
+        $this->assertArrayHasKey('inline', $defaults);
+        $this->assertArrayHasKey('grid', $defaults);
+
+        $this->assertTrue($defaults['horizontal']);
+        $this->assertFalse($defaults['inline']);
+        $this->assertInternalType('array', $defaults['grid']);
 
         $this->assertTrue($config['use_themes']);
         $this->assertTrue($config['use_forms']);
