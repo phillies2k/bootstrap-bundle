@@ -12,9 +12,9 @@ services:
         abstract: true
         public: false
         calls:
-            - [ setAllowedTypes [ %p2_bootstrap.form.allowed_types% ]]
-            - [ setAllowedValues [ %p2_bootstrap.form.allowed_values% ]]
-            - [ setDefaults [ %p2_bootstrap.form.defaults% ]]
+            - [ setAllowedTypes, [ %p2_bootstrap.form.allowed_types% ]]
+            - [ setAllowedValues, [ %p2_bootstrap.form.allowed_values% ]]
+            - [ setDefaults, [ %p2_bootstrap.form.defaults% ]]
 
     # button type extension
     p2_bootstrap.form.button_type_extension:

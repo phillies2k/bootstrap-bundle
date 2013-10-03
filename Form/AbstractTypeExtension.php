@@ -96,9 +96,9 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        $resolver->setDefaults(array_merge($this->defaults, $this->getDefaults($resolver)));
         $resolver->setAllowedTypes(array_merge($this->allowedTypes, $this->getAllowedTypes($resolver)));
         $resolver->setAllowedValues(array_merge($this->allowedValues, $this->getAllowedValues($resolver)));
-        $resolver->setDefaults(array_merge($this->defaults, $this->getDefaults($resolver)));
     }
 
     /**
