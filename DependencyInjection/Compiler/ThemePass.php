@@ -23,6 +23,25 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ThemePass implements CompilerPassInterface
 {
+    const LESS_BOOTSTRAP = <<<LESS_BOOTSTRAP
+// This file is auto generated. Do not edit.
+
+// imports
+%imports%
+
+// bootstrap extensions
+
+.form-control-inline {
+    display: inline-block;
+    width: auto;
+    + .form-control-inline {
+        margin-left: @base-padding-horizontal;
+    }
+}
+
+LESS_BOOTSTRAP;
+
+
     /**
      * {@inheritDoc}
      */
@@ -79,7 +98,7 @@ class ThemePass implements CompilerPassInterface
     {
         $relativePath = $this->getRelativeBootstrapPath($config, $container);
         $template = "@import \"%s\";\n";
-        $contents = "// This file is auto generated.\n\n";
+        $contents = "";
 
         foreach ($this->parseImports($config, $container) as $filepath) {
             if ($filepath !== 'variables.less') {
@@ -87,7 +106,7 @@ class ThemePass implements CompilerPassInterface
             }
         }
 
-        return $contents;
+        return strtr(static::LESS_BOOTSTRAP, array('%imports%' => $contents));
     }
 
     /**
