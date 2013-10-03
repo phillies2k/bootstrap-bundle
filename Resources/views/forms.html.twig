@@ -1,23 +1,5 @@
 {% extends 'form_div_layout.html.twig' %}
 
-{% block grid_row_attributes %}
-    {% set grid_attr = grid_attr|default('') %}
-    {% for key,val in grid %}
-        {% if val is not empty %}
-            {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
-        {% endif %}
-    {% endfor %}
-{% endblock grid_row_attributes %}
-
-{% block grid_label_attributes %}
-    {% set grid_attr = grid_attr|default('') %}
-    {% for key,val in grid %}
-        {% if val is not empty %}
-            {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
-        {% endif %}
-    {% endfor %}
-{% endblock grid_label_attributes %}
-
 {% block form_start %}
     {% set attr = attr|merge({ role: 'form' }) %}
     {% if horizontal %}
@@ -30,7 +12,12 @@
 
 {% block form_row_attributes %}
     {% spaceless %}
-        {{ block('grid_row_attributes') }}
+        {% set grid_attr = grid_attr|default('') %}
+        {% for key,val in grid %}
+            {% if val is not empty %}
+                {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
+            {% endif %}
+        {% endfor %}
         {% if id is not empty %} id="{{ id ~ '-control' }}"{% endif %}
         {% set row_attr = row_attr|default({})|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
@@ -42,11 +29,11 @@
         <div class="form-group">
             {{ form_label(form) }}
             {% if horizontal and not inline %}<div{{ block('form_row_attributes') }}>{% endif %}
-            {{ form_widget(form) }}
-            {% if form.parent == null %}
-                {{ form_errors(form) }}
-            {% endif %}
-            {% if horizontal and not inline %}</div>{% endif %}
+                {{ form_widget(form) }}
+                {% if form.parent == null %}
+                    {{ form_errors(form) }}
+                {% endif %}
+                {% if horizontal and not inline %}</div>{% endif %}
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -61,7 +48,12 @@
 
 {% block form_label %}
     {% if horizontal and not inline %}
-        {{ block('grid_label_attributes') }}
+        {% set grid_attr = grid_attr|default('') %}
+        {% for key,val in grid %}
+            {% if val is not empty %}
+                {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[0])|trim %}
+            {% endif %}
+        {% endfor %}
         {% set label_attr = label_attr|default({})|merge({ class: (label_attr.class|default('') ~ ' control-label ' ~ grid_attr)|trim}) %}
     {% endif %}
     {{ parent() }}
@@ -97,9 +89,9 @@
     {% spaceless %}
         <div class="form-group">
             {% if horizontal and not inline %}<div{{ block('button_row_attributes') }}>
-            {% endif %}
-            {{ form_widget(form) }}
-            {% if horizontal and not inline %}</div>{% endif %}
+                {% endif %}
+                {{ form_widget(form) }}
+                {% if horizontal and not inline %}</div>{% endif %}
         </div>
     {% endspaceless %}
 {% endblock button_row %}
