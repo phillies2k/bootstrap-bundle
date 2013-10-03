@@ -10,7 +10,7 @@
 
 namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
-use Symfony\Component\Form\AbstractTypeExtension;
+use P2\Bundle\BootstrapBundle\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -66,31 +66,25 @@ class ButtonTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritDoc}
      */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function getViewVars(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['button'] = $options['button'];
-        $view->vars['icon'] = $options['icon'];
+        return array('button' => $options['button'], 'icon' => $options['icon']);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function getDefaults(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        return array('button' => static::BUTTON_DEFAULT, 'icon' => null);
+    }
 
-        $resolver->setDefaults(
-            array(
-                'button' => static::BUTTON_DEFAULT,
-                'icon' => null,
-            )
-        );
-
-        $resolver->setAllowedValues(
-            array(
-                'button' => static::$buttons
-            )
-        );
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllowedValues(OptionsResolverInterface $resolver)
+    {
+        return array('button' => static::$buttons);
     }
 
     /**

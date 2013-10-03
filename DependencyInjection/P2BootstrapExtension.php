@@ -40,6 +40,10 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         }
 
         if ($config['use_forms'] === true) {
+            $container->setParameter('p2_bootstrap.form.allowed_types', $config['forms']['allowed_types']);
+            $container->setParameter('p2_bootstrap.form.allowed_values', $config['forms']['allowed_values']);
+            $container->setParameter('p2_bootstrap.form.defaults', $config['forms']['defaults']);
+
             $loader->load('forms.yml');
         }
     }

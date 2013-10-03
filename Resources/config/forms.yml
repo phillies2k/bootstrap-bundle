@@ -1,31 +1,31 @@
 parameters:
+
+    p2_bootstrap.form.abstract_type_extension.class: P2\Bundle\BootstrapBundle\Form\AbstractTypeExtension
     p2_bootstrap.form.button_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\ButtonTypeExtension
-    p2_bootstrap.form.grid_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\GridTypeExtension
-    p2_bootstrap.form.help_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\HelpTypeExtension
-    p2_bootstrap.form.horizontal_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\HorizontalTypeExtension
+    p2_bootstrap.form.form_type_extension.class: P2\Bundle\BootstrapBundle\Form\Extension\FormTypeExtension
 
 services:
+
+    # abstract type extension
+    p2_bootstrap.form.abstract_type_extension:
+        class: %p2_bootstrap.form.abstract_type_extension.class%
+        abstract: true
+        public: false
+        calls:
+            - [ setAllowedTypes [ %p2_bootstrap.form.allowed_types% ]]
+            - [ setAllowedValues [ %p2_bootstrap.form.allowed_values% ]]
+            - [ setDefaults [ %p2_bootstrap.form.defaults% ]]
 
     # button type extension
     p2_bootstrap.form.button_type_extension:
         class: %p2_bootstrap.form.button_type_extension.class%
+        parent: p2_bootstrap.form.abstract_type_extension
         tags:
-            - { name: "form.type_extension", alias: "button" }
+            - { name: form.type_extension, alias: button }
 
-    # grid type extension
-    p2_bootstrap.form.grid_type_extension:
-        class: %p2_bootstrap.form.grid_type_extension.class%
+    # button type extension
+    p2_bootstrap.form.form_type_extension:
+        class: %p2_bootstrap.form.form_type_extension.class%
+        parent: p2_bootstrap.form.abstract_type_extension
         tags:
-            - { name: "form.type_extension", alias: "form" }
-
-    # help type extension
-    p2_bootstrap.form.help_type_extension:
-        class: %p2_bootstrap.form.help_type_extension.class%
-        tags:
-            - { name: "form.type_extension", alias: "form" }
-
-    # horizontal type extension
-    p2_bootstrap.form.horizontal_type_extension:
-        class: %p2_bootstrap.form.horizontal_type_extension.class%
-        tags:
-            - { name: "form.type_extension", alias: "form" }
+            - { name: form.type_extension, alias: form }
