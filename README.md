@@ -3,6 +3,7 @@ BootstrapBundle
 
 Version: **1.1.0**
 
+[![Build Status](https://travis-ci.org/phillies2k/bootstrap-bundle.png?branch=master)](https://travis-ci.org/phillies2k/bootstrap-bundle)
 
 ### Installation
 
