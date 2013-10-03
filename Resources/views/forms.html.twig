@@ -29,11 +29,11 @@
         <div class="form-group">
             {{ form_label(form) }}
             {% if horizontal and not inline %}<div{{ block('form_row_attributes') }}>{% endif %}
-                {{ form_widget(form) }}
-                {% if form.parent == null %}
-                    {{ form_errors(form) }}
-                {% endif %}
-                {% if horizontal and not inline %}</div>{% endif %}
+            {{ form_widget(form) }}
+            {% if form.parent == null %}
+                {{ form_errors(form) }}
+            {% endif %}
+            {% if horizontal and not inline %}</div>{% endif %}
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -61,9 +61,13 @@
 
 {% block form_widget_simple %}
     {% spaceless %}
+        {% if (prepend or append) and icon is not empty %}<div class="input-group">{% endif %}
+        {% if prepend and not append and icon is not empty %}<span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>{% endif %}
         {{ parent() }}
+        {% if append and not prepend and icon is not empty %}<span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>{% endif %}
+        {% if (prepend or append) and icon is not empty %}</div>{% endif %}
         {{ block('form_help') }}
-    {% endspaceless %}
+        {% endspaceless %}
 {% endblock form_widget_simple %}
 
 {% block widget_attributes %}
@@ -115,10 +119,13 @@
             {% set label = name|humanize %}
         {% endif %}
         <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
-            {% if icon is not empty %}
+            {% if prepend and not append and icon is not empty %}
                 <i class="glyphicon glyphicon-{{ icon }}"></i>
             {% endif %}
             {{ label|trans({}, translation_domain) }}
+            {% if append and not prepend and icon is not empty %}
+                <i class="glyphicon glyphicon-{{ icon }}"></i>
+            {% endif %}
         </button>
     {% endspaceless %}
 {% endblock button_widget %}
