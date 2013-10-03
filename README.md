@@ -30,14 +30,14 @@ The Bundle will automatically create and provide the following assets for you:
 Default configuration:
 ```yaml
 p2_bootstrap:
-    use_themes: true                                                    # enables bootstrap themeing
-    use_forms: true                                                     # enables bootstrap forms
-    jquery_path: '%kernel.root_dir%/../components/jquery/jquery.js'     # path to the jquery source directory
-    source_path: '%kernel.root_dir%/../vendor/twitter/bootstrap'        # path to the bootstrap source directory
-    themes_path: '%kernel.root_dir%/Resources/themes'                   # path to store the themes to
-    bootstrap_css: 'css/bootstrap.css'                                  # public bootstrap css path
-    bootstrap_js: 'js/bootstrap.js'                                     # public bootstrap js library path
-    jquery_js: 'js/jquery.js'                                           # public jquery path
+    use_themes: true
+    use_forms: true
+    jquery_path: '%kernel.root_dir%/../components/jquery/jquery.js'
+    source_path: '%kernel.root_dir%/../vendor/twitter/bootstrap'
+    themes_path: '%kernel.root_dir%/Resources/themes'
+    bootstrap_css: 'css/bootstrap.css'
+    bootstrap_js: 'js/bootstrap.js'
+    jquery_js: 'js/jquery.js'
     forms:
         defaults:
             horizontal: true
