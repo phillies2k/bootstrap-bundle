@@ -53,7 +53,7 @@ LESS_LAYOUT;
 
 %contents%
 
-@import "../../../../bootstrap.less";
+@import "../../bootstrap.less";
 
 LESS_THEME;
 
