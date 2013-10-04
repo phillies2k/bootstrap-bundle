@@ -104,10 +104,13 @@ LESS_THEME;
             if (! is_dir($path)) {
                 mkdir($path, 0777, true);
             }
+            if (! is_dir($path . '/layout')) {
+                mkdir($path, 0777, true);
+            }
 
-            // only create layout.less if this file does not exists already (we do not want to overwrite custom styling)
-            if (! file_exists($path . '/layout.less')) {
-                file_put_contents($path . '/layout.less', $this->generateLayoutLess($theme));
+            // only create style.less if this file does not exists already (we do not want to overwrite custom styling)
+            if (! file_exists($path . '/layout/style.less')) {
+                file_put_contents($path . '/layout/style.less', $this->generateLayoutLess($theme));
             }
 
             file_put_contents($path . '/theme.less', $this->generateThemeLess($theme));
