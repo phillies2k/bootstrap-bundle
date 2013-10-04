@@ -35,7 +35,7 @@ class ThemePass implements CompilerPassInterface
     display: inline-block;
     width: auto;
     + .form-control-inline {
-        margin-left: @base-padding-horizontal;
+        margin-left: @padding-base-horizontal;
     }
 }
 
