@@ -81,16 +81,29 @@ class ThemePass implements CompilerPassInterface
         $relativePath = $this->getRelativeBootstrapPath($config, $container);
         $imports = $this->parseImports($config, $container);
 
-        /** @var EngineInterface $templating */
-        $templating = $container->get('templating');
+        $template = <<<TEMPLATE
+// This file is auto generated. Do not edit.
 
-        return $templating->render(
-            'P2BootstrapBundle::bootstrap.less.twig',
-            array(
-                'imports' => $imports,
-                'path' => $relativePath . '/less'
-            )
-        );
+// imports
+%contents%
+
+// bootstrap extensions
+.form-control-inline {
+    display: inline-block;
+    width: auto;
+    + .form-control-inline {
+        margin-left: @padding-base-horizontal;
+    }
+}
+
+TEMPLATE;
+        $contents = '';
+
+        foreach ($imports as $import) {
+            $contents .= sprintf('@import "%s/less/%s";', $relativePath, $import) . "\n";
+        }
+
+        return strtr($template, array('%contents%' => $contents));
     }
 
     /**
