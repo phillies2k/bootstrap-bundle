@@ -41,7 +41,6 @@ class ThemePass implements CompilerPassInterface
 
 LESS_BOOTSTRAP;
 
-
     /**
      * {@inheritDoc}
      */
