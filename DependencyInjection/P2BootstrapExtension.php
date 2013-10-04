@@ -98,14 +98,8 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
             if (false !== preg_match('#(\w+)/' . $stylePath . '#', $filepath, $matches)) {
                 $theme = $matches[1];
 
-                $assets[$theme . '_theme'] = array(
-                    'inputs' => array(dirname($filepath) . '/theme.less', $filepath),
-                    'filters' => array('less', 'cssrewrite'),
-                    'output' => $publicPath . '/' . $theme . '/css/theme.css'
-                );
-
                 $assets[$theme . '_style'] = array(
-                    'inputs' => array(dirname($filepath) . '/../theme.less'),
+                    'inputs' => array($filepath),
                     'filters' => array('less', 'cssrewrite'),
                     'output' => $publicPath . '/' . $theme . '/css/style.css'
                 );
