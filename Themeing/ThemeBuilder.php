@@ -77,41 +77,26 @@ class ThemeBuilder implements ThemeBuilderInterface
 
             // only create style.less if this file does not exists already (we do not want to overwrite custom styling)
             if (! file_exists($path . '/layout/style.less')) {
-                file_put_contents($path . '/layout/style.less', $this->generateLayoutLess($theme));
+                $contents = $this->templating->render(
+                    'P2BootstrapBundle::style.less.twig',
+                    array(
+                        'theme' => $theme->getName()
+                    )
+                );
+
+                file_put_contents($path . '/layout/style.less', $contents);
             }
 
-            file_put_contents($path . '/theme.less', $this->generateThemeLess($theme));
+            $contents = $this->templating->render(
+                'P2BootstrapBundle::theme.less.twig',
+                array(
+                    'variables' => $this->buildBootstrapVariables($theme),
+                    'theme' => $theme->getName()
+                )
+            );
+
+            file_put_contents($path . '/theme.less', $contents);
         }
-    }
-
-    /**
-     * Generates the layout less file for the given theme.
-     *
-     * @param ThemeInterface $theme
-     *
-     * @return string
-     */
-    protected function generateLayoutLess(ThemeInterface $theme)
-    {
-        return $this->templating->render('P2BootstrapBundle::style.less.twig', array('theme' => $theme->getName()));
-    }
-
-    /**
-     * Returns the theme.less stylesheet contents.
-     *
-     * @param ThemeInterface $theme
-     *
-     * @return string
-     */
-    protected function generateThemeLess(ThemeInterface $theme)
-    {
-        return $this->templating->render(
-            'P2BootstrapBundle::style.less.twig',
-            array(
-                'variables' => $this->buildBootstrapVariables($theme),
-                'theme' => $theme->getName()
-            )
-        );
     }
 
     /**
