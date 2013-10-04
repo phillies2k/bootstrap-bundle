@@ -101,11 +101,8 @@ LESS_THEME;
         foreach ($this->themes as $theme) {
             $path = $this->themesDirectory . '/' . $theme->getName() . '/less';
 
-            if (! is_dir($path)) {
-                mkdir($path, 0777, true);
-            }
             if (! is_dir($path . '/layout')) {
-                mkdir($path, 0777, true);
+                mkdir($path . '/layout', 0777, true);
             }
 
             // only create style.less if this file does not exists already (we do not want to overwrite custom styling)
