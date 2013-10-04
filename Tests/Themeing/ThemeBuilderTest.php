@@ -12,6 +12,9 @@ namespace P2\Bundle\BootstrapBundle\Tests\Themeing;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use P2\Bundle\BootstrapBundle\Themeing\ThemeBuilder;
+use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Templating\TemplateNameParser;
 
 /**
  * UnitTest ThemeBuilderTest
@@ -41,10 +44,12 @@ class ThemeBuilderTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        $templating = new TwigEngine(new \Twig_Environment(), new TemplateNameParser(), new FileLocator());
+
         $structure = array('less' => array('variables.less' => '// vars'));
         $this->sourceDirectory = vfsStream::setup('source', null, $structure);
         $this->themesDirectory = vfsStream::setup('themes');
-        $this->themeBuilder = new ThemeBuilder(vfsStream::url('source'), vfsStream::url('themes'));
+        $this->themeBuilder = new ThemeBuilder($templating, vfsStream::url('source'), vfsStream::url('themes'));
     }
     
     /**
@@ -65,7 +70,8 @@ class ThemeBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $builder = new ThemeBuilder('source/', 'themes/');
+        $templating = new TwigEngine(new \Twig_Environment(), new TemplateNameParser(), new FileLocator());
+        $builder = new ThemeBuilder($templating, 'source/', 'themes/');
 
         $sourceDirectoryReflection = new \ReflectionProperty($builder, 'sourceDirectory');
         $themesDirectoryReflection = new \ReflectionProperty($builder, 'themesDirectory');

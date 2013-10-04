@@ -10,6 +10,7 @@ services:
     p2_bootstrap.theme_builder:
         class: %p2_bootstrap.theme_builder.class%
         arguments:
+            - @templating
             - %p2_bootstrap.source_directory%
             - %p2_bootstrap.themes_directory%
 

@@ -12,6 +12,7 @@ namespace P2\Bundle\BootstrapBundle\Themeing;
 
 use P2\Bundle\BootstrapBundle\Themeing\Theme\ThemeInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Templating\EngineInterface;
 
 /**
  * Class ThemeBuilder
@@ -20,42 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class ThemeBuilder implements ThemeBuilderInterface
 {
     /**
-     * Template for layout.less file
-     *
-     * @var string
+     * @var EngineInterface
      */
-    const LESS_LAYOUT = <<<LESS_LAYOUT
-//
-// Theme: %theme%
-//
-// Layout
-// -------------------------------------------------
-
-@import "../theme";
-
-// Put your custom styles here
-
-LESS_LAYOUT;
-
-    /**
-     * Template for theme.less file
-     *
-     * @var string
-     */
-    const LESS_THEME = <<<LESS_THEME
-//
-// Theme: %theme%
-// Last-Modified: %datetime%
-//
-// This file is auto-generated.
-// -------------------------------------------------
-//
-
-%contents%
-
-@import "../../bootstrap.less";
-
-LESS_THEME;
+    protected $templating;
 
     /**
      * @var string
@@ -73,11 +41,13 @@ LESS_THEME;
     protected $themes;
 
     /**
+     * @param EngineInterface $templating
      * @param string $sourceDirectory
      * @param string $themesDirectory
      */
-    public function __construct($sourceDirectory, $themesDirectory)
+    public function __construct(EngineInterface $templating, $sourceDirectory, $themesDirectory)
     {
+        $this->templating = $templating;
         $this->sourceDirectory = $sourceDirectory;
         $this->themesDirectory = $themesDirectory;
         $this->themes = array();
@@ -123,7 +93,7 @@ LESS_THEME;
      */
     protected function generateLayoutLess(ThemeInterface $theme)
     {
-        return strtr(static::LESS_LAYOUT, array('%theme%' => $theme->getName()));
+        return $this->templating->render('P2BootstrapBundle::style.less.twig', array('theme' => $theme->getName()));
     }
 
     /**
@@ -135,18 +105,11 @@ LESS_THEME;
      */
     protected function generateThemeLess(ThemeInterface $theme)
     {
-        $contents = "";
-
-        foreach ($this->buildBootstrapVariables($theme) as $name => $value) {
-            $contents .= "@" . $name . ": " . $value . ";\n";
-        }
-
-        return strtr(
-            static::LESS_THEME,
+        return $this->templating->render(
+            'P2BootstrapBundle::style.less.twig',
             array(
-                '%theme%' => $theme->getName(),
-                '%datetime%' => date('d/m/Y H:i:s', time()),
-                '%contents%' => $contents
+                'variables' => $this->buildBootstrapVariables($theme),
+                'theme' => $theme->getName()
             )
         );
     }

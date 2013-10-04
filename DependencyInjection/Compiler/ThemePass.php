@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Templating\EngineInterface;
 
 /**
  * Class ThemePass
@@ -23,24 +24,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ThemePass implements CompilerPassInterface
 {
-    const LESS_BOOTSTRAP = <<<LESS_BOOTSTRAP
-// This file is auto generated. Do not edit.
-
-// imports
-%imports%
-
-// bootstrap extensions
-
-.form-control-inline {
-    display: inline-block;
-    width: auto;
-    + .form-control-inline {
-        margin-left: @padding-base-horizontal;
-    }
-}
-
-LESS_BOOTSTRAP;
-
     /**
      * {@inheritDoc}
      */
@@ -96,16 +79,18 @@ LESS_BOOTSTRAP;
     protected function generateBootstrapLess(array $config, ContainerBuilder $container)
     {
         $relativePath = $this->getRelativeBootstrapPath($config, $container);
-        $template = "@import \"%s\";\n";
-        $contents = "";
+        $imports = $this->parseImports($config, $container);
 
-        foreach ($this->parseImports($config, $container) as $filepath) {
-            if ($filepath !== 'variables.less') {
-                $contents .= sprintf($template, $relativePath . '/less/' . $filepath);
-            }
-        }
+        /** @var EngineInterface $templating */
+        $templating = $container->get('templating');
 
-        return strtr(static::LESS_BOOTSTRAP, array('%imports%' => $contents));
+        return $templating->render(
+            'P2BootstrapBundle::bootstrap.less.twig',
+            array(
+                'imports' => $imports,
+                'path' => $relativePath . '/less'
+            )
+        );
     }
 
     /**

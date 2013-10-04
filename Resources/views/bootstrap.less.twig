@@ -1,0 +1,16 @@
+// This file is auto generated. Do not edit.
+
+// imports
+{% for import in imports %}
+@import "{{ path }}/{{ import }}";
+{% endfor %}
+
+// bootstrap extensions
+
+.form-control-inline {
+    display: inline-block;
+    width: auto;
+    + .form-control-inline {
+        margin-left: @padding-base-horizontal;
+    }
+}
