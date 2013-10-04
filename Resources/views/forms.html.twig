@@ -28,12 +28,32 @@
     {% spaceless %}
         <div class="form-group">
             {{ form_label(form) }}
-            {% if horizontal and not inline %}<div{{ block('form_row_attributes') }}>{% endif %}
-            {{ form_widget(form) }}
-            {% if form.parent == null %}
-                {{ form_errors(form) }}
+            {% if horizontal and not inline %}
+            <div{{ block('form_row_attributes') }}>
+                {% endif %}
+                {% if (prepend or append) and icon is not empty %}
+                <div class="input-group">
+                    {% endif %}
+                    {% if prepend and not append and icon is not empty %}
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
+                    {% endif %}
+                    {{ form_widget(form) }}
+                    {% if info is not empty %}
+                        <span class="text-info">{{ info }}</span>
+                    {% endif %}
+                    {% if append and not prepend and icon is not empty %}
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
+                    {% endif %}
+                    {% if (prepend or append) and icon is not empty %}
+                </div>
+                {% endif %}
+                {{ block('form_help') }}
+                {% if form.parent == null %}
+                    {{ form_errors(form) }}
+                {% endif %}
+                {% if horizontal and not inline %}
+            </div>
             {% endif %}
-            {% if horizontal and not inline %}</div>{% endif %}
         </div>
     {% endspaceless %}
 {% endblock form_row %}
@@ -59,16 +79,6 @@
     {{ parent() }}
 {% endblock form_label %}
 
-{% block form_widget_simple %}
-    {% spaceless %}
-        {% if (prepend or append) and icon is not empty %}<div class="input-group">{% endif %}
-        {% if prepend and not append and icon is not empty %}<span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>{% endif %}
-        {{ parent() }}
-        {% if append and not prepend and icon is not empty %}<span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>{% endif %}
-        {% if (prepend or append) and icon is not empty %}</div>{% endif %}
-        {{ block('form_help') }}
-        {% endspaceless %}
-{% endblock form_widget_simple %}
 
 {% block widget_attributes %}
     {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control')|trim}) %}

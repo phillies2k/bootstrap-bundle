@@ -33,6 +33,7 @@ Default configuration:
 p2_bootstrap:
     use_themes: true
     use_forms: true
+    public_path: '%kernel.root_dir%/../web/themes'
     jquery_path: '%kernel.root_dir%/../components/jquery/jquery.js'
     source_path: '%kernel.root_dir%/../vendor/twitter/bootstrap'
     themes_path: '%kernel.root_dir%/Resources/themes'
@@ -46,6 +47,8 @@ p2_bootstrap:
             prepend: true
             append: false
             help: ~
+            info: ~
+            icon: ~
             grid: [ 4, 8 ]
         allowed_types:
             horizontal: 'bool'
@@ -53,6 +56,8 @@ p2_bootstrap:
             prepend: 'bool'
             append: 'bool'
             help: [ 'null', 'string' ]
+            info: [ 'null', 'string' ]
+            icon: [ 'null', 'string' ]
             grid: 'array'
         allowed_values: []
 ```
