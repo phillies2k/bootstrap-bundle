@@ -28,28 +28,4 @@ class FormTypeExtension extends AbstractTypeExtension
     {
         return 'form';
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getDefaults(OptionsResolverInterface $resolver)
-    {
-        return array('help' => null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAllowedTypes(OptionsResolverInterface $resolver)
-    {
-        return array('help' => array('null', 'string'));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getViewVars(FormView $view, FormInterface $form, array $options)
-    {
-        return array('help' => $options['help']);
-    }
 }
