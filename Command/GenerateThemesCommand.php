@@ -49,7 +49,7 @@ class GenerateThemesCommand extends ContainerAwareCommand
         try {
             $themeBuilder->buildThemes();
 
-            $output->writeln("<notice>Themes build successfully!</notice>");
+            $output->writeln("<comment>Themes build successfully!</comment>");
 
             return 0;
         } catch (\Exception $e) {
