@@ -24,7 +24,7 @@ services:
         tags:
             - { name: form.type_extension, alias: button }
 
-    # button type extension
+    # form type extension
     p2_bootstrap.form.form_type_extension:
         class: %p2_bootstrap.form.form_type_extension.class%
         parent: p2_bootstrap.form.abstract_type_extension

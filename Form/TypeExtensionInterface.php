@@ -21,6 +21,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 interface TypeExtensionInterface
 {
     /**
+     * Returns an array of default options for this form type extension.
+     *
      * @param OptionsResolverInterface $resolver
      *
      * @return array
@@ -28,6 +30,8 @@ interface TypeExtensionInterface
     public function getDefaults(OptionsResolverInterface $resolver);
 
     /**
+     * Returns an array of allowed types for this form type extension.
+     *
      * @param OptionsResolverInterface $resolver
      *
      * @return array
@@ -35,6 +39,8 @@ interface TypeExtensionInterface
     public function getAllowedTypes(OptionsResolverInterface $resolver);
 
     /**
+     * Returns an array of allowed values for this form type extension.
+     *
      * @param OptionsResolverInterface $resolver
      *
      * @return array
@@ -42,6 +48,8 @@ interface TypeExtensionInterface
     public function getAllowedValues(OptionsResolverInterface $resolver);
 
     /**
+     * Returns an array of view variables for this form type extension.
+     *
      * @param FormView $view
      * @param FormInterface $form
      * @param array $options

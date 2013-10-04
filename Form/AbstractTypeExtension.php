@@ -51,6 +51,8 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
     }
 
     /**
+     * Sets an array of allowed values.
+     *
      * @param array $allowedValues
      *
      * @return $this
