@@ -28,6 +28,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('p2_bootstrap');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->booleanNode('use_themes')->defaultTrue()->end()
                 ->booleanNode('use_forms')->defaultTrue()->end()
@@ -40,8 +41,10 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('jquery_js')->defaultValue('js/jquery.js')->end()
                 ->scalarNode('less_path')->defaultNull()->end()
                 ->arrayNode('forms')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->arrayNode('defaults')
+                            ->addDefaultsIfNotSet()
                             ->children()
                                 ->booleanNode('icon')->defaultNull()->end()
                                 ->booleanNode('info')->defaultNull()->end()
@@ -51,18 +54,18 @@ class Configuration implements ConfigurationInterface
                                 ->booleanNode('horizontal')->defaultTrue()->end()
                                 ->booleanNode('inline')->defaultFalse()->end()
                                 ->arrayNode('grid')
+                                    ->addDefaultsIfNotSet()
                                     ->children()
                                         ->arrayNode('xs')->prototype('integer')->end()->end()
                                         ->arrayNode('sm')->prototype('integer')->end()->end()
                                         ->arrayNode('md')->prototype('integer')->end()->end()
                                         ->arrayNode('lg')->prototype('integer')->end()->end()
                                     ->end()
-                                    ->addDefaultsIfNotSet()
                                 ->end()
                             ->end()
-                            ->addDefaultsIfNotSet()
                         ->end()
                         ->arrayNode('allowed_types')
+                            ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('icon')->defaultValue(array('null', 'string'))->end()
                                 ->scalarNode('info')->defaultValue(array('null', 'string'))->end()
@@ -73,16 +76,13 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('inline')->defaultValue('bool')->end()
                                 ->scalarNode('grid')->defaultValue('array')->end()
                             ->end()
-                            ->addDefaultsIfNotSet()
                         ->end()
                         ->arrayNode('allowed_values')
                             ->addDefaultsIfNotSet()
                         ->end()
                     ->end()
-                    ->addDefaultsIfNotSet()
                 ->end()
-            ->end()
-            ->addDefaultsIfNotSet();
+            ->end();
 
         return $treeBuilder;
     }
