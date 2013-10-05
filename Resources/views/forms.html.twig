@@ -18,7 +18,7 @@
                 {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
             {% endif %}
         {% endfor %}
-        {% if id is not empty %} id="{{ id ~ '-control' }}"{% endif %}
+        {% if id is not empty %} id="{{ id ~ '_control' }}"{% endif %}
         {% set row_attr = row_attr|default({})|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
@@ -38,9 +38,7 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
                     {% endif %}
                     {{ form_widget(form) }}
-                    {% if info is not empty %}
-                        <span class="text-info">{{ info }}</span>
-                    {% endif %}
+                    {{ block('form_info') }}
                     {% if append and not prepend and icon is not empty %}
                         <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
                     {% endif %}
@@ -58,10 +56,18 @@
     {% endspaceless %}
 {% endblock form_row %}
 
+{% block form_info %}
+    {% spaceless %}
+        {% if info is not empty %}
+            <span class="help-inline{% if info_type is not empty %} text-{{ info_type }}{% endif %}">{{ info }}</span>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_info %}
+
 {% block form_help %}
     {% spaceless %}
         {% if help is not empty %}
-            <span class="help-block">{{ help|trans({}, translation_domain) }}</span>
+            <span class="help-block{% if help_type is not empty %} text-{{ help_type }}{% endif %}">{{ help|trans({}, translation_domain) }}</span>
         {% endif %}
     {% endspaceless %}
 {% endblock form_help %}
@@ -78,7 +84,6 @@
     {% endif %}
     {{ parent() }}
 {% endblock form_label %}
-
 
 {% block widget_attributes %}
     {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-control')|trim}) %}

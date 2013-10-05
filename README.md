@@ -48,7 +48,9 @@ p2_bootstrap:
             prepend: true
             append: false
             help: ~
+            help_type: ~
             info: ~
+            info_type: ~
             icon: ~
             grid: [ 4, 8 ]
         allowed_types:
@@ -57,7 +59,9 @@ p2_bootstrap:
             prepend: 'bool'
             append: 'bool'
             help: [ 'null', 'string' ]
+            help_type: [ 'null', 'string' ]
             info: [ 'null', 'string' ]
+            info_type: [ 'null', 'string' ]
             icon: [ 'null', 'string' ]
             grid: 'array'
         allowed_values: []
