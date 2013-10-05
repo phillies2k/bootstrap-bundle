@@ -38,7 +38,7 @@ class SymlinkFontsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $origin = $this->getContainer()->getParameter('p2_bootstrap.source_path') . '/fonts';
+            $origin = $this->getContainer()->getParameter('p2_bootstrap.source_directory') . '/fonts';
             $target = $this->getContainer()->getParameter('kernel.root_dir') . '/../web/fonts';
 
             $filesystem = new Filesystem();
