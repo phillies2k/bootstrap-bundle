@@ -8,7 +8,7 @@
 //
 
 {% for key,val in variables %}
-@{{ key }}:{{ val }};
+@{{ key }}:{{ val|raw }};
 {% endfor %}
 
 @import "../../bootstrap.less";
