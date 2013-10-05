@@ -33,6 +33,7 @@ Default configuration:
 p2_bootstrap:
     use_themes: true
     use_forms: true
+    use_extensions: true
     public_path: '%kernel.root_dir%/../web/themes'
     jquery_path: '%kernel.root_dir%/../components/jquery/jquery.js'
     source_path: '%kernel.root_dir%/../vendor/twitter/bootstrap'

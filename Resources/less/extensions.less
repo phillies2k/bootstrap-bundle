@@ -1,0 +1,20 @@
+// bootstrap extensions
+
+.form-control-inline {
+  display: inline-block;
+  width: auto;
+  + .form-control-inline {
+    margin-left: @padding-base-horizontal;
+  }
+}
+
+.help-inline {
+  display: inline-block;
+  width: auto;
+  margin-left: @padding-base-horizontal;
+  color: lighten(@text-color, 25%);
+}
+
+.navbar-btn-group {
+  .navbar-vertical-align(@input-height-base);
+}

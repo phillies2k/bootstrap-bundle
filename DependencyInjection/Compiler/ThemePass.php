@@ -15,7 +15,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class ThemePass
@@ -35,8 +34,6 @@ class ThemePass implements CompilerPassInterface
         $processor = new Processor();
         $configs = $container->getExtensionConfig('p2_bootstrap');
         $config = $processor->processConfiguration(new Configuration(), $configs);
-
-        $this->symlinkFonts($config, $container);
 
         if ($config['use_themes'] === true) {
             $this->buildBootstrapLess($config, $container);
@@ -80,29 +77,22 @@ class ThemePass implements CompilerPassInterface
         $relativePath = $this->getRelativeBootstrapPath($config, $container);
         $imports = $this->parseImports($config, $container);
 
-        $template = <<<TEMPLATE
-// This file is auto generated. Do not edit.
-
-// imports
-%contents%
-
-// bootstrap extensions
-.form-control-inline {
-    display: inline-block;
-    width: auto;
-    + .form-control-inline {
-        margin-left: @padding-base-horizontal;
-    }
-}
-
-TEMPLATE;
-        $contents = '';
+        $contents = "// imports\n";
 
         foreach ($imports as $import) {
             $contents .= sprintf('@import "%s/less/%s";', $relativePath, $import) . "\n";
         }
 
-        return strtr($template, array('%contents%' => $contents));
+        $sourcePath = __DIR__ . '/../../Resources/less';
+        $template = file_get_contents($sourcePath . '/bootstrap.less');
+        $less = str_replace('//__IMPORTS__//', $contents, $template);
+
+        if ($config['use_extensions'] === true) {
+            $extensions = file_get_contents($sourcePath . '/extensions.less');
+            $less .= "\n" . $extensions;
+        }
+
+        return $less;
     }
 
     /**
@@ -164,22 +154,5 @@ TEMPLATE;
         $step = count(explode('/', $path));
 
         return str_repeat('../', $step);
-    }
-
-    /**
-     * Adds theme symlinks for bootstraps glyphicon font.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     */
-    protected function symlinkFonts(array $config, ContainerBuilder $container)
-    {
-        $origin = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts';
-        $target = $container->getParameter('kernel.root_dir') . '/../web/fonts';
-
-        $filesystem = new Filesystem();
-        if (! $filesystem->exists($target)) {
-            $filesystem->symlink($origin, $target);
-        }
     }
 }

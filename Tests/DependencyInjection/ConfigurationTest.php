@@ -31,6 +31,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('use_themes', $config);
         $this->assertArrayHasKey('use_forms', $config);
+        $this->assertArrayHasKey('use_extensions', $config);
         $this->assertArrayHasKey('public_path', $config);
         $this->assertArrayHasKey('jquery_path', $config);
         $this->assertArrayHasKey('source_path', $config);
@@ -74,6 +75,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($config['use_themes']);
         $this->assertTrue($config['use_forms']);
+        $this->assertTrue($config['use_extensions']);
         $this->assertEquals('%kernel.root_dir%/../web/themes', $config['public_path']);
         $this->assertEquals('%kernel.root_dir%/../components/jquery/jquery.js', $config['jquery_path']);
         $this->assertEquals('%kernel.root_dir%/../vendor/twbs/bootstrap', $config['source_path']);
