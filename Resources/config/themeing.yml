@@ -14,14 +14,14 @@ services:
             - %p2_bootstrap.source_directory%
             - %p2_bootstrap.themes_directory%
 
-    # generate theme command
-    p2_bootstrap.command.generate_theme:
-        class: %p2_bootstrap.command.generate_theme.class%
-        calls:
-            - [ setThemeBuilder, [ @p2_bootstrap.theme_builder ]]
-
     # default theme (bootstrap default style)
     p2_bootstrap.theme.default_theme:
         class: %p2_bootstrap.theme.default_theme.class%
         tags:
             - { name: bootstrap.theme }
+
+    # generate theme command
+    p2_bootstrap.command.generate_theme:
+        class: %p2_bootstrap.command.generate_theme.class%
+        calls:
+            - [ setThemeBuilder, [ @p2_bootstrap.theme_builder ]]

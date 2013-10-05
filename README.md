@@ -63,13 +63,18 @@ p2_bootstrap:
         allowed_values: []
 ```
 
-### Console Command
+### Console Commands
 
 ```bash
-    app/console bootstrap:generate:theme
+    app/console bootstrap:generate:themes
 ```
-
 This will generate the themes for your application.
+
+```bash
+    app/console bootstrap:symlink:fonts
+```
+This command will symlink the bootstrap glyphicon fonts.
+
 
 ### Themeing
 

@@ -32,6 +32,8 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
+        $loader->load('services.yml');
+
         if ($config['use_themes'] === true) {
             $container->setParameter('p2_bootstrap.source_directory', $config['source_path']);
             $container->setParameter('p2_bootstrap.themes_directory', $config['themes_path']);
