@@ -77,6 +77,10 @@ class ThemePass implements CompilerPassInterface
         $relativePath = $this->getRelativeBootstrapPath($config, $container);
         $imports = $this->parseImports($config, $container);
 
+        if ('variables.less' !== array_shift($imports)) {
+            throw new \RuntimeException('Unknown bootstrap import inheritance chain.');
+        }
+
         $contents = "// imports\n";
 
         foreach ($imports as $import) {
