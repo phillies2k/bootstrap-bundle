@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.*",
-        "twbs/bootstrap": "3.0",
+        "twbs/bootstrap": "dev-master",
         "components/jquery": "~1.9"
     },
     "require-dev": {
