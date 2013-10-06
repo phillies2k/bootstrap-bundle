@@ -59,7 +59,7 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
      */
     public function setAllowedValues(array $allowedValues)
     {
-        $this->allowedValues = $allowedValues;
+        $this->allowedValues = array_merge($this->allowedValues, $allowedValues);
 
         return $this;
     }
