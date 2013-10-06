@@ -128,11 +128,14 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
         $filters = array(
             'cssrewrite' => null,
-            'less' => $config['less_path'] ?: null,
             'yui_js' => array(
                 'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
             )
         );
+
+        if ($config['less_path'] !== null) {
+            $filters['less'] = $config['less_path'];
+        }
 
         return array(
             'filters' => $filters,
