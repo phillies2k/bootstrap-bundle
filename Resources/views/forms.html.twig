@@ -59,7 +59,7 @@
 {% block form_info %}
     {% spaceless %}
         {% if info is not empty %}
-            <span class="help-inline{% if info_type is not empty %} text-{{ info_type }}{% endif %}">{{ info }}</span>
+            <span class="help-inline{% if info_type is not empty %} text-{{ info_type }}{% endif %}">{{ info|trans({}, translation_domain) }}</span>
         {% endif %}
     {% endspaceless %}
 {% endblock form_info %}
