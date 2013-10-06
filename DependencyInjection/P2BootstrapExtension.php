@@ -102,7 +102,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
                 $assets[$theme . '_style'] = array(
                     'inputs' => array($filepath),
-                    'filters' => array('less', 'cssrewrite'),
                     'output' => $publicPath . '/' . $theme . '/css/style.css'
                 );
             }
@@ -126,19 +125,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $assets['bootstrap_js'] = $this->buildAsseticBootstrapJsConfig($config);
         $assets['jquery_js'] = $this->buildAsseticJqueryConfig($config);
 
-        $filters = array(
-            'cssrewrite' => null,
-            'yui_js' => array(
-                'jar' => __DIR__ . '/../Resources/java/yuicompressor.jar'
-            )
-        );
-
-        if ($config['less_path'] !== null) {
-            $filters['less'] = $config['less_path'];
-        }
-
         return array(
-            'filters' => $filters,
             'assets' => $assets
         );
     }
@@ -169,7 +156,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     {
         return array(
             'inputs' => array($config['source_path'] . '/less/bootstrap.less'),
-            'filters' => array('less'),
             'output' => $config['bootstrap_css']
         );
     }
@@ -198,7 +184,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                 $config['source_path'] . '/js/tab.js',
                 $config['source_path'] . '/js/affix.js'
             ),
-            'filters' => array('yui_js'),
             'output' => $config['bootstrap_js']
         );
     }
