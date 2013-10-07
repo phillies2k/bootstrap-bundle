@@ -1,9 +1,0 @@
-parameters:
-
-    p2_bootstrap.command.symlink_fonts.class: P2\Bundle\BootstrapBundle\Command\SymlinkFontsCommand
-
-services:
-
-    # symlink fonts command
-    p2_bootstrap.command.symlink_fonts:
-        class: %p2_bootstrap.command.symlink_fonts.class%

@@ -1,7 +1,7 @@
 BootstrapBundle
 ===============
 
-Version: **1.1.0**
+Version: **1.2.0**
 
 [![Build Status](https://travis-ci.org/phillies2k/bootstrap-bundle.png?branch=master)](https://travis-ci.org/phillies2k/bootstrap-bundle)
 
@@ -34,7 +34,7 @@ p2_bootstrap:
     use_themes: true
     use_forms: true
     use_extensions: true
-    public_path: '%kernel.root_dir%/../web/themes'
+    public_path: '/themes'
     jquery_path: '%kernel.root_dir%/../components/jquery/jquery.js'
     source_path: '%kernel.root_dir%/../vendor/twitter/bootstrap'
     themes_path: '%kernel.root_dir%/Resources/themes'

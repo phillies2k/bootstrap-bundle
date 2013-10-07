@@ -32,8 +32,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $loader->load('services.yml');
-
         if ($config['use_themes'] === true) {
             $container->setParameter('p2_bootstrap.source_directory', $config['source_path']);
             $container->setParameter('p2_bootstrap.themes_directory', $config['themes_path']);
@@ -79,38 +77,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     }
 
     /**
-     * Returns the assetic asset configuration for your themes.
-     *
-     * @param array $config
-     * @param ContainerBuilder $container
-     *
-     * @return array
-     */
-    protected function buildAssetsConfig(array $config, ContainerBuilder $container)
-    {
-        $publicPath = $container->getParameterBag()->resolveValue($config['public_path']);
-        $publicPath = substr($publicPath, strpos($publicPath, 'web/') + 4);
-
-        $themesPath = $container->getParameterBag()->resolveValue($config['themes_path']);
-        $stylePath = 'less/layout/style.less';
-
-        $assets = array();
-
-        foreach (glob($themesPath . '/*/' . $stylePath) as $filepath) {
-            if (false !== preg_match('#(\w+)/' . $stylePath . '#', $filepath, $matches)) {
-                $theme = $matches[1];
-
-                $assets[$theme . '_style'] = array(
-                    'inputs' => array($filepath),
-                    'output' => $publicPath . '/' . $theme . '/css/style.css'
-                );
-            }
-        }
-
-        return $assets;
-    }
-
-    /**
      * Returns the assetic assets configuration section.
      *
      * @param array $config
@@ -120,10 +86,14 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
      */
     protected function buildAsseticConfig(array $config, ContainerBuilder $container)
     {
-        $assets = $this->buildAssetsConfig($config, $container);
-        $assets['bootstrap_css'] = $this->buildAsseticBootstrapCssConfig($config);
-        $assets['bootstrap_js'] = $this->buildAsseticBootstrapJsConfig($config);
-        $assets['jquery_js'] = $this->buildAsseticJqueryConfig($config);
+        $assets = array();
+
+        $this->buildAsseticBootstrapCssConfig($config, $assets);
+        $this->buildAsseticBootstrapJsConfig($config, $assets);
+        $this->buildAsseticJqueryConfig($config, $assets);
+
+        $this->buildAsseticFontConfig($config, $container, $assets);
+        $this->buildAsseticThemeConfig($config, $container, $assets);
 
         return array(
             'assets' => $assets
@@ -131,45 +101,24 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
     }
 
     /**
-     * Returns the assetic jquery configuration.
-     *
      * @param array $config
-     *
-     * @return array
+     * @param array $assets
      */
-    protected function buildAsseticJqueryConfig(array $config)
+    protected function buildAsseticBootstrapCssConfig(array $config, array & $assets)
     {
-        return array(
-            'inputs' => array($config['jquery_path']),
-            'output' => $config['jquery_js']
-        );
-    }
-
-    /**
-     * Returns the assetic bootstrap css configuration.
-     *
-     * @param array $config
-     *
-     * @return array
-     */
-    protected function buildAsseticBootstrapCssConfig(array $config)
-    {
-        return array(
+        $assets['bootstrap_css'] = array(
             'inputs' => array($config['source_path'] . '/less/bootstrap.less'),
             'output' => $config['bootstrap_css']
         );
     }
 
     /**
-     * Returns the assetic bootstrap js configuration.
-     *
      * @param array $config
-     *
-     * @return array
+     * @param array $assets
      */
-    protected function buildAsseticBootstrapJsConfig(array $config)
+    protected function buildAsseticBootstrapJsConfig(array $config, array & $assets)
     {
-        return array(
+        $assets['bootstrap_js'] = array(
             'inputs' => array(
                 $config['source_path'] . '/js/transition.js',
                 $config['source_path'] . '/js/alert.js',
@@ -186,5 +135,61 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
             ),
             'output' => $config['bootstrap_js']
         );
+    }
+
+    /**
+     * @param array $config
+     * @param array $assets
+     */
+    protected function buildAsseticJqueryConfig(array $config, array & $assets)
+    {
+        $assets['jquery_js'] = array(
+            'inputs' => array($config['jquery_path']),
+            'output' => $config['jquery_js']
+        );
+    }
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param array $assets
+     */
+    protected function buildAsseticFontConfig(array $config, ContainerBuilder $container, array & $assets)
+    {
+        $fontPattern = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts/*';
+        $webPath = $container->getParameter('kernel.root_dir') . '/../web';
+
+        foreach (glob($fontPattern) as $fontPath) {
+            $fontName = basename($fontPath);
+            $assets[$fontName] = array(
+                'inputs' => array($fontPath),
+                'output' => $webPath . '/fonts/' . $fontName
+            );
+        }
+    }
+
+    /**
+     * @param array $config
+     * @param ContainerBuilder $container
+     * @param array $assets
+     */
+    protected function buildAsseticThemeConfig(array $config, ContainerBuilder $container, array & $assets)
+    {
+        $webPath = $container->getParameter('kernel.root_dir') . '/../web/';
+        $publicPath = $webPath . ltrim($config['public_path'], '/');
+
+        $themesPath = $container->getParameterBag()->resolveValue($config['themes_path']);
+        $stylePath = 'less/layout/style.less';
+
+        foreach (glob($themesPath . '/*/' . $stylePath) as $filepath) {
+            if (false !== preg_match('#(\w+)/' . $stylePath . '#', $filepath, $matches)) {
+                $theme = $matches[1];
+
+                $assets[$theme . '_style'] = array(
+                    'inputs' => array($filepath),
+                    'output' => $publicPath . '/' . $theme . '/css/style.css'
+                );
+            }
+        }
     }
 }
