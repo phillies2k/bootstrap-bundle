@@ -68,7 +68,7 @@ class ButtonTypeExtension extends AbstractTypeExtension
      */
     public function getViewVars(FormView $view, FormInterface $form, array $options)
     {
-        return array('button' => $options['button'], 'icon' => $options['icon']);
+        return array('button' => $options['button']);
     }
 
     /**
@@ -76,7 +76,7 @@ class ButtonTypeExtension extends AbstractTypeExtension
      */
     public function getDefaults(OptionsResolverInterface $resolver)
     {
-        return array('button' => static::BUTTON_DEFAULT, 'icon' => null);
+        return array('button' => static::BUTTON_DEFAULT);
     }
 
     /**

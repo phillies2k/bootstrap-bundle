@@ -156,14 +156,13 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
      */
     protected function buildAsseticFontConfig(array $config, ContainerBuilder $container, array & $assets)
     {
-        $fontPattern = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts/*';
-        $webPath = $container->getParameter('kernel.root_dir') . '/../web';
+        $fontPath = $container->getParameterBag()->resolveValue($config['source_path']) . '/fonts';
 
-        foreach (glob($fontPattern) as $fontPath) {
-            $fontName = basename($fontPath);
+        foreach (glob($fontPath . '/*') as $path) {
+            $fontName = preg_replace('/[.-]/', '_', basename($path));
             $assets[$fontName] = array(
-                'inputs' => array($fontPath),
-                'output' => $webPath . '/fonts/' . $fontName
+                'inputs' => array($config['source_path'] . '/fonts/' . basename($path)),
+                'output' => 'fonts/' . basename($path)
             );
         }
     }
@@ -175,19 +174,14 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
      */
     protected function buildAsseticThemeConfig(array $config, ContainerBuilder $container, array & $assets)
     {
-        $webPath = $container->getParameter('kernel.root_dir') . '/../web/';
-        $publicPath = $webPath . ltrim($config['public_path'], '/');
-
         $themesPath = $container->getParameterBag()->resolveValue($config['themes_path']);
         $stylePath = 'less/layout/style.less';
 
         foreach (glob($themesPath . '/*/' . $stylePath) as $filepath) {
             if (false !== preg_match('#(\w+)/' . $stylePath . '#', $filepath, $matches)) {
                 $theme = $matches[1];
-
                 $assets[$theme . '_style'] = array(
-                    'inputs' => array($filepath),
-                    'output' => $publicPath . '/' . $theme . '/css/style.css'
+                    'inputs' => array($config['themes_path'] . '/' . $theme . '/' . $stylePath)
                 );
             }
         }

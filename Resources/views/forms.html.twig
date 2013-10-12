@@ -12,49 +12,69 @@
 
 {% block form_row_attributes %}
     {% spaceless %}
-        {% set grid_attr = grid_attr|default('') %}
-        {% for key,val in grid %}
-            {% if val is not empty %}
-                {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
-            {% endif %}
-        {% endfor %}
+        {% set row_attr = row_attr|default({}) %}
+        {% if horizontal and not inline %}
+            {% set grid_attr = grid_attr|default('') %}
+            {% for key,val in grid %}
+                {% if val is not empty %}
+                    {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
+                {% endif %}
+            {% endfor %}
+            {% set row_attr = row_attr|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+        {% endif %}
         {% if id is not empty %} id="{{ id ~ '_control' }}"{% endif %}
-        {% set row_attr = row_attr|default({})|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
         {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
 {% endblock form_row_attributes %}
 
+{% block form_group_attributes %}
+    {% spaceless %}
+        {% set group_attr = group_attr|default({})|merge({ class: (group_attr.class|default('') ~ ' form-group')|trim }) %}
+        {% for attrname, attrvalue in group_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock form_group_attributes %}
+
 {% block form_row %}
     {% spaceless %}
-        <div class="form-group">
-            {{ form_label(form) }}
-            {% if horizontal and not inline %}
-            <div{{ block('form_row_attributes') }}>
-                {% endif %}
+        <div{{ block('form_group_attributes') }}>
+            {% if label != false %}{{ form_label(form) }}{% endif %}
+            {% if label != false and horizontal and not inline %}
+                <div{{ block('form_row_attributes') }}>
+            {% endif %}
                 {% if (prepend or append) and icon is not empty %}
-                <div class="input-group">
-                    {% endif %}
-                    {% if prepend and not append and icon is not empty %}
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
-                    {% endif %}
-                    {{ form_widget(form) }}
-                    {{ block('form_info') }}
-                    {% if append and not prepend and icon is not empty %}
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
-                    {% endif %}
-                    {% if (prepend or append) and icon is not empty %}
-                </div>
+                    <div class="input-group">
+                        {% endif %}
+                        {% if prepend and not append and icon is not empty %}
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
+                        {% endif %}
+                        {{ form_widget(form) }}
+                        {{ block('form_info') }}
+                        {% if append and not prepend and icon is not empty %}
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
+                        {% endif %}
+                        {% if (prepend or append) and icon is not empty %}
+                    </div>
                 {% endif %}
                 {{ block('form_help') }}
-                {% if form.parent == null %}
-                    {{ form_errors(form) }}
-                {% endif %}
-                {% if horizontal and not inline %}
-            </div>
+                {{ form_errors(form) }}
+            {% if label != false and horizontal and not inline %}
+                </div>
             {% endif %}
         </div>
     {% endspaceless %}
 {% endblock form_row %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            <ul class="list-unstyled help-block">
+                {% for error in errors %}
+                    <li class="text-danger">{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
 
 {% block form_info %}
     {% spaceless %}
@@ -117,13 +137,15 @@
 
 {% block button_row_attributes %}
     {% spaceless %}
-        {% set grid_attr = grid_attr|default('') %}
-        {% for key,val in grid %}
-            {% if val is not empty %}
-                {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0] ~ ' col-' ~ key ~ '-' ~val[1])|trim %}
-            {% endif %}
-        {% endfor %}
-        {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+        {% if horizontal and not inline %}
+            {% set grid_attr = grid_attr|default('') %}
+            {% for key,val in grid %}
+                {% if val is not empty %}
+                    {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0] ~ ' col-' ~ key ~ '-' ~val[1])|trim %}
+                {% endif %}
+            {% endfor %}
+            {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+        {% endif %}
         {% for attrname, attrvalue in button_row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
 {% endblock button_row_attributes %}
@@ -137,7 +159,7 @@
             {% if prepend and not append and icon is not empty %}
                 <i class="glyphicon glyphicon-{{ icon }}"></i>
             {% endif %}
-            {{ label|trans({}, translation_domain) }}
+            {% if label != false %}{{ label|trans({}, translation_domain) }}{% endif %}
             {% if append and not prepend and icon is not empty %}
                 <i class="glyphicon glyphicon-{{ icon }}"></i>
             {% endif %}
