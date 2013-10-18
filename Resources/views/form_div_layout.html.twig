@@ -10,6 +10,21 @@
     {{ parent() }}
 {% endblock form_start %}
 
+{% block input_group_addon %}
+    {% spaceless %}
+        <span{{ block('input_group_addon_attributes') }}>
+            {% if addon_button is not empty %}
+                <button{{ block('addon_button_attributes') }}>
+                    {% if icon is not empty %}<i class="glyphicon glyphicon-{{ icon }}"></i>{% endif %}
+                    {% if addon_button is not sameas(true) %}{{ addon_button|trans }}{% endif %}
+                </button>
+            {% elseif icon is not empty %}
+                <i class="glyphicon glyphicon-{{ icon }}"></i>
+            {% endif %}
+        </span>
+    {% endspaceless %}
+{% endblock input_group_addon %}
+
 {% block form_row_attributes %}
     {% spaceless %}
         {% set row_attr = row_attr|default({}) %}
@@ -34,33 +49,69 @@
     {% endspaceless %}
 {% endblock form_group_attributes %}
 
+{% block input_group_attributes %}
+    {% spaceless %}
+        {% set input_group_attr = input_group_attr|merge({ class: (input_group_attr.class|default('') ~ ' input-group')|trim}) %}
+        {% for attrname, attrvalue in input_group_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock input_group_attributes %}
+
+{% block input_group_addon_attributes %}
+    {% spaceless %}
+        {% if addon_toggle is sameas(true) %}
+            {% set input_group_addon_attr = input_group_addon_attr|merge({ 'data-toggle': 'collapse', 'data-target': addon_toggle_target|default(''), class: (input_group_addon_attr.class|default('') ~ ' collapsed')|trim }) %}
+        {% endif %}
+        {% set input_group_addon_attr = input_group_addon_attr|merge({ class: (input_group_addon_attr.class|default('') ~ ' input-group-' ~ (addon_button ? 'btn' : 'addon'))|trim}) %}
+        {% for attrname, attrvalue in input_group_addon_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock input_group_addon_attributes %}
+
+{% block addon_button_attributes %}
+    {% spaceless %}
+        {% set addon_button_attr = addon_button_attr|merge({ type: 'button', class: (addon_button_attr.class|default('') ~ ' btn btn-' ~ (addon_button is not sameas(true) ? addon_button : 'default'))|trim}) %}
+        {% if addon_tooltip is not empty %}
+            {% set addon_button_attr = addon_button_attr|merge({ 'data-toggle': 'tooltip', 'title': addon_tooltip|trans, 'data-placement': addon_tooltip_placement|default('auto') }) %}
+        {% endif %}
+        {% for attrname, attrvalue in addon_button_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock addon_button_attributes %}
+
 {% block form_row %}
     {% spaceless %}
+
         <div{{ block('form_group_attributes') }}>
-            {% if label != false %}{{ form_label(form) }}{% endif %}
-            {% if label != false and horizontal and not inline %}
-                <div{{ block('form_row_attributes') }}>
-            {% endif %}
-                {% if (prepend or append) and icon is not empty %}
-                    <div class="input-group">
-                        {% endif %}
-                        {% if prepend and not append and icon is not empty %}
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
-                        {% endif %}
-                        {{ form_widget(form) }}
-                        {{ block('form_info') }}
-                        {% if append and not prepend and icon is not empty %}
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-{{ icon }}"></i></span>
-                        {% endif %}
-                        {% if (prepend or append) and icon is not empty %}
-                    </div>
+            {% if label is not sameas(false) %}{{ form_label(form) }}{% endif %}
+
+            {% if label is not sameas(false) and horizontal is sameas(true) %}
+            <div{{ block('form_row_attributes') }}>
                 {% endif %}
-                {{ block('form_help') }}
-                {{ form_errors(form) }}
-            {% if label != false and horizontal and not inline %}
+
+                {% if append is sameas(true) or prepend is sameas(true) %}
+                <div{{ block('input_group_attributes') }}>
+                    {% endif %}
+
+                    {% if prepend is sameas(true) %}{{ block('input_group_addon') }}{% endif %}
+
+                    {{ form_widget(form) }}
+
+                    {{ block('form_info') }}
+
+                    {% if append is sameas(true) %}{{ block('input_group_addon') }}{% endif %}
+
+                    {% if append is sameas(true) or prepend is sameas(true) %}
                 </div>
+                {% endif %}
+
+                {{ block('form_help') }}
+
+                {{ form_errors(form) }}
+
+                {% if label is not sameas(false) and horizontal is sameas(true) %}
+            </div>
             {% endif %}
+
         </div>
+
     {% endspaceless %}
 {% endblock form_row %}
 
