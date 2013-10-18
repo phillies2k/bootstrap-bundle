@@ -58,9 +58,6 @@
 
 {% block input_group_addon_attributes %}
     {% spaceless %}
-        {% if addon_toggle is sameas(true) %}
-            {% set input_group_addon_attr = input_group_addon_attr|merge({ 'data-toggle': 'collapse', 'data-target': addon_toggle_target|default(''), class: (input_group_addon_attr.class|default('') ~ ' collapsed')|trim }) %}
-        {% endif %}
         {% set input_group_addon_attr = input_group_addon_attr|merge({ class: (input_group_addon_attr.class|default('') ~ ' input-group-' ~ (addon_button ? 'btn' : 'addon'))|trim}) %}
         {% for attrname, attrvalue in input_group_addon_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
@@ -69,8 +66,8 @@
 {% block addon_button_attributes %}
     {% spaceless %}
         {% set addon_button_attr = addon_button_attr|merge({ type: 'button', class: (addon_button_attr.class|default('') ~ ' btn btn-' ~ (addon_button is not sameas(true) ? addon_button : 'default'))|trim}) %}
-        {% if addon_tooltip is not empty %}
-            {% set addon_button_attr = addon_button_attr|merge({ 'data-toggle': 'tooltip', 'title': addon_tooltip|trans, 'data-placement': addon_tooltip_placement|default('auto') }) %}
+        {% if addon_toggle is sameas(true) %}
+            {% set addon_button_attr = addon_button_attr|merge({ 'data-toggle': 'collapse', 'data-target': addon_toggle_target|default(''), class: (addon_button_attr.class|default('') ~ ' collapsed')|trim }) %}
         {% endif %}
         {% for attrname, attrvalue in addon_button_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
