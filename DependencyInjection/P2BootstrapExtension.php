@@ -68,7 +68,7 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                 array(
                     'form' => array(
                         'resources' => array(
-                            'P2BootstrapBundle::forms.html.twig'
+                            'P2BootstrapBundle::form_div_layout.html.twig'
                         )
                     )
                 )
