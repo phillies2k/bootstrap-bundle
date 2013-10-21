@@ -1,7 +1,7 @@
 {% extends 'form_div_layout.html.twig' %}
 
 {% block form_start %}
-    {% set attr = attr|merge({ role: 'form' }) %}
+    {% set attr = attr|merge({ role: 'form', id: name }) %}
     {% if horizontal %}
         {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-horizontal')|trim}) %}
     {% elseif inline %}
@@ -28,7 +28,7 @@
 {% block form_row_attributes %}
     {% spaceless %}
         {% set row_attr = row_attr|default({}) %}
-        {% if horizontal and not inline %}
+        {% if horizontal is sameas(true) %}
             {% set grid_attr = grid_attr|default('') %}
             {% for key,val in grid %}
                 {% if val is not empty %}
@@ -79,7 +79,7 @@
         <div{{ block('form_group_attributes') }}>
             {% if label is not sameas(false) %}{{ form_label(form) }}{% endif %}
 
-            {% if label is not sameas(false) and horizontal is sameas(true) %}
+            {% if label is not sameas(false) and horizontal is sameas(true) and not inline %}
             <div{{ block('form_row_attributes') }}>
                 {% endif %}
 
@@ -103,7 +103,7 @@
 
                 {{ form_errors(form) }}
 
-                {% if label is not sameas(false) and horizontal is sameas(true) %}
+                {% if label is not sameas(false) and horizontal is sameas(true) and not inline %}
             </div>
             {% endif %}
 
@@ -141,7 +141,7 @@
 {% endblock form_help %}
 
 {% block form_label %}
-    {% if horizontal and not inline %}
+    {% if horizontal is sameas(true) %}
         {% set grid_attr = grid_attr|default('') %}
         {% for key,val in grid %}
             {% if val is not empty %}
@@ -175,10 +175,13 @@
 {% block button_row %}
     {% spaceless %}
         <div class="form-group">
-            {% if horizontal and not inline %}<div{{ block('button_row_attributes') }}>
+            {% if horizontal is sameas(true) %}
+            <div{{ block('button_row_attributes') }}>
                 {% endif %}
                 {{ form_widget(form) }}
-                {% if horizontal and not inline %}</div>{% endif %}
+                {% if horizontal is sameas(true) %}
+            </div>
+            {% endif %}
         </div>
     {% endspaceless %}
 {% endblock button_row %}
