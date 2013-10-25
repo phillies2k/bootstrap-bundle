@@ -1,7 +1,7 @@
 {% extends 'form_div_layout.html.twig' %}
 
 {% block form_start %}
-    {% set attr = attr|merge({ role: 'form', id: name }) %}
+    {% set attr = attr|merge({ role: 'form', id: attr.id|default(name) }) %}
     {% if horizontal %}
         {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-horizontal')|trim}) %}
     {% elseif inline %}
@@ -221,6 +221,6 @@
 
 {% block button_attributes %}
     {% if type == 'submit' and button == 'default' %}{% set button = 'primary' %}{% endif %}
-    {% set attr = attr|merge({ class: (attr.class|default('') ~ ' btn btn-' ~ button)|trim }) %}
+    {% set attr = attr|merge({ class: (attr.class|default('') ~ ' btn btn-' ~ button|default('default'))|trim }) %}
     {{ parent() }}
 {% endblock button_attributes %}
