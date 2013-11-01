@@ -12,9 +12,10 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.3.*",
-        "twbs/bootstrap": "~3.0",
-        "components/jquery": "~1.9"
+        "symfony/framework-bundle": "~2.3",
+        "symfony/twig-bundle": "~2.3",
+        "symfony/form": "~2.3",
+        "symfony/console": "~2.3"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
