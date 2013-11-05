@@ -1,10 +1,10 @@
 {% extends 'form_div_layout.html.twig' %}
 
 {% block form_start %}
-    {% set attr = attr|merge({ role: 'form', id: attr.id|default(name) }) %}
-    {% if horizontal %}
+    {% set attr = attr|merge({ role: 'form', id: name }) %}
+    {% if horizontal is sameas(true) %}
         {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-horizontal')|trim}) %}
-    {% elseif inline %}
+    {% elseif inline is sameas(true) %}
         {% set attr = attr|merge({ class: (attr.class|default('') ~ ' form-inline')|trim}) %}
     {% endif %}
     {{ parent() }}
@@ -24,22 +24,6 @@
         </span>
     {% endspaceless %}
 {% endblock input_group_addon %}
-
-{% block form_row_attributes %}
-    {% spaceless %}
-        {% set row_attr = row_attr|default({}) %}
-        {% if horizontal is sameas(true) %}
-            {% for key,val in grid %}
-                {% if val is not empty %}
-                    {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
-                {% endif %}
-            {% endfor %}
-            {% set row_attr = row_attr|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr|default(''))|trim}) %}
-        {% endif %}
-        {% if id is not empty %} id="{{ id ~ '_control' }}"{% endif %}
-        {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
-    {% endspaceless %}
-{% endblock form_row_attributes %}
 
 {% block form_group_attributes %}
     {% spaceless %}
@@ -72,13 +56,60 @@
     {% endspaceless %}
 {% endblock addon_button_attributes %}
 
+{% block button_row %}
+    {% spaceless %}
+        <div class="form-group">
+            {% if horizontal is sameas(true) %}
+            <div{{ block('button_row_attributes') }}>
+                {% endif %}
+                {{ form_widget(form) }}
+                {% if horizontal is sameas(true) %}
+            </div>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock button_row %}
+
+{% block button_row_attributes %}
+    {% spaceless %}
+        {% set grid_attr = grid_attr|default('') %}
+        {% if horizontal is sameas(true) %}
+            {% for key,val in grid %}
+                {% if val is not empty %}
+                    {% set grid_attr = (grid_attr ~ ' col-' ~ key ~ '-offset-' ~ val[0] ~ ' col-' ~ key ~ '-' ~val[1])|trim %}
+                {% endif %}
+            {% endfor %}
+            {% set button_row_attr = button_row_attr|default({})|merge({ class: button_row_attr.class|default('') ~ ' ' ~ grid_attr|trim }) %}
+        {% endif %}
+        {% for attrname, attrvalue in button_row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock button_row_attributes %}
+
+{% block form_row_attributes %}
+    {% spaceless %}
+        {% set row_attr = row_attr|default({}) %}
+        {% set grid_attr = grid_attr|default('') %}
+        {% if horizontal is sameas(true) %}
+            {% for key,val in grid %}
+                {% if val is not empty %}
+                    {% set grid_attr = (grid_attr ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
+                {% endif %}
+            {% endfor %}
+            {% set row_attr = row_attr|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr|default(''))|trim}) %}
+        {% endif %}
+        {% if id is not empty %} id="{{ id ~ '_control' }}"{% endif %}
+        {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+    {% endspaceless %}
+{% endblock form_row_attributes %}
+
 {% block form_row %}
     {% spaceless %}
-
         <div{{ block('form_group_attributes') }}>
-            {% if label is not sameas(false) %}{{ block('form_label') }}{% endif %}
+            {% if label is not sameas(false) %}
+                {{ block('form_label') }}
+            {% endif %}
 
-            {% if label is not sameas(false) and horizontal is sameas(true) and not inline %}
+            {% if horizontal is sameas(true) %}
             <div{{ block('form_row_attributes') }}>
                 {% endif %}
 
@@ -171,40 +202,22 @@
     {{ parent() }}
 {% endblock time_widget %}
 
-{% block button_row %}
+{% block form_widget_compound %}
     {% spaceless %}
-        <div class="form-group">
-            {% if horizontal is sameas(true) %}
-            <div{{ block('button_row_attributes') }}>
-                {% endif %}
-                {{ form_widget(form) }}
-                {% if horizontal is sameas(true) %}
-            </div>
-            {% endif %}
-        </div>
-    {% endspaceless %}
-{% endblock button_row %}
-
-{% block button_row_attributes %}
-    {% spaceless %}
-        {% if horizontal and not inline %}
-            {% for key,val in grid %}
-                {% if val is not empty %}
-                    {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0] ~ ' col-' ~ key ~ '-' ~val[1])|trim %}
-                {% endif %}
-            {% endfor %}
-            {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr|default('')|trim}) %}
+        {% if form.parent is empty %}
+            {{ form_errors(form) }}
         {% endif %}
-        {% for attrname, attrvalue in button_row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
+        {{ block('form_rows') }}
+        {{ form_rest(form) }}
     {% endspaceless %}
-{% endblock button_row_attributes %}
+{% endblock form_widget_compound %}
 
 {% block button_widget %}
     {% spaceless %}
         {% if label is empty %}
             {% set label = name|humanize %}
         {% endif %}
-        <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
+        <button{{ block('button_attributes') }}>
             {% if prepend and not append and icon is not empty %}
                 <i class="glyphicon glyphicon-{{ icon }}"></i>
             {% endif %}
@@ -219,6 +232,6 @@
 
 {% block button_attributes %}
     {% if type == 'submit' and button == 'default' %}{% set button = 'primary' %}{% endif %}
-    {% set attr = attr|merge({ class: (attr.class|default('') ~ ' btn btn-' ~ button|default('default'))|trim }) %}
+    {% set attr = attr|merge({ type: type|default('button'), class: (attr.class|default('') ~ ' btn btn-' ~ button|default('default'))|trim }) %}
     {{ parent() }}
 {% endblock button_attributes %}
