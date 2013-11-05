@@ -29,13 +29,12 @@
     {% spaceless %}
         {% set row_attr = row_attr|default({}) %}
         {% if horizontal is sameas(true) %}
-            {% set grid_attr = grid_attr|default('') %}
             {% for key,val in grid %}
                 {% if val is not empty %}
                     {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-' ~ val[1])|trim %}
                 {% endif %}
             {% endfor %}
-            {% set row_attr = row_attr|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+            {% set row_attr = row_attr|merge({ class: (row_attr.class|default('') ~ ' ' ~ grid_attr|default(''))|trim}) %}
         {% endif %}
         {% if id is not empty %} id="{{ id ~ '_control' }}"{% endif %}
         {% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
@@ -77,7 +76,7 @@
     {% spaceless %}
 
         <div{{ block('form_group_attributes') }}>
-            {% if label is not sameas(false) %}{{ form_label(form) }}{% endif %}
+            {% if label is not sameas(false) %}{{ block('form_label') }}{% endif %}
 
             {% if label is not sameas(false) and horizontal is sameas(true) and not inline %}
             <div{{ block('form_row_attributes') }}>
