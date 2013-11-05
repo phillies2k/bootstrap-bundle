@@ -188,13 +188,12 @@
 {% block button_row_attributes %}
     {% spaceless %}
         {% if horizontal and not inline %}
-            {% set grid_attr = grid_attr|default('') %}
             {% for key,val in grid %}
                 {% if val is not empty %}
                     {% set grid_attr = (grid_attr|default('') ~ ' col-' ~ key ~ '-offset-' ~ val[0] ~ ' col-' ~ key ~ '-' ~val[1])|trim %}
                 {% endif %}
             {% endfor %}
-            {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr)|trim}) %}
+            {% set button_row_attr = button_row_attr|default({})|merge({ class: (button_row_attr.class|default('') ~ ' ' ~ grid_attr|default('')|trim}) %}
         {% endif %}
         {% for attrname, attrvalue in button_row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}
     {% endspaceless %}
