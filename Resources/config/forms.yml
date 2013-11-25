@@ -18,16 +18,16 @@ services:
 
     # button type extension
     p2_bootstrap.form.extension.button_type_extension:
-        class: %p2_bootstrap.extension.form.button_type_extension.class%
-        parent: p2_bootstrap.extension.form.abstract_type_extension
+        class: %p2_bootstrap.form.extension.button_type_extension.class%
+        parent: p2_bootstrap.form.extension.abstract_type_extension
         public: true
         tags:
             - { name: form.type_extension, alias: button }
 
     # form type extension
     p2_bootstrap.form.extension.form_type_extension:
-        class: %p2_bootstrap.extension.form.form_type_extension.class%
-        parent: p2_bootstrap.extension.form.abstract_type_extension
+        class: %p2_bootstrap.form.extension.form_type_extension.class%
+        parent: p2_bootstrap.form.extension.abstract_type_extension
         public: true
         tags:
             - { name: form.type_extension, alias: form }
