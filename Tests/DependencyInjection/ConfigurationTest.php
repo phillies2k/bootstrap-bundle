@@ -26,21 +26,18 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigTreeBuilder()
     {
         $processor = new Processor();
-        $configuration = new Configuration(array());
-        $config = $processor->processConfiguration($configuration, array(array()));
+        $config = $processor->processConfiguration(new Configuration(array()), array(array()));
 
-        $this->assertArrayHasKey('use_themes', $config);
         $this->assertArrayHasKey('use_forms', $config);
-        $this->assertArrayHasKey('use_extensions', $config);
-        $this->assertArrayHasKey('public_path', $config);
-        $this->assertArrayHasKey('jquery_path', $config);
         $this->assertArrayHasKey('source_path', $config);
-        $this->assertArrayHasKey('themes_path', $config);
         $this->assertArrayHasKey('bootstrap_css', $config);
         $this->assertArrayHasKey('bootstrap_js', $config);
-        $this->assertArrayHasKey('jquery_js', $config);
-        $this->assertArrayHasKey('less_path', $config);
         $this->assertArrayHasKey('forms', $config);
+
+        $this->assertTrue($config['use_forms']);
+        $this->assertEquals('%kernel.root_dir%/../vendor/twbs/bootstrap', $config['source_path']);
+        $this->assertEquals('css/bootstrap.css', $config['bootstrap_css']);
+        $this->assertEquals('js/bootstrap.js', $config['bootstrap_js']);
 
         $forms = $config['forms'];
 
@@ -68,21 +65,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('horizontal', $defaults);
         $this->assertArrayHasKey('inline', $defaults);
         $this->assertArrayHasKey('grid', $defaults);
-
         $this->assertTrue($defaults['horizontal']);
         $this->assertFalse($defaults['inline']);
         $this->assertInternalType('array', $defaults['grid']);
-
-        $this->assertTrue($config['use_themes']);
-        $this->assertTrue($config['use_forms']);
-        $this->assertTrue($config['use_extensions']);
-        $this->assertEquals('%kernel.root_dir%/../web/themes', $config['public_path']);
-        $this->assertEquals('%kernel.root_dir%/../components/jquery/jquery.js', $config['jquery_path']);
-        $this->assertEquals('%kernel.root_dir%/../vendor/twbs/bootstrap', $config['source_path']);
-        $this->assertEquals('%kernel.root_dir%/Resources/themes', $config['themes_path']);
-        $this->assertEquals('css/bootstrap.css', $config['bootstrap_css']);
-        $this->assertEquals('js/bootstrap.js', $config['bootstrap_js']);
-        $this->assertEquals('js/jquery.js', $config['jquery_js']);
-        $this->assertNull($config['less_path']);
     }
 }

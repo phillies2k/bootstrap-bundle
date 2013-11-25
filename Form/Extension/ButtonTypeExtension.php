@@ -10,7 +10,6 @@
 
 namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
-use P2\Bundle\BootstrapBundle\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

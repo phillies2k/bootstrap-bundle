@@ -10,8 +10,6 @@
 
 namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
-use P2\Bundle\BootstrapBundle\Form\AbstractTypeExtension;
-
 /**
  * Class FormTypeExtension
  * @package P2\Bundle\BootstrapBundle\Form\Extension

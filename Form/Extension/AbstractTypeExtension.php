@@ -8,9 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace P2\Bundle\BootstrapBundle\Form;
+namespace P2\Bundle\BootstrapBundle\Form\Extension;
 
-use Doctrine\Common\Inflector\Inflector;
 use Symfony\Component\Form\AbstractTypeExtension as BaseTypeExtension;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -20,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  * Class AbstractTypeExtension
  * @package P2\Bundle\BootstrapBundle\Form\Extension
  */
-abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeExtensionInterface
+abstract class AbstractTypeExtension extends BaseTypeExtension
 {
     /**
      * @var array
@@ -104,7 +103,8 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
     }
 
     /**
-     * {@inheritDoc}
+     * @param OptionsResolverInterface $resolver
+     * @return array
      */
     public function getDefaults(OptionsResolverInterface $resolver)
     {
@@ -112,7 +112,8 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
     }
 
     /**
-     * {@inheritDoc}
+     * @param OptionsResolverInterface $resolver
+     * @return array
      */
     public function getAllowedTypes(OptionsResolverInterface $resolver)
     {
@@ -120,7 +121,8 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
     }
 
     /**
-     * {@inheritDoc}
+     * @param OptionsResolverInterface $resolver
+     * @return array
      */
     public function getAllowedValues(OptionsResolverInterface $resolver)
     {
@@ -128,7 +130,10 @@ abstract class AbstractTypeExtension extends BaseTypeExtension implements TypeEx
     }
 
     /**
-     * {@inheritDoc}
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     * @return array
      */
     public function getViewVars(FormView $view, FormInterface $form, array $options)
     {

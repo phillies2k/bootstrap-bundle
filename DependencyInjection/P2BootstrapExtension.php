@@ -32,13 +32,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        if ($config['use_themes'] === true) {
-            $container->setParameter('p2_bootstrap.source_directory', $config['source_path']);
-            $container->setParameter('p2_bootstrap.themes_directory', $config['themes_path']);
-
-            $loader->load('themeing.yml');
-        }
-
         if ($config['use_forms'] === true) {
             $container->setParameter('p2_bootstrap.form.allowed_types', $config['forms']['allowed_types']);
             $container->setParameter('p2_bootstrap.form.allowed_values', $config['forms']['allowed_values']);
@@ -59,7 +52,12 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
         $bundles = $container->getParameter('kernel.bundles');
 
         if (isset($bundles['AsseticBundle'])) {
-            $container->prependExtensionConfig('assetic', $this->buildAsseticConfig($config, $container));
+            $container->prependExtensionConfig(
+                'assetic',
+                array(
+                    'assets' => $this->buildAsseticConfig($config, $container)
+                )
+            );
         }
 
         if (isset($bundles['TwigBundle']) && $config['use_forms'] === true) {
@@ -90,14 +88,9 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
         $this->buildAsseticBootstrapCssConfig($config, $assets);
         $this->buildAsseticBootstrapJsConfig($config, $assets);
-        $this->buildAsseticJqueryConfig($config, $assets);
-
         $this->buildAsseticFontConfig($config, $container, $assets);
-        $this->buildAsseticThemeConfig($config, $container, $assets);
 
-        return array(
-            'assets' => $assets
-        );
+        return $assets;
     }
 
     /**
@@ -139,18 +132,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
 
     /**
      * @param array $config
-     * @param array $assets
-     */
-    protected function buildAsseticJqueryConfig(array $config, array & $assets)
-    {
-        $assets['jquery_js'] = array(
-            'inputs' => array($config['jquery_path']),
-            'output' => $config['jquery_js']
-        );
-    }
-
-    /**
-     * @param array $config
      * @param ContainerBuilder $container
      * @param array $assets
      */
@@ -164,26 +145,6 @@ class P2BootstrapExtension extends Extension implements PrependExtensionInterfac
                 'inputs' => array($config['source_path'] . '/fonts/' . basename($path)),
                 'output' => 'fonts/' . basename($path)
             );
-        }
-    }
-
-    /**
-     * @param array $config
-     * @param ContainerBuilder $container
-     * @param array $assets
-     */
-    protected function buildAsseticThemeConfig(array $config, ContainerBuilder $container, array & $assets)
-    {
-        $themesPath = $container->getParameterBag()->resolveValue($config['themes_path']);
-        $stylePath = 'less/layout/style.less';
-
-        foreach (glob($themesPath . '/*/' . $stylePath) as $filepath) {
-            if (false !== preg_match('#(\w+)/' . $stylePath . '#', $filepath, $matches)) {
-                $theme = $matches[1];
-                $assets[$theme . '_style'] = array(
-                    'inputs' => array($config['themes_path'] . '/' . $theme . '/' . $stylePath)
-                );
-            }
         }
     }
 }
